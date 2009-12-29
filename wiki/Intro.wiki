@@ -8,6 +8,15 @@ this is a place holder for many small projects related to my quest for a personl
 
 = Projects =
 
-*Basic light board*
+==Basic Light Board==
 this project is the first attempt at a full solution to control DMX lighting.
 It is a 1 to 1 patched 24 channel board with X and Y scenes a cross fader and a go button with timer.
+
+===Notes===
+  * This currently does not interface with the Enttec widget because i haven't receive it yet. that should be forthcoming in the next week (by Jan 07 2010)
+  * this employs two custom built controls
+    # a basic slider with channel label, slider, percentage display, and bump button
+    # a group of sliders to allow for easy GUI integration and ease of detecting changes
+
+= Currently Under Development = 
+add a cue list to the *Basic Light Board*
