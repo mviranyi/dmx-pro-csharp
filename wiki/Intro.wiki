@@ -1,0 +1,13 @@
+#summary What is hosted here
+#labels Featured
+
+= Introduction =
+
+this is a place holder for many small projects related to my quest for a personlized lighting controller for my thearter troupe. We needed a solution that would allow us to control our many shows (typically 40ish shows and 2 musicals a year) that would allow for flexible operation as well as on the fly changes (we have very young kids, acting some of them cant read, it makes learning lines hard) the idea is to start with a simple controller and work my way up to something that can be on par with a dedicated lighting console.
+
+
+= Projects =
+
+*Basic light board*
+this project is the first attempt at a full solution to control DMX lighting.
+It is a 1 to 1 patched 24 channel board with X and Y scenes a cross fader and a go button with timer.
