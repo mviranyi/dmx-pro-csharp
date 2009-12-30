@@ -30,13 +30,13 @@
         {
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.sliderGroup1 = new basic_light_board.SliderGroup();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.sliderGroup2 = new basic_light_board.SliderGroup();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.button1 = new System.Windows.Forms.Button();
             this.crossFaders1 = new basic_light_board.CrossFaders();
+            this.sliderGroup1 = new basic_light_board.SliderGroup();
+            this.sliderGroup2 = new basic_light_board.SliderGroup();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -68,34 +68,16 @@
             this.tabPage1.Text = "X";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
-            // sliderGroup1
-            // 
-            this.sliderGroup1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.sliderGroup1.Location = new System.Drawing.Point(3, 3);
-            this.sliderGroup1.Name = "sliderGroup1";
-            this.sliderGroup1.Size = new System.Drawing.Size(427, 360);
-            this.sliderGroup1.TabIndex = 0;
-            this.sliderGroup1.ValueChanged += new System.EventHandler(this.trackBar1_ValueChanged);
-            // 
             // tabPage2
             // 
             this.tabPage2.Controls.Add(this.sliderGroup2);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(410, 359);
+            this.tabPage2.Size = new System.Drawing.Size(433, 366);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Y";
             this.tabPage2.UseVisualStyleBackColor = true;
-            // 
-            // sliderGroup2
-            // 
-            this.sliderGroup2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.sliderGroup2.Location = new System.Drawing.Point(3, 3);
-            this.sliderGroup2.Name = "sliderGroup2";
-            this.sliderGroup2.Size = new System.Drawing.Size(404, 353);
-            this.sliderGroup2.TabIndex = 0;
-            this.sliderGroup2.ValueChanged += new System.EventHandler(this.trackBar1_ValueChanged);
             // 
             // textBox1
             // 
@@ -145,14 +127,34 @@
             // 
             // crossFaders1
             // 
+            this.crossFaders1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.crossFaders1.CrossFaderValue = ((byte)(0));
-            this.crossFaders1.Location = new System.Drawing.Point(464, 12);
+            this.crossFaders1.Location = new System.Drawing.Point(465, 12);
             this.crossFaders1.Name = "crossFaders1";
             this.crossFaders1.Scene1Value = ((byte)(255));
-            this.crossFaders1.Scene2Value = ((byte)(255));
+            this.crossFaders1.Scene2Value = ((byte)(0));
             this.crossFaders1.Size = new System.Drawing.Size(136, 385);
             this.crossFaders1.TabIndex = 8;
             this.crossFaders1.ValueChanged += new System.EventHandler(this.trackBar1_ValueChanged);
+            // 
+            // sliderGroup1
+            // 
+            this.sliderGroup1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.sliderGroup1.Location = new System.Drawing.Point(3, 3);
+            this.sliderGroup1.Name = "sliderGroup1";
+            this.sliderGroup1.Size = new System.Drawing.Size(427, 360);
+            this.sliderGroup1.TabIndex = 0;
+            this.sliderGroup1.ValueChanged += new System.EventHandler(this.trackBar1_ValueChanged);
+            // 
+            // sliderGroup2
+            // 
+            this.sliderGroup2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.sliderGroup2.Location = new System.Drawing.Point(3, 3);
+            this.sliderGroup2.Name = "sliderGroup2";
+            this.sliderGroup2.Size = new System.Drawing.Size(427, 360);
+            this.sliderGroup2.TabIndex = 0;
+            this.sliderGroup2.ValueChanged += new System.EventHandler(this.trackBar1_ValueChanged);
             // 
             // Form1
             // 
@@ -186,7 +188,7 @@
         private SliderGroup sliderGroup2;
         private System.Windows.Forms.NumericUpDown numericUpDown1;
         private System.Windows.Forms.Button button1;
-        private basic_light_board.CrossFaders crossFaders1;
+        private CrossFaders crossFaders1;
     }
 }
 

@@ -29,12 +29,12 @@
         private void InitializeComponent()
         {
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.Scene1Slider = new MB.Controls.ColorSlider();
             this.Scene2Slider = new MB.Controls.ColorSlider();
             this.CrossfaderSlider = new MB.Controls.ColorSlider();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -58,42 +58,6 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(136, 156);
             this.tableLayoutPanel1.TabIndex = 2;
-            // 
-            // label2
-            // 
-            this.label2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label2.Location = new System.Drawing.Point(106, 137);
-            this.label2.Margin = new System.Windows.Forms.Padding(3);
-            this.label2.MinimumSize = new System.Drawing.Size(27, 16);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(27, 16);
-            this.label2.TabIndex = 4;
-            this.label2.Text = "0";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label1
-            // 
-            this.label1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label1.Location = new System.Drawing.Point(3, 137);
-            this.label1.Margin = new System.Windows.Forms.Padding(3);
-            this.label1.MinimumSize = new System.Drawing.Size(27, 16);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(27, 16);
-            this.label1.TabIndex = 3;
-            this.label1.Text = "255";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // checkBox1
-            // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(36, 137);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(61, 16);
-            this.checkBox1.TabIndex = 5;
-            this.checkBox1.Text = "Disable";
-            this.checkBox1.UseVisualStyleBackColor = true;
             // 
             // Scene1Slider
             // 
@@ -174,6 +138,43 @@
             this.CrossfaderSlider.ThumbSize = 40;
             this.CrossfaderSlider.ValueChanged += new System.EventHandler(this.colorSlider3_ValueChanged);
             this.CrossfaderSlider.Scroll += new System.Windows.Forms.ScrollEventHandler(this.colorSlider3_Scroll);
+            // 
+            // label2
+            // 
+            this.label2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label2.Location = new System.Drawing.Point(106, 137);
+            this.label2.Margin = new System.Windows.Forms.Padding(3);
+            this.label2.MinimumSize = new System.Drawing.Size(27, 16);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(27, 16);
+            this.label2.TabIndex = 4;
+            this.label2.Text = "0";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label1
+            // 
+            this.label1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label1.Location = new System.Drawing.Point(3, 137);
+            this.label1.Margin = new System.Windows.Forms.Padding(3);
+            this.label1.MinimumSize = new System.Drawing.Size(27, 16);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(27, 16);
+            this.label1.TabIndex = 3;
+            this.label1.Text = "255";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(36, 137);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(61, 16);
+            this.checkBox1.TabIndex = 5;
+            this.checkBox1.Text = "Disable";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
             // CrossFaders
             // 
