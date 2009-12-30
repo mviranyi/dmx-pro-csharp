@@ -20,3 +20,8 @@ It is a 1 to 1 patched 24 channel board with X and Y scenes a cross fader and a 
 
 = Currently Under Development = 
 add a cue list to the *Basic Light Board*
+
+=future work=
+  *make a Slider group control that can be adjusted to contain as many sliders as needed
+  *adjust the sliders so they can have multiple dimmers
+  *allow the sliders to change their position when given new values.
