@@ -12,25 +12,56 @@ namespace basic_light_board
     {
         public event EventHandler ValueChanged;
 
-        public byte Scene1Value { set; get; }
-        public byte Scene2Value { set; get; }
-        public byte CrossFaderValue { set; get; }
-
+        public byte Scene1Value {
+            set
+            {
+                if (value != Scene1Slider.Value)
+                    Scene1Slider.Value = value;
+            }
+            get
+            {
+                return (byte)Scene1Slider.Value;
+            }
+        }
+        public byte Scene2Value
+        {
+            set
+            {
+                if (value != Scene2Slider.Value)
+                    Scene2Slider.Value = value;
+            }
+            get
+            {
+                return (byte)Scene2Slider.Value ;
+            }
+        }
+        public byte CrossFaderValue
+        {
+            set
+            {
+                if (value != CrossfaderSlider.Value)
+                    CrossfaderSlider.Value = value;
+            }
+            get
+            {
+                return (byte)CrossfaderSlider.Value;
+            }
+        }
 
         private bool centralSliderActive;
+
+        
 
         public CrossFaders()
         {
             InitializeComponent();
-            Binding Bnd1 = new Binding("Value", label1, "Text");
-            Bnd1.DataSourceUpdateMode = DataSourceUpdateMode.OnPropertyChanged;
-            Scene1Slider.DataBindings.Add(Bnd1);
-            Binding Bnd2 = new Binding("Value", label2, "Text");
-            Bnd2.DataSourceUpdateMode = DataSourceUpdateMode.OnPropertyChanged;
-            Scene2Slider.DataBindings.Add(Bnd2);
 
-
-            
+            Binding Bnd = new Binding("Value", label1, "Text");
+            Bnd.DataSourceUpdateMode = DataSourceUpdateMode.OnPropertyChanged;
+            Scene1Slider.DataBindings.Add(Bnd);
+            Bnd = new Binding("Value", label2, "Text");
+            Bnd.DataSourceUpdateMode = DataSourceUpdateMode.OnPropertyChanged;
+            Scene2Slider.DataBindings.Add(Bnd);           
             centralSliderActive = false;
             CrossfaderSlider.Value = 0;
 
@@ -53,14 +84,14 @@ namespace basic_light_board
 
         private void colorSlider2_ValueChanged(object sender, EventArgs e)
         {
-            Scene2Value = (byte)Scene1Slider.Value;
+            Scene2Value = (byte)Scene2Slider.Value;
             if (!centralSliderActive)
                 OnValueChanged();
         }
 
         private void Scene2Slider_Scroll(object sender, ScrollEventArgs e)
         {
-            Scene2Value = (byte)Scene1Slider.Value;
+            Scene2Value = (byte)Scene2Slider.Value;
             if (!centralSliderActive)
                 OnValueChanged();
         }
@@ -73,9 +104,9 @@ namespace basic_light_board
         private void colorSlider3_Scroll(object sender, ScrollEventArgs e)
         {
             centralSliderActive = true;
-            Scene1Slider.Value = CrossfaderSlider.Value;
-            Scene2Slider.Value = 255 - CrossfaderSlider.Value;
             CrossFaderValue = (byte)CrossfaderSlider.Value;
+            Scene1Value = CrossFaderValue;
+            Scene2Value = (byte)(255 - CrossFaderValue);
             centralSliderActive = false;
             OnValueChanged();
         }
@@ -83,11 +114,16 @@ namespace basic_light_board
         private void colorSlider3_ValueChanged(object sender, EventArgs e)
         {
             centralSliderActive = true;
-            Scene1Slider.Value = CrossfaderSlider.Value;
-            Scene2Slider.Value = 255 - CrossfaderSlider.Value;
             CrossFaderValue = (byte)CrossfaderSlider.Value;
+            Scene1Value = CrossFaderValue;
+            Scene2Value = (byte)(255 - CrossFaderValue);
             centralSliderActive = false;
             OnValueChanged();
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            CrossfaderSlider.Enabled = !(sender as CheckBox).Checked;
         }
 
         
