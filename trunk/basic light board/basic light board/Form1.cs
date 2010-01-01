@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using System.Diagnostics;
 
 namespace basic_light_board
 {
@@ -16,13 +17,21 @@ namespace basic_light_board
     /// </summary>
     public partial class Form1 : Form
     {
-        byte[] LiveLevels = new byte[24];
-        byte[] XLevels = new byte[24];
-        byte[] YLevels = new byte[24];
+        public const int universeSize=512;
+        byte[] LiveLevels = new byte[universeSize];
+        byte[] XLevels = new byte[universeSize];
+        byte[] YLevels = new byte[universeSize];
+        output m_outForm;
+        Stopwatch m_timer;
+
+        int iterations;
+        int change;
 
         public Form1()
         {
             InitializeComponent();
+            m_outForm = new output();
+            m_outForm.Show();
         }
 
         private void updateTextBox()
@@ -37,22 +46,37 @@ namespace basic_light_board
             textBox1.Text = str.ToString();
         }
 
-        private void FullScale(byte[] Live, byte[] X, byte[] Y, byte xLev,byte yLev)
+
+        private void updateOutForm()
         {
-            int max = X.Length;
+            for (int i = 0; i < m_outForm.m_Bars.Count; i++)
+            {
+                m_outForm.m_Bars[i].Value = LiveLevels[i+1];
+            }
+        }
+
+
+        
+        private void FullScale(byte[] Live, byte[] X, byte[] Y, byte xLev, byte yLev)
+        {
+            int max = universeSize;
             for (int i = 0; i < max; i++)
             {
                 Live[i] = scale(X[i], Y[i], xLev,yLev);
             }
             updateTextBox();
+            updateOutForm();
         }
                
 
         private byte scale(byte Xval, byte Yval, byte XLevel,byte Ylevel)
         {
-            byte temp =(byte)Math.Round(((Xval * (XLevel / 255.0) + Yval * (Ylevel / 255.0))));
-            if (temp>255) return 255;
-            return temp;
+            int xTemp = (int)(Xval * (XLevel / 255.0));
+            int yTemp = (int)(Yval * (Ylevel / 255.0));
+            int temp =(int)Math.Round(((Xval * (XLevel / 255.0) + Yval * (Ylevel / 255.0))));
+
+            return (byte)(xTemp < yTemp ? yTemp : xTemp);
+            //return (byte)(temp > 255 ? 255 : temp);
         }
 
         private void trackBar1_ValueChanged(object sender, EventArgs e)
@@ -68,27 +92,61 @@ namespace basic_light_board
         private void button1_Click(object sender, EventArgs e)
         {
             Timer goTime = new Timer();
-            goTime.Interval = (int)((((int)numericUpDown1.Value)) / 255.0);
+            if ((int)(((int)numericUpDown1.Value)/255.0) == 0)
+            {
+                crossFaders1.CrossFaderValue = (byte)(crossFaders1.CrossFaderValue == 0 ? 255 : 0);
+                return;
+            }
+            goTime.Interval = (int)((double)numericUpDown1.Value / 255.0);
             goTime.Tick += new EventHandler(goTime_Tick);
-            if (crossFaders1.CrossFaderValue == 0) goTime.Tag = "up";
-            else goTime.Tag = "down";
+            if (crossFaders1.CrossFaderValue == 0) change=  1;//up
+            else change = -1;//down
             button1.Enabled = false;
+            m_timer = new Stopwatch();
+            m_timer.Start();
+            
             goTime.Start();
+            
 
+        }
+
+        void goTime_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            Timer t = (sender as Timer);
+            crossFaders1.CrossFaderValue = (byte)(crossFaders1.CrossFaderValue + change );
+
+            if (crossFaders1.CrossFaderValue == 0 || crossFaders1.CrossFaderValue == 255)
+            {
+                button1.Enabled = true;
+                
+                t.Stop();
+                m_timer.Stop();
+                MessageBox.Show(string.Format("time={0}ms", m_timer.Elapsed));
+            }
+        }
+
+        void updateFader(byte val)
+        {
+            crossFaders1.CrossFaderValue = val;
         }
 
         void goTime_Tick(object sender, EventArgs e)
         {
-            if (!(sender is Timer)) return;
+            
             Timer t = (sender as Timer);
-
-            if (((string)t.Tag) == "up") crossFaders1.CrossFaderValue++;
-            else crossFaders1.CrossFaderValue--;
-            if (crossFaders1.CrossFaderValue  == 0 || crossFaders1.CrossFaderValue == 255)
+            if (crossFaders1.InvokeRequired)
+                crossFaders1.Invoke( new Action<byte>(updateFader),(byte)(crossFaders1.CrossFaderValue + change));
+            else
+                updateFader((byte)(crossFaders1.CrossFaderValue + change));
+             
+            if (crossFaders1.CrossFaderValue == 0 || crossFaders1.CrossFaderValue == 255)
             {
                 button1.Enabled = true;
                 t.Stop();
+                m_timer.Stop();
+                MessageBox.Show(string.Format("time={0}", m_timer.Elapsed));
             }
+            
         }
     }
 }
