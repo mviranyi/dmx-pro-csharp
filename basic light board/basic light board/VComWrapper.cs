@@ -57,7 +57,7 @@ namespace basic_light_board
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception(string.Format("Failed to open USB DMX Pro on comm port: {0} - Check Settings, Device",m_port.PortName));
+                    throw new Exception(string.Format("Failed to open USB DMX Pro on comm port: {0} - Check Settings, Device",m_port.PortName),ex);
                 }
             }
         }

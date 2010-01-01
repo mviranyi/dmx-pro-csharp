@@ -11,8 +11,8 @@ namespace basic_light_board
     public partial class SliderGroup : UserControl
     {
         public byte[] Values = new byte[513];
-        public List<int> Patchlist = new List<int>(512);
-        public List<byte> Level = new List<byte>(512);
+        public static List<int> Patchlist = new List<int>(512);
+        public static List<byte> Level = new List<byte>(512);
         
         [Description("Event fires when the Value property changes")]
         [Category("Action")]
@@ -30,7 +30,7 @@ namespace basic_light_board
             }
         }
 
-        public void patch(int dimmer,int channel,byte maxLevel)
+        public static void patch(int dimmer,int channel,byte maxLevel)
         {
             Patchlist[dimmer]=channel;
             Level[dimmer]=maxLevel;
@@ -49,7 +49,6 @@ namespace basic_light_board
 
         private void singleSlider1_ValueChanged(object sender, EventArgs e)
         {
-            int i=0;
             int channel = (sender as SingleSlider).Channel;
             byte value = (sender as SingleSlider).Value;
 
