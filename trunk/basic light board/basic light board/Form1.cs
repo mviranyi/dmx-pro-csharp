@@ -24,13 +24,13 @@ namespace basic_light_board
         output m_outForm;
         Stopwatch m_timer;
 
-        int iterations;
+        //int iterations;
         int change;
 
         public Form1()
         {
             InitializeComponent();
-            m_outForm = new output();
+            m_outForm = new output(48);
             m_outForm.Show();
         }
 
@@ -132,21 +132,25 @@ namespace basic_light_board
 
         void goTime_Tick(object sender, EventArgs e)
         {
-            
+
             Timer t = (sender as Timer);
             if (crossFaders1.InvokeRequired)
                 crossFaders1.Invoke( new Action<byte>(updateFader),(byte)(crossFaders1.CrossFaderValue + change));
             else
                 updateFader((byte)(crossFaders1.CrossFaderValue + change));
-             
+
             if (crossFaders1.CrossFaderValue == 0 || crossFaders1.CrossFaderValue == 255)
             {
                 button1.Enabled = true;
                 t.Stop();
-                m_timer.Stop();
-                MessageBox.Show(string.Format("time={0}", m_timer.Elapsed));
             }
             
+            
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            SliderGroup.patch(47, 1, 128);
         }
     }
 }

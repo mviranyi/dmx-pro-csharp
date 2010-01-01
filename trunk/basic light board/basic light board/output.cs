@@ -15,12 +15,14 @@ namespace basic_light_board
         public const int barW = 10;
         public const int barH = 100;
         public const int barM = 3;
-        public output()
+        public int m_num;
+        public output(int num)
         {
+            m_num=num;
             InitializeComponent();
-            m_Bars = new List<VerticalProgressBar>(24);
+            m_Bars = new List<VerticalProgressBar>(m_num);
             VerticalProgressBar temp;
-            for (int i = 0; i < 24; i++) 
+            for (int i = 0; i < m_num; i++) 
             {
                 temp = new VerticalProgressBar();
                 temp.Top = 0;

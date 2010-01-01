@@ -45,7 +45,6 @@
 
         #endregion
 
-        private VPB.VerticalProgressBar verticalProgressBar1;
         
     }
 }
