@@ -63,9 +63,6 @@ namespace basic_light_board
             Bnd.DataSourceUpdateMode = DataSourceUpdateMode.OnPropertyChanged;
             Scene2Slider.DataBindings.Add(Bnd);           
             centralSliderActive = false;
-            CrossfaderSlider.Value = 0;
-
-            
         }
 
         private void colorSlider1_ValueChanged(object sender, EventArgs e)
