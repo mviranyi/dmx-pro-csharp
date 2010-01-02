@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace basic_light_board
 {
@@ -32,6 +33,7 @@ namespace basic_light_board
             InitializeComponent();
             m_outForm = new output(48);
             m_outForm.Show();
+            
         }
 
         private void updateTextBox()
@@ -152,5 +154,74 @@ namespace basic_light_board
         {
             SliderGroup.patch(47, 1, 128);
         }
+
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+            Regex rx = new Regex(@"(?<dimmer>\d+)(@(?<channel>\d+)(@(?<level>\d+))?)?", RegexOptions.Compiled);
+            Regex rx2 = new Regex(@"\d+@\d+@\d+", RegexOptions.Compiled);
+
+
+            Match m = rx.Match(textBox2.Text);
+            //m = rx2.Match(textBox2.Text);
+            label1.Text = "dimmer: " + m.Groups["dimmer"].Value;
+            label2.Text = "channel: " + m.Groups["channel"].Value;
+            label3.Text = "Value: " + m.Groups["level"].Value;
+        }
+
+        private void textBox2_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Return)
+            {
+                Regex rx = new Regex(@"(?<dimmer>\d+)(@(?<channel>\d+)(@(?<level>\d+))?)?", RegexOptions.Compiled);
+                Match m = rx.Match(textBox2.Text);
+                if (!m.Success) { MessageBox.Show("bad string"); return; }
+
+                try
+                {
+                    int d = int.Parse(m.Groups["dimmer"].Value);
+                    int c = int.Parse(m.Groups["channel"].Value);
+                    byte l = byte.Parse(m.Groups["level"].Value);
+
+                    SliderGroup.patch(d, c, l);
+                    MessageBox.Show(string.Format("Patched dimmer {0} to channel {1} @ {2}", d, c, l));
+                }
+                catch (Exception ex)
+                {
+                    if (ex is ArgumentException) MessageBox.Show("there was an argument Exception");
+                }
+            }
+        }
+
+        private void textBox3_TextChanged(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void textBox3_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Return)
+            {
+                Regex rx = new Regex(@"(?<channel>\d+)@(?<level>\d+)", RegexOptions.Compiled);
+                Match m = rx.Match(textBox3.Text);
+                if (!m.Success) { MessageBox.Show("bad string"); return; }
+
+                try
+                {
+                    int c = int.Parse(m.Groups["channel"].Value);
+                    byte l = byte.Parse(m.Groups["level"].Value);
+
+                    if (c < 1 || l < 0 || l > 255) throw new ArgumentException();
+
+                    sliderGroup1.setLevel(c, l);
+                    MessageBox.Show(string.Format("channel {0} @ {1}", c, l));
+                }
+                catch (Exception ex)
+                {
+                    if (ex is ArgumentException) MessageBox.Show("there was an argument Exception");
+                }
+            }
+        }
+
     }
 }

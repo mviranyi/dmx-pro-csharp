@@ -13,6 +13,9 @@ namespace basic_light_board
         public byte[] Values = new byte[513];
         public static List<int> Patchlist = new List<int>(512);
         public static List<byte> Level = new List<byte>(512);
+
+        public List<int> m_PatchList { get { return Patchlist; } set { Patchlist = value; } }
+        private List<SingleSlider> m_sliders;
         
         [Description("Event fires when the Value property changes")]
         [Category("Action")]
@@ -24,13 +27,25 @@ namespace basic_light_board
             
             setupPatch();
             
+            m_sliders=new List<SingleSlider>();
             foreach (SingleSlider slide in this.tableLayoutPanel1.Controls)
             {
                 slide.Value = 0;
+                m_sliders.Add(slide );
             }
         }
 
-        public static void patch(int dimmer,int channel,byte maxLevel)
+        public void setLevel(int channel, byte value)
+        {
+            if (channel < m_sliders.Count)
+            {
+                m_sliders[channel-1].Value = value;
+                return;
+            }
+            updateValuesWithPatchList(channel, value);
+        }
+
+        public static void patch(int dimmer, int channel, byte maxLevel)
         {
             Patchlist[dimmer]=channel;
             Level[dimmer]=maxLevel;
@@ -53,8 +68,6 @@ namespace basic_light_board
             byte value = (sender as SingleSlider).Value;
 
             updateValuesWithPatchList(channel, value);
-                    
-            if (ValueChanged != null) ValueChanged(this, new EventArgs());
         }
 
         private void singleSlider1_Scroll(object sender, ScrollEventArgs e)
@@ -63,8 +76,6 @@ namespace basic_light_board
             byte value = (sender as SingleSlider).Value;
 
             updateValuesWithPatchList(channel, value);
-
-            if (ValueChanged != null) ValueChanged(this, new EventArgs());
         }
 
         private void updateValuesWithPatchList(int chan,byte value)
@@ -76,7 +87,8 @@ namespace basic_light_board
             {
                 Values[i] = (byte)(value*Level[i]/255);
                 i = Patchlist.IndexOf(chan, i+1);
-            }   
+            }
+            if (ValueChanged != null) ValueChanged(this, new EventArgs());
         }
     }
 }
