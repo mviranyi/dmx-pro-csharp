@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="basic_light_board.CrossFaders">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABEAAAACAAABEAAgCAABACAEAAAAEAgAgACAEAAGA=</HashCode>
+      <FileName>CrossFaders.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="basic_light_board.Form1">
+    <Position X="2" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACCAQMAYEDgAQBAAAACASARCQAAYAAICEGBABICBBAQ=</HashCode>
+      <FileName>Form1.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="basic_light_board.output">
+    <Position X="3.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAGAYAAAAAACAAAACAAAAAAAAAAAAAAAAAQA=</HashCode>
+      <FileName>output.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="basic_light_board.SingleSlider">
+    <Position X="5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAAAAAkACAAkAAEEACAABACEEAIAQAAAAEgAAAAAAA=</HashCode>
+      <FileName>SingleSlider.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="basic_light_board.SliderGroup">
+    <Position X="6.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAEGQTOIXGBAAJJGAAABCAEQEAAADAAAgAAAAACA=</HashCode>
+      <FileName>SliderGroup.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Tahoma" Size="8.25" />
+</ClassDiagram>

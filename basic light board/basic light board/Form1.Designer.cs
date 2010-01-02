@@ -32,7 +32,9 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.sliderGroup1 = new basic_light_board.SliderGroup();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.sliderGroup2 = new basic_light_board.SliderGroup();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -44,8 +46,6 @@
             this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
             this.button2 = new System.Windows.Forms.Button();
             this.crossFaders1 = new basic_light_board.CrossFaders();
-            this.sliderGroup1 = new basic_light_board.SliderGroup();
-            this.sliderGroup2 = new basic_light_board.SliderGroup();
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -80,16 +80,36 @@
             this.tabPage1.Text = "X";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // sliderGroup1
+            // 
+            this.sliderGroup1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.sliderGroup1.Location = new System.Drawing.Point(3, 3);
+            
+            this.sliderGroup1.Name = "sliderGroup1";
+            this.sliderGroup1.Size = new System.Drawing.Size(499, 352);
+            this.sliderGroup1.TabIndex = 0;
+            this.sliderGroup1.ValueChanged += new System.EventHandler(this.trackBar1_ValueChanged);
+            // 
             // tabPage2
             // 
             this.tabPage2.Controls.Add(this.sliderGroup2);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(505, 384);
+            this.tabPage2.Size = new System.Drawing.Size(505, 358);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Y";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // sliderGroup2
+            // 
+            this.sliderGroup2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.sliderGroup2.Location = new System.Drawing.Point(3, 3);
+            
+            this.sliderGroup2.Name = "sliderGroup2";
+            this.sliderGroup2.Size = new System.Drawing.Size(499, 352);
+            this.sliderGroup2.TabIndex = 0;
+            this.sliderGroup2.ValueChanged += new System.EventHandler(this.trackBar1_ValueChanged);
             // 
             // tabPage3
             // 
@@ -189,6 +209,7 @@
             // 
             // button2
             // 
+            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.button2.Location = new System.Drawing.Point(612, 429);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(63, 23);
@@ -210,28 +231,10 @@
             this.crossFaders1.TabIndex = 8;
             this.crossFaders1.ValueChanged += new System.EventHandler(this.trackBar1_ValueChanged);
             // 
-            // sliderGroup1
-            // 
-            this.sliderGroup1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.sliderGroup1.Location = new System.Drawing.Point(3, 3);
-            this.sliderGroup1.m_PatchList = ((System.Collections.Generic.List<int>)(resources.GetObject("sliderGroup1.m_PatchList")));
-            this.sliderGroup1.Name = "sliderGroup1";
-            this.sliderGroup1.Size = new System.Drawing.Size(499, 352);
-            this.sliderGroup1.TabIndex = 0;
-            this.sliderGroup1.ValueChanged += new System.EventHandler(this.trackBar1_ValueChanged);
-            // 
-            // sliderGroup2
-            // 
-            this.sliderGroup2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.sliderGroup2.Location = new System.Drawing.Point(3, 3);
-            this.sliderGroup2.m_PatchList = ((System.Collections.Generic.List<int>)(resources.GetObject("sliderGroup2.m_PatchList")));
-            this.sliderGroup2.Name = "sliderGroup2";
-            this.sliderGroup2.Size = new System.Drawing.Size(499, 378);
-            this.sliderGroup2.TabIndex = 0;
-            this.sliderGroup2.ValueChanged += new System.EventHandler(this.trackBar1_ValueChanged);
-            // 
             // textBox3
             // 
+            this.textBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox3.Location = new System.Drawing.Point(17, 402);
             this.textBox3.Name = "textBox3";
             this.textBox3.Size = new System.Drawing.Size(513, 20);
