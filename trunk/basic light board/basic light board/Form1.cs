@@ -19,6 +19,11 @@ namespace basic_light_board
     public partial class Form1 : Form
     {
         public const int universeSize=512;
+
+        /// <summary>
+        /// LiveLevels contains one entry for every dimmer
+        /// LiveLevels[0] contains the value for dimmer 1
+        /// </summary>
         byte[] LiveLevels = new byte[universeSize];
         byte[] XLevels = new byte[universeSize];
         byte[] YLevels = new byte[universeSize];
@@ -39,12 +44,19 @@ namespace basic_light_board
         private void updateTextBox()
         {
             StringBuilder str = new StringBuilder();
-            int i = 1;
-            foreach (byte b in LiveLevels)
+            for (int i = 0; i < universeSize; i++)
             {
-                str.AppendFormat("Ch{0,2}:{1,4} ", i++, b);
-                if (i!=0 && (i-1) % 6 == 0) str.AppendLine();
+                str.AppendFormat("Ch{0,2}:{1,4} ", i + 1, LiveLevels[i]);
+                if (i != 0 && ((i+1) % 6) == 0) str.AppendLine();
+
+
             }
+            //int i = 1;
+            //foreach (byte b in LiveLevels)
+            //{
+            //    str.AppendFormat("Ch{0,2}:{1,4} ", i++, b);
+            //    if (i!=0 && (i-1) % 6 == 0) str.AppendLine();
+            //}
             textBox1.Text = str.ToString();
         }
 
@@ -53,7 +65,7 @@ namespace basic_light_board
         {
             for (int i = 0; i < m_outForm.m_Bars.Count; i++)
             {
-                m_outForm.m_Bars[i].Value = LiveLevels[i+1];
+                m_outForm.m_Bars[i].Value = LiveLevels[i];
             }
         }
 
@@ -173,7 +185,7 @@ namespace basic_light_board
         {
             if (e.KeyChar == (char)Keys.Return)
             {
-                Regex rx = new Regex(@"(?<dimmer>\d+)(@(?<channel>\d+)(@(?<level>\d+))?)?", RegexOptions.Compiled);
+                Regex rx = new Regex(@"(?<dimmer>\d+)(@(?<channel>\d+)(@(?<level>\d+\%?))?)?", RegexOptions.Compiled);
                 Match m = rx.Match(textBox2.Text);
                 if (!m.Success) { MessageBox.Show("bad string"); return; }
 
@@ -181,7 +193,15 @@ namespace basic_light_board
                 {
                     int d = int.Parse(m.Groups["dimmer"].Value);
                     int c = int.Parse(m.Groups["channel"].Value);
-                    byte l = byte.Parse(m.Groups["level"].Value);
+                    byte l;
+                    if (m.Groups["level"].Value.EndsWith("%"))
+                    {
+                        l = (byte)(int.Parse(m.Groups["level"].Value.TrimEnd('%')) * 255/100);
+                    }
+                    else
+                    {
+                        l = byte.Parse(m.Groups["level"].Value);
+                    }
 
                     SliderGroup.patch(d, c, l);
                     MessageBox.Show(string.Format("Patched dimmer {0} to channel {1} @ {2}", d, c, l));
@@ -202,23 +222,30 @@ namespace basic_light_board
         {
             if (e.KeyChar == (char)Keys.Return)
             {
-                Regex rx = new Regex(@"(?<channel>\d+)@(?<level>\d+)", RegexOptions.Compiled);
+                Regex rx = new Regex(@"(?<channel>\d+)@(?<level>\d+\%?)", RegexOptions.Compiled);
                 Match m = rx.Match(textBox3.Text);
                 if (!m.Success) { MessageBox.Show("bad string"); return; }
 
                 try
                 {
                     int c = int.Parse(m.Groups["channel"].Value);
-                    byte l = byte.Parse(m.Groups["level"].Value);
+                    //byte l = byte.Parse(m.Groups["level"].Value);
 
-                    if (c < 1 || l < 0 || l > 255) throw new ArgumentException();
+                    int l;
+                    if (m.Groups["level"].Value.EndsWith("%"))
+                        l = (int.Parse(m.Groups["level"].Value.TrimEnd('%')) * 255 / 100);
+                    else
+                        l = int.Parse(m.Groups["level"].Value);
 
-                    sliderGroup1.setLevel(c, l);
+                    if (c < 1) throw new ArgumentOutOfRangeException("channel");
+                    if (l < 0 || l > 255) throw new ArgumentOutOfRangeException("level");
+
+                    sliderGroup1.setLevel(c, (byte) l);
                     MessageBox.Show(string.Format("channel {0} @ {1}", c, l));
                 }
                 catch (Exception ex)
                 {
-                    if (ex is ArgumentException) MessageBox.Show("there was an argument Exception");
+                        MessageBox.Show(ex.ToString());
                 }
             }
         }
