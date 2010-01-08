@@ -28,13 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.sliderGroup1 = new basic_light_board.SliderGroup();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.sliderGroup2 = new basic_light_board.SliderGroup();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -43,15 +39,20 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.button1 = new System.Windows.Forms.Button();
-            this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
             this.button2 = new System.Windows.Forms.Button();
-            this.crossFaders1 = new basic_light_board.CrossFaders();
             this.textBox3 = new System.Windows.Forms.TextBox();
+            this.crossFaders1 = new basic_light_board.CrossFaders();
+            this.sliderGroup1 = new basic_light_board.SliderGroup();
+            this.sliderGroup2 = new basic_light_board.SliderGroup();
+            this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.button3 = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+            this.tabPage4.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -62,6 +63,7 @@
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage3);
+            this.tabControl1.Controls.Add(this.tabPage4);
             this.tabControl1.Location = new System.Drawing.Point(17, 12);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
@@ -80,16 +82,6 @@
             this.tabPage1.Text = "X";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
-            // sliderGroup1
-            // 
-            this.sliderGroup1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.sliderGroup1.Location = new System.Drawing.Point(3, 3);
-            
-            this.sliderGroup1.Name = "sliderGroup1";
-            this.sliderGroup1.Size = new System.Drawing.Size(499, 352);
-            this.sliderGroup1.TabIndex = 0;
-            this.sliderGroup1.ValueChanged += new System.EventHandler(this.trackBar1_ValueChanged);
-            // 
             // tabPage2
             // 
             this.tabPage2.Controls.Add(this.sliderGroup2);
@@ -100,16 +92,6 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Y";
             this.tabPage2.UseVisualStyleBackColor = true;
-            // 
-            // sliderGroup2
-            // 
-            this.sliderGroup2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.sliderGroup2.Location = new System.Drawing.Point(3, 3);
-            
-            this.sliderGroup2.Name = "sliderGroup2";
-            this.sliderGroup2.Size = new System.Drawing.Size(499, 352);
-            this.sliderGroup2.TabIndex = 0;
-            this.sliderGroup2.ValueChanged += new System.EventHandler(this.trackBar1_ValueChanged);
             // 
             // tabPage3
             // 
@@ -218,6 +200,17 @@
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
+            // textBox3
+            // 
+            this.textBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBox3.Location = new System.Drawing.Point(17, 402);
+            this.textBox3.Name = "textBox3";
+            this.textBox3.Size = new System.Drawing.Size(513, 20);
+            this.textBox3.TabIndex = 10;
+            this.textBox3.TextChanged += new System.EventHandler(this.textBox3_TextChanged);
+            this.textBox3.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox3_KeyPress);
+            // 
             // crossFaders1
             // 
             this.crossFaders1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
@@ -231,16 +224,52 @@
             this.crossFaders1.TabIndex = 8;
             this.crossFaders1.ValueChanged += new System.EventHandler(this.trackBar1_ValueChanged);
             // 
-            // textBox3
+            // sliderGroup1
             // 
-            this.textBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox3.Location = new System.Drawing.Point(17, 402);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(513, 20);
-            this.textBox3.TabIndex = 10;
-            this.textBox3.TextChanged += new System.EventHandler(this.textBox3_TextChanged);
-            this.textBox3.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox3_KeyPress);
+            this.sliderGroup1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.sliderGroup1.Location = new System.Drawing.Point(3, 3);
+            this.sliderGroup1.Name = "sliderGroup1";
+            this.sliderGroup1.Size = new System.Drawing.Size(499, 352);
+            this.sliderGroup1.TabIndex = 0;
+            this.sliderGroup1.ValueChanged += new System.EventHandler(this.trackBar1_ValueChanged);
+            // 
+            // sliderGroup2
+            // 
+            this.sliderGroup2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.sliderGroup2.Location = new System.Drawing.Point(3, 3);
+            this.sliderGroup2.Name = "sliderGroup2";
+            this.sliderGroup2.Size = new System.Drawing.Size(499, 352);
+            this.sliderGroup2.TabIndex = 0;
+            this.sliderGroup2.ValueChanged += new System.EventHandler(this.trackBar1_ValueChanged);
+            // 
+            // tabPage4
+            // 
+            this.tabPage4.Controls.Add(this.button3);
+            this.tabPage4.Controls.Add(this.comboBox1);
+            this.tabPage4.Location = new System.Drawing.Point(4, 22);
+            this.tabPage4.Name = "tabPage4";
+            this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage4.Size = new System.Drawing.Size(505, 358);
+            this.tabPage4.TabIndex = 3;
+            this.tabPage4.Text = "Conntection";
+            this.tabPage4.UseVisualStyleBackColor = true;
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(6, 6);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(121, 21);
+            this.comboBox1.TabIndex = 0;
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(6, 33);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(78, 29);
+            this.button3.TabIndex = 1;
+            this.button3.Text = "button3";
+            this.button3.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
@@ -263,6 +292,7 @@
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+            this.tabPage4.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -279,7 +309,6 @@
         private System.Windows.Forms.NumericUpDown numericUpDown1;
         private System.Windows.Forms.Button button1;
         private CrossFaders crossFaders1;
-        private System.IO.Ports.SerialPort serialPort1;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.TextBox textBox2;
@@ -287,6 +316,9 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.TabPage tabPage4;
+        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.ComboBox comboBox1;
     }
 }
 
