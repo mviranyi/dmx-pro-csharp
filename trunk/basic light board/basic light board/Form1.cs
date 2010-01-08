@@ -29,6 +29,7 @@ namespace basic_light_board
         byte[] YLevels = new byte[universeSize];
         output m_outForm;
         Stopwatch m_timer;
+        VComWrapper com;
 
         //int iterations;
         int change;
@@ -38,8 +39,61 @@ namespace basic_light_board
             InitializeComponent();
             m_outForm = new output(48);
             m_outForm.Show();
+
+            com = new VComWrapper();
+            com.dataReceived +=new EventHandler<DMXMessage>(com_dataReceived);
+            com.initPro();
+            byte []temp=new byte[2];
+            temp[0]=0xfc;
+            temp[1]=0x01;
+            com.sendMsg(DMXProMsgLabel.GET_WIDGET_PARAMETERS_REQUEST,temp);
             
         }
+
+        void com_dataReceived(object sender, DMXMessage e)
+        {
+            int len;
+            switch (e.type)
+            {
+                case DMXProMsgLabel.GET_WIDGET_PARAMETERS_REPLY: //3
+                    UInt16 Firmware = (UInt16)(e.message[0] | (e.message[1] << 8));
+                    double DMXOutBreakTime = 10.67 * e.message[2];
+                    double DMXOutMarkTime = 10.67 * e.message[3];
+                    int DMXOutRate = e.message[4];
+
+                    len = e.message.Length - 5;
+                    byte[] UserConfigData = new byte[len];
+                    Array.Copy(e.message,5,UserConfigData,0,len);
+                    break;
+                case DMXProMsgLabel.GET_WIDGET_SERIAL_NUMBER_REPLY: //10
+                    UInt32 SerialNumber;
+                    SerialNumber = (UInt32)(e.message[0] | (e.message[1] << 8) | (e.message[2] << 16) | (e.message[3] << 24));
+                    break;
+                case DMXProMsgLabel.PROGRAM_FLASH_PAGE_REPLY:
+                    bool success;
+                    string label=Encoding.UTF8.GetString(e.message, 0, 4);
+                    if (label == "TRUE") success = true;
+                    else if (label == "FALSE") success = false;
+                    else throw new Exception("Program Flash Page Responded with neither TRUE nor FALSE");
+                    break;
+                case DMXProMsgLabel.RECEIVED_DMX_CHANGE_OF_STATE_PACKET:
+                    throw new NotImplementedException("Received DMX Change of State Packet is more effort than i want to put in at 12:26");
+                    break;
+                case DMXProMsgLabel.RECEIVED_DMX_PACKET:
+                    /*The Widget sends this message to the PC unsolicited, 
+                     * whenever the Widget receives a DMX or
+                     * RDM packet from the DMX port, 
+                     * and the Receive DMX on Change mode is 'Send always'.*/
+                    bool valid = (bool)((e.message[0] & 0x01)==1);
+                    len = e.message.Length - 1;
+                    byte[] levels = new byte[len];
+                    Array.Copy(e.message, 1, levels, 0, len);
+                    break;
+
+
+            }                
+        }
+
 
         private void updateTextBox()
         {
@@ -51,15 +105,13 @@ namespace basic_light_board
 
 
             }
-            //int i = 1;
-            //foreach (byte b in LiveLevels)
-            //{
-            //    str.AppendFormat("Ch{0,2}:{1,4} ", i++, b);
-            //    if (i!=0 && (i-1) % 6 == 0) str.AppendLine();
-            //}
             textBox1.Text = str.ToString();
         }
 
+        private void updateWidget()
+        {
+            com.sendDMXPacketRequest(LiveLevels);               
+        }
 
         private void updateOutForm()
         {
@@ -80,6 +132,7 @@ namespace basic_light_board
             }
             updateTextBox();
             updateOutForm();
+            updateWidget();
         }
                
 
@@ -164,7 +217,7 @@ namespace basic_light_board
 
         private void button2_Click(object sender, EventArgs e)
         {
-            SliderGroup.patch(47, 1, 128);
+            com.GetWidgetSerialNumber();
         }
 
 
@@ -194,7 +247,11 @@ namespace basic_light_board
                     int d = int.Parse(m.Groups["dimmer"].Value);
                     int c = int.Parse(m.Groups["channel"].Value);
                     byte l;
-                    if (m.Groups["level"].Value.EndsWith("%"))
+                    if (m.Groups["level"].Value == "")
+                    {
+                        l = 255;
+                    }
+                    else if (m.Groups["level"].Value.EndsWith("%"))
                     {
                         l = (byte)(int.Parse(m.Groups["level"].Value.TrimEnd('%')) * 255/100);
                     }
