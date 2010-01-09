@@ -33,69 +33,174 @@ namespace basic_light_board
             type = t;
         }
     }
+
+    class WidgetParameterArgs : EventArgs
+    {
+        public UInt16 Firmware;
+        public double DMXOutBreakTime;
+        public double DMXOutMarkTime;
+        public int DMXOutRate;
+        public byte[] UserConfigData;
+
+        public WidgetParameterArgs(UInt16 dmxFirmware, double dmxOutBreakTime, double dmxOutMarkTime, int dmxOutRate, byte[] ConfigData)
+        {
+            Firmware = dmxFirmware;
+            DMXOutBreakTime = dmxOutBreakTime;
+            DMXOutMarkTime = dmxOutMarkTime;
+            DMXOutRate = dmxOutRate;
+            UserConfigData = ConfigData;
+        }
+    }
+    class SerialNumberArgs : EventArgs
+    {
+        public UInt32 SerialNumber;
+        public SerialNumberArgs(UInt32 serial)
+        {
+            SerialNumber = serial;
+        }
+    }
+    class DMXLevelArgs : EventArgs
+    {
+        public bool valid;
+        public byte[] levels;
+        public DMXLevelArgs(bool isValid, byte[] lvls)
+        {
+            valid = isValid;
+            levels = lvls;
+        }
+    }
+    class FlashReplyArgs : EventArgs
+    {
+        public bool success;
+        public FlashReplyArgs(bool s)
+        {
+            success = s;
+        }
+    }
+
+
+
     class VComWrapper
     {
         public System.IO.Ports.SerialPort m_port;
         public const byte msgStart = 0x7e;
         public const byte msgEnd = 0xe7;
-        public string buffer;
 
-        public event EventHandler<DMXMessage> dataReceived;
+        public event EventHandler<WidgetParameterArgs> WidgetParametersReceived;
+        public event EventHandler<SerialNumberArgs> SerialNumberReceived;
+        public event EventHandler<FlashReplyArgs> FlashReplyRecieved;
+        public event EventHandler<DMXLevelArgs> DMXLevelsRecieved;
         
         
-
         public VComWrapper()
         {
             m_port = new System.IO.Ports.SerialPort();
-            //m_port.BaudRate = 9600;
-            //m_port.DataBits = 8;
             m_port.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(m_port_DataReceived);
-            m_port.Encoding = Encoding.UTF8;
             m_port.ErrorReceived += new System.IO.Ports.SerialErrorReceivedEventHandler(m_port_ErrorReceived);
-            m_port.PortName = "COM4";
-            //m_port.NewLine = string.Format("{0}", (char)msgEnd);
-        
-            
+            m_port.Encoding = Encoding.UTF8;            
         }
+
+        public bool initPro(string portName)
+        {
+            if (!m_port.IsOpen )
+            {
+                try
+                {
+                    m_port.PortName = portName;
+                    m_port.Open();
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    //throw new Exception(string.Format("Failed to open USB DMX Pro on comm port: {0} - Check Settings, Device",m_port.PortName),ex);
+                    return false;
+                }
+            }
+            return false;
+        }
+        public void detatchPro()
+        {
+            if (m_port.IsOpen)
+                m_port.Close();
+        }
+        public bool IsOpen { get { return m_port.IsOpen; } }
 
         void m_port_ErrorReceived(object sender, System.IO.Ports.SerialErrorReceivedEventArgs e)
         {
             throw new System.NotImplementedException();
         }
-
-
-        public void initPro()
-        {
-            if (!m_port.IsOpen)
-            {
-                try
-                {
-                    m_port.Open();
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception(string.Format("Failed to open USB DMX Pro on comm port: {0} - Check Settings, Device",m_port.PortName),ex);
-                }
-            }
-        }
-
         void m_port_DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
         {
             byte[] header = new byte[4];
+            byte[] message;
+            byte footer;
             int length;
             m_port.Read(header, 0, 4);
             if (header[0] != VComWrapper.msgStart) return;
             length = header[2] | (header[3] << 8);
-            byte[] message = new byte[length+1];
+            message = new byte[length]; 
             m_port.Read(message, 0, length);
-            byte[] footer = new byte[1];
-            m_port.Read(footer,0,1);
-            if (footer[0] != VComWrapper.msgEnd) return;
-            buffer = Encoding.UTF8.GetString(header) + Encoding.UTF8.GetString(message);
-            if (dataReceived != null) dataReceived(this, new DMXMessage((DMXProMsgLabel)header[1], message));
+//            footer = new byte[1];
+            footer = (byte)m_port.ReadByte();
+            if (footer != VComWrapper.msgEnd) return;
+            decodeMessage((DMXProMsgLabel)header[1], message);
         }
 
+        void decodeMessage(DMXProMsgLabel label, byte [] msg)
+        {
+            int len;
+            switch (label)
+            {
+                case DMXProMsgLabel.GET_WIDGET_PARAMETERS_REPLY: //3
+                    UInt16 Firmware = (UInt16)(msg[0] | (msg[1] << 8));
+                    double DMXOutBreakTime = 10.67 * msg[2];
+                    double DMXOutMarkTime = 10.67 * msg[3];
+                    int DMXOutRate = msg[4];
 
+                    len = msg.Length - 5;
+                    byte[] UserConfigData = new byte[len];
+                    Array.Copy(msg, 5, UserConfigData, 0, len);
+                    if (WidgetParametersReceived != null) WidgetParametersReceived(this, new WidgetParameterArgs(Firmware, DMXOutBreakTime, DMXOutMarkTime,DMXOutRate, UserConfigData));
+                    break;
+                case DMXProMsgLabel.GET_WIDGET_SERIAL_NUMBER_REPLY: //10
+                    UInt32 SerialNumber;
+                    SerialNumber = (UInt32)(msg[0] | (msg[1] << 8) | (msg[2] << 16) | (msg[3] << 24));
+                    if (SerialNumberReceived != null) SerialNumberReceived(this, new SerialNumberArgs(SerialNumber));
+                    break;
+                case DMXProMsgLabel.PROGRAM_FLASH_PAGE_REPLY:
+                    bool success;
+                    string result = Encoding.UTF8.GetString(msg, 0, 4);
+                    if (result == "TRUE") success = true;
+                    else if (result == "FALSE") success = false;
+                    else throw new Exception(string.Format("Program Flash Page Responded with neither TRUE nor FALSE({0})",result ));
+
+                    if (FlashReplyRecieved != null) FlashReplyRecieved(this, new FlashReplyArgs(success));
+                    break;
+                case DMXProMsgLabel.RECEIVED_DMX_CHANGE_OF_STATE_PACKET:
+                    throw new NotImplementedException("Received DMX Change of State Packet is more effort than i want to put in at 12:26");
+                    break;
+                case DMXProMsgLabel.RECEIVED_DMX_PACKET:
+                    /*The Widget sends this message to the PC unsolicited, 
+                     * whenever the Widget receives a DMX or
+                     * RDM packet from the DMX port, 
+                     * and the Receive DMX on Change mode is 'Send always'.*/
+                    bool valid = (bool)((msg[0] & 0x01) == 1);
+                    len = msg.Length - 1;
+                    byte[] levels = new byte[len];
+                    Array.Copy(msg, 1, levels, 0, len);
+                    if (DMXLevelsRecieved != null) DMXLevelsRecieved(this, new DMXLevelArgs(valid, levels));
+                    break;
+
+
+            }
+        }
+
+        /// <summary>
+        /// construct any message
+        /// this is a helper function and should not be called directly unless implementing a new type of message
+        /// </summary>
+        /// <param name="label">the enumeration label of the message you are sending</param>
+        /// <param name="data">and pertinent data the message type requires</param>
         public void sendMsg(DMXProMsgLabel label,byte []data)
         {
             if (!m_port.IsOpen) return;
@@ -111,18 +216,29 @@ namespace basic_light_board
         }
 
 
+        /// <summary>
+        /// tells the Widget that we want to reprogram it's flash
+        /// </summary>
         public void sendReprogramFirmwareRequest()
         {
             // not sure this makes sense
             sendMsg(DMXProMsgLabel.REPROGRAM_FIRMWARE_REQUEST, new byte[0]);
         }
 
+        /// <summary>
+        /// programs one page of the Widgets Flash
+        /// </summary>
+        /// <param name="page">an array of 64 bytes that corrisponds to a page of flash</param>
         public void sendProgramFlashPageRequest(byte[] page)
         {
             if (page.Length != 64) throw new Exception("page file must be 64 bytes");
             sendMsg(DMXProMsgLabel.PROGRAM_FLASH_PAGE_REQUEST, page);
         }
 
+        /// <summary>
+        /// gets data about the widget including DMX Timings,Firmware Version, and any user defined data
+        /// </summary>
+        /// <param name="configSize">the size of the user defined Data</param>
         public void sendGetWidgetParametersRequest(UInt16 configSize)
         {
             if (configSize > 508) throw new Exception("Config Size must be <= 508 bytes");
@@ -132,6 +248,13 @@ namespace basic_light_board
             sendMsg(DMXProMsgLabel.GET_WIDGET_PARAMETERS_REQUEST, size);
         }
 
+        /// <summary>
+        /// sets the parameters of the widget
+        /// </summary>
+        /// <param name="DMXOutputBreakTime">the low time at the start of a DMX Packet (>88 uS) usually 100-120uS</param>
+        /// <param name="DMXOutputMarkTime"></param>
+        /// <param name="DMXOutRate"></param>
+        /// <param name="configData"></param>
         public void SetWidgetParametersRequest(float DMXOutputBreakTime, float DMXOutputMarkTime, int DMXOutRate, byte[] configData)
         {
             byte breakTime =(byte)( DMXOutputBreakTime / 10.67);
