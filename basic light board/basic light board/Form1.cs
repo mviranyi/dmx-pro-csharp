@@ -31,7 +31,7 @@ namespace basic_light_board
         Stopwatch m_timer;
         VComWrapper com;
 
-        //int iterations;
+        int iterations;
         int change;
 
         public Form1()
@@ -41,13 +41,22 @@ namespace basic_light_board
             m_outForm.Show();
 
             com = new VComWrapper();
-            com.dataReceived +=new EventHandler<DMXMessage>(com_dataReceived);
-            com.initPro();
-            byte []temp=new byte[2];
-            temp[0]=0xfc;
-            temp[1]=0x01;
-            com.sendMsg(DMXProMsgLabel.GET_WIDGET_PARAMETERS_REQUEST,temp);
-            
+            //com.dataReceived +=new EventHandler<DMXMessage>(com_dataReceived);
+            com.SerialNumberReceived += new EventHandler<SerialNumberArgs>(com_SerialNumberReceived);
+            com.WidgetParametersReceived += new EventHandler<WidgetParameterArgs>(com_WidgetParametersReceived);
+            com.initPro("COM4");
+            com.sendGetWidgetParametersRequest(508);           
+        }
+
+        void com_WidgetParametersReceived(object sender, WidgetParameterArgs e)
+        {
+            MessageBox.Show(string.Format("Firmware: {0}\nBreakTime: {1}\nMarkTime:{2}\nOutRate: {3}\nUserConfig:{4}",
+                e.Firmware, e.DMXOutBreakTime, e.DMXOutMarkTime, e.DMXOutRate, e.UserConfigData));
+        }
+
+        void com_SerialNumberReceived(object sender, SerialNumberArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         void com_dataReceived(object sender, DMXMessage e)
@@ -110,7 +119,15 @@ namespace basic_light_board
 
         private void updateWidget()
         {
-            com.sendDMXPacketRequest(LiveLevels);               
+            if (com.m_port.BytesToWrite == 0)
+            {
+                iterations = 0;
+                com.sendDMXPacketRequest(LiveLevels);
+            }
+            else
+            {
+                iterations++;
+            }
         }
 
         private void updateOutForm()
@@ -305,6 +322,11 @@ namespace basic_light_board
                         MessageBox.Show(ex.ToString());
                 }
             }
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            com.detatchPro();
         }
 
     }
