@@ -178,7 +178,7 @@ namespace basic_light_board
                     break;
                 case DMXProMsgLabel.RECEIVED_DMX_CHANGE_OF_STATE_PACKET:
                     throw new NotImplementedException("Received DMX Change of State Packet is more effort than i want to put in at 12:26");
-                    break;
+                    //break;
                 case DMXProMsgLabel.RECEIVED_DMX_PACKET:
                     /*The Widget sends this message to the PC unsolicited, 
                      * whenever the Widget receives a DMX or

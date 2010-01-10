@@ -31,7 +31,7 @@ namespace basic_light_board
         /// </summary>
         public static List<byte> Level = new List<byte>();
 
-        //public List<int> m_PatchList { get { return Patchlist; } set { Patchlist = value; } }
+        
         private List<SingleSlider> m_sliders;
         
         [Description("Event fires when the Value property changes")]

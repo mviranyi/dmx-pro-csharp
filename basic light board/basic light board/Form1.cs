@@ -59,6 +59,7 @@ namespace basic_light_board
             throw new NotImplementedException();
         }
 
+        /*
         void com_dataReceived(object sender, DMXMessage e)
         {
             int len;
@@ -89,10 +90,10 @@ namespace basic_light_board
                     throw new NotImplementedException("Received DMX Change of State Packet is more effort than i want to put in at 12:26");
                     break;
                 case DMXProMsgLabel.RECEIVED_DMX_PACKET:
-                    /*The Widget sends this message to the PC unsolicited, 
-                     * whenever the Widget receives a DMX or
-                     * RDM packet from the DMX port, 
-                     * and the Receive DMX on Change mode is 'Send always'.*/
+                    //*The Widget sends this message to the PC unsolicited, 
+                    // * whenever the Widget receives a DMX or
+                    // * RDM packet from the DMX port, 
+                    // * and the Receive DMX on Change mode is 'Send always'./
                     bool valid = (bool)((e.message[0] & 0x01)==1);
                     len = e.message.Length - 1;
                     byte[] levels = new byte[len];
@@ -102,7 +103,7 @@ namespace basic_light_board
 
             }                
         }
-
+        */
 
         private void updateTextBox()
         {
