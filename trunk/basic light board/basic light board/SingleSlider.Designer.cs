@@ -32,13 +32,14 @@
             this.channelLabel = new System.Windows.Forms.Label();
             this.percentLabel = new System.Windows.Forms.Label();
             this.mainSlider = new MB.Controls.ColorSlider();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // button1
             // 
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.Location = new System.Drawing.Point(3, 164);
+            this.button1.Location = new System.Drawing.Point(3, 197);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(25, 24);
             this.button1.TabIndex = 1;
@@ -51,7 +52,7 @@
             this.channelLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.channelLabel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.channelLabel.Location = new System.Drawing.Point(3, 4);
+            this.channelLabel.Location = new System.Drawing.Point(3, 23);
             this.channelLabel.Name = "channelLabel";
             this.channelLabel.Size = new System.Drawing.Size(25, 23);
             this.channelLabel.TabIndex = 2;
@@ -62,7 +63,7 @@
             this.percentLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.percentLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.percentLabel.Location = new System.Drawing.Point(3, 138);
+            this.percentLabel.Location = new System.Drawing.Point(3, 171);
             this.percentLabel.Name = "percentLabel";
             this.percentLabel.Size = new System.Drawing.Size(25, 23);
             this.percentLabel.TabIndex = 3;
@@ -78,12 +79,12 @@
             this.mainSlider.BorderRoundRectSize = new System.Drawing.Size(8, 8);
             this.mainSlider.invertDirection = true;
             this.mainSlider.LargeChange = ((uint)(64u));
-            this.mainSlider.Location = new System.Drawing.Point(3, 30);
+            this.mainSlider.Location = new System.Drawing.Point(3, 49);
             this.mainSlider.Maximum = 255;
             this.mainSlider.MouseWheelBarPartitions = 16;
             this.mainSlider.Name = "mainSlider";
             this.mainSlider.Orientation = System.Windows.Forms.Orientation.Vertical;
-            this.mainSlider.Size = new System.Drawing.Size(25, 105);
+            this.mainSlider.Size = new System.Drawing.Size(25, 119);
             this.mainSlider.SmallChange = ((uint)(1u));
             this.mainSlider.TabIndex = 0;
             this.mainSlider.Text = "colorSlider1";
@@ -92,17 +93,26 @@
             this.mainSlider.ValueChanged += new System.EventHandler(this.mainSlider_ValueChanged);
             this.mainSlider.Scroll += new System.Windows.Forms.ScrollEventHandler(this.mainSlider_Scroll);
             // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(0, 0);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(31, 20);
+            this.textBox1.TabIndex = 4;
+            // 
             // SingleSlider
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.textBox1);
             this.Controls.Add(this.percentLabel);
             this.Controls.Add(this.channelLabel);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.mainSlider);
             this.Name = "SingleSlider";
-            this.Size = new System.Drawing.Size(31, 191);
+            this.Size = new System.Drawing.Size(31, 224);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -112,5 +122,6 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label channelLabel;
         private System.Windows.Forms.Label percentLabel;
+        private System.Windows.Forms.TextBox textBox1;
     }
 }
