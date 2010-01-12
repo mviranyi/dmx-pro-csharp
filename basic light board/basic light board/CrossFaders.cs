@@ -11,6 +11,7 @@ namespace basic_light_board
     public partial class CrossFaders : UserControl
     {
         public event EventHandler ValueChanged;
+        public event EventHandler SceneChanged;
 
         public byte Scene1Value {
             set
@@ -48,13 +49,50 @@ namespace basic_light_board
             }
         }
 
+        public byte CurrentSceneValue
+        {
+            get
+            {
+                if (inLeftScene)
+                    return Scene1Value;
+                else
+                    return Scene2Value;
+            }
+            set
+            {
+                if (inLeftScene) Scene1Value = value;
+                else Scene2Value = value;
+            }
+        }
+
+        public byte NextSceneValue
+        {
+            get
+            {
+                if (inLeftScene)
+                    return Scene2Value;
+                else
+                    return Scene1Value;
+            }
+            set
+            {
+                if (inLeftScene) Scene2Value = value;
+                else Scene1Value = value;
+            }
+        }
+
+
         private bool centralSliderActive;
+
+        private bool inLeftScene = true;
+        private bool inRightScene = false;
 
         
 
         public CrossFaders()
         {
             InitializeComponent();
+            checkScene();
 
             Binding Bnd = new Binding("Value", label1, "Text");
             Bnd.DataSourceUpdateMode = DataSourceUpdateMode.OnPropertyChanged;
@@ -96,6 +134,38 @@ namespace basic_light_board
         private void OnValueChanged()
         {
             if (ValueChanged != null) ValueChanged(this, new EventArgs());
+            checkScene();
+
+        }
+
+        private void onSceneChange()
+        {
+            if (inLeftScene)
+                Console.WriteLine("now in Left Scene");
+            else
+                Console.WriteLine("now in Right Scene");
+            if (SceneChanged != null) SceneChanged(this, new EventArgs());
+        }
+
+        private void checkScene()
+        {
+            if (Scene1Value == 255 && Scene2Value == 0 && inRightScene)
+            {
+                inLeftScene = true;
+                inRightScene = false;
+                lblLeft.Text = "Current";
+                lblRight.Text = "Next";
+                onSceneChange();
+            }
+            if (Scene1Value == 0 && Scene2Value == 255 && inLeftScene)
+            {
+                inLeftScene = false;
+                inRightScene = true;
+                lblLeft.Text = "Next";
+                lblRight.Text = "Current";
+                
+                onSceneChange();
+            }
         }
 
         private void colorSlider3_Scroll(object sender, ScrollEventArgs e)

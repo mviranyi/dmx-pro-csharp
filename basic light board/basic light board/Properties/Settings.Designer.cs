@@ -58,5 +58,17 @@ namespace basic_light_board.Properties {
                 this["PatchList"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("myCues.csv")]
+        public string cueFile {
+            get {
+                return ((string)(this["cueFile"]));
+            }
+            set {
+                this["cueFile"] = value;
+            }
+        }
     }
 }

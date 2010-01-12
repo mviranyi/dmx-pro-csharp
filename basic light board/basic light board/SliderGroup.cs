@@ -11,14 +11,46 @@ namespace basic_light_board
 {
     public partial class SliderGroup : UserControl
     {
-        
+        private bool suspendValuesChanged = false;
         /// <summary>
         /// Values contains one entry for ever dimmer
         /// Values[0] is the value of dimmer 1 (0-255)
         /// </summary>
-        public byte[] Values = new byte[512];
+        private byte[] mValues = new byte[512];
 
-        
+        /// <summary>
+        /// mChannelLevel contains one entry for every channel
+        /// mChannelLevel[0] contains the value for channel 1 (0-255)
+        /// </summary>
+        private byte[] mChannelLevels = new byte[512]; //512 is just a safty maximum....this is the number of channels not dimmers
+
+        public byte[] dimmerValues
+        {
+            get { return mValues; }
+            set { mValues = value; onValuesChanged(); }
+        } 
+
+        public byte[] ChannelValues
+        {
+            get { return mChannelLevels; }
+            set
+            {
+                suspendValuesChanged = true;
+                for (int i = 0; i < Math.Min(m_sliders.Count,value.Length); i++)
+                {
+                    m_sliders[i].Value = value[i];
+                }
+                suspendValuesChanged = false;
+                onValuesChanged();
+            }
+        }
+
+
+        private void onValuesChanged()
+        {
+            if (ValueChanged != null && !suspendValuesChanged) ValueChanged(this, new EventArgs());
+        }
+
         /// <summary>
         ///Patchlist contains one entry for every dimmer
         ///Patchlist[0] contains the channel that dimmer 1 is patched into. (1-> anything)
@@ -36,11 +68,11 @@ namespace basic_light_board
         
         private List<SingleSlider> m_sliders;
         
-        [Description("Event fires when any Value property changes")]
+        [Description("cueChanged fires when any Value property changes")]
         [Category("Action")]
         public event EventHandler ValueChanged;
 
-        [Description("Event fires when any Label property changes")]
+        [Description("cueChanged fires when any Label property changes")]
         [Category("Action")]
         public static event EventHandler<LabelChangedArgs> LabelChanged;
 
@@ -53,7 +85,7 @@ namespace basic_light_board
             if (Patchlist.Count==0) setupPatch();
 
             
-            // construct the list of sliders based on what is already in the control
+            // construct the list of sliders based onIsFollowTimeChanged what is already in the control
             m_sliders=new List<SingleSlider>();
             foreach (SingleSlider slide in this.tableLayoutPanel1.Controls)
             {
@@ -72,9 +104,12 @@ namespace basic_light_board
             
             if (channel < m_sliders.Count)
             {
-                m_sliders[channel-1].Value = value;
-                return;
+                if (m_sliders[channel - 1].Value != value)
+                {
+                    m_sliders[channel - 1].Value = value;
+                }
             }
+            ChannelValues[channel - 1] = value;
             updateValuesWithPatchList(channel, value);
         }
 
@@ -102,29 +137,28 @@ namespace basic_light_board
         {
             int channel = (sender as SingleSlider).Channel;
             byte value = (sender as SingleSlider).Value;
-
-            updateValuesWithPatchList(channel, value);
+            setLevel(channel, value);
         }
 
         private void singleSlider1_Scroll(object sender, ScrollEventArgs e)
         {
             int channel = (sender as SingleSlider).Channel;
             byte value = (sender as SingleSlider).Value;
-
-            updateValuesWithPatchList(channel, value);
+            setLevel(channel, value);
         }
 
         private void updateValuesWithPatchList(int chan,byte value)
         {
+            
             int i=0;
-             //update dimmerList based on the patch list
+             //update dimmerList based onIsFollowTimeChanged the patch list
             i=Patchlist.IndexOf(chan, i);
             while (i != -1)
             {
-                Values[i] = (byte)(value*Level[i]/255);
+                mValues[i] = (byte)(value*Level[i]/255);
                 i = Patchlist.IndexOf(chan, i+1);
             }
-            if (ValueChanged != null) ValueChanged(this, new EventArgs());
+            onValuesChanged();
         }
 
         private void singleSlider1_LabelChanged(object sender, EventArgs e)
