@@ -31,8 +31,8 @@
             this.button1 = new System.Windows.Forms.Button();
             this.channelLabel = new System.Windows.Forms.Label();
             this.percentLabel = new System.Windows.Forms.Label();
-            this.mainSlider = new MB.Controls.ColorSlider();
             this.textBox1 = new System.Windows.Forms.TextBox();
+            this.mainSlider = new MB.Controls.ColorSlider();
             this.SuspendLayout();
             // 
             // button1
@@ -70,6 +70,14 @@
             this.percentLabel.Text = "0";
             this.percentLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(0, 0);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(31, 20);
+            this.textBox1.TabIndex = 4;
+            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
+            // 
             // mainSlider
             // 
             this.mainSlider.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
@@ -93,13 +101,6 @@
             this.mainSlider.ValueChanged += new System.EventHandler(this.mainSlider_ValueChanged);
             this.mainSlider.Scroll += new System.Windows.Forms.ScrollEventHandler(this.mainSlider_Scroll);
             // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(0, 0);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(31, 20);
-            this.textBox1.TabIndex = 4;
-            // 
             // SingleSlider
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -122,6 +123,6 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label channelLabel;
         private System.Windows.Forms.Label percentLabel;
-        private System.Windows.Forms.TextBox textBox1;
+        public System.Windows.Forms.TextBox textBox1;
     }
 }

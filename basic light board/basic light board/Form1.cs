@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
+using basic_light_board.Properties;
 
 namespace basic_light_board
 {
@@ -36,22 +37,37 @@ namespace basic_light_board
 
         public Form1()
         {
+            SliderGroup.Labels = Settings.Default.Labels.Split(',');
+            SliderGroup.LabelChanged += new EventHandler<LabelChangedArgs>(SliderGroup_LabelChanged);
             InitializeComponent();
-            m_outForm = new output(48);
-            m_outForm.Show();
+
 
             com = new VComWrapper();
-            //com.dataReceived +=new EventHandler<DMXMessage>(com_dataReceived);
             com.SerialNumberReceived += new EventHandler<SerialNumberArgs>(com_SerialNumberReceived);
             com.WidgetParametersReceived += new EventHandler<WidgetParameterArgs>(com_WidgetParametersReceived);
-            com.initPro("COM4");
-            com.sendGetWidgetParametersRequest(508);           
+        }
+
+        void SliderGroup_LabelChanged(object sender, LabelChangedArgs e)
+        {
+            string[] temp = Settings.Default.Labels.Split(',');
+            if (temp.Length < (e.slider.Channel))
+            {
+                string[] temp1 = new string[e.slider.Channel];
+                Array.Copy(temp, temp1, temp.Length);
+                temp = temp1;
+            }
+            temp[e.slider.Channel - 1] = e.slider.textBox1.Text;
+            Settings.Default.Labels = String.Join(",", temp);
+            SliderGroup.Labels = temp ;
+            Settings.Default.Save();
         }
 
         void com_WidgetParametersReceived(object sender, WidgetParameterArgs e)
         {
-            MessageBox.Show(string.Format("Firmware: {0}\nBreakTime: {1}\nMarkTime:{2}\nOutRate: {3}\nUserConfig:{4}",
-                e.Firmware, e.DMXOutBreakTime, e.DMXOutMarkTime, e.DMXOutRate, e.UserConfigData));
+            if (this.InvokeRequired)
+                this.Invoke(new System.Action<string>(delegate(string s) { this.Text =s; }),"Connected");
+            else
+                this.Text = "Connected";
         }
 
         void com_SerialNumberReceived(object sender, SerialNumberArgs e)
@@ -120,19 +136,16 @@ namespace basic_light_board
 
         private void updateWidget()
         {
-            if (com.m_port.BytesToWrite == 0)
-            {
-                iterations = 0;
-                com.sendDMXPacketRequest(LiveLevels);
-            }
-            else
-            {
-                iterations++;
-            }
+            if (com == null) return;
+            if (com.IsOpen == false) return;
+            if (com.m_port.BytesToWrite > 0) return;
+
+            com.sendDMXPacketRequest(LiveLevels);
         }
 
         private void updateOutForm()
         {
+            if (m_outForm == null) return;
             for (int i = 0; i < m_outForm.m_Bars.Count; i++)
             {
                 m_outForm.m_Bars[i].Value = LiveLevels[i];
@@ -328,6 +341,28 @@ namespace basic_light_board
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             com.detatchPro();
+            // save the labels
+            //String.Join(",", intArray.Select(i => i.ToString()).ToArray());
+            Settings.Default.Save();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+            m_outForm = new output(48);
+            m_outForm.Show();
+
+            comboBox1.Items.AddRange(System.IO.Ports.SerialPort.GetPortNames());
+            comboBox1.SelectedIndex = 0;
+            this.Text = "Not Connected";
+
+            // get the labels and 
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            if (com.initPro((string)comboBox1.SelectedItem))
+                com.sendGetWidgetParametersRequest((ushort)0);
         }
 
     }

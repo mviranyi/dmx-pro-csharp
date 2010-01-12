@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Data;
 using System.Text;
 using System.Windows.Forms;
+using basic_light_board.Properties;
 
 namespace basic_light_board
 {
@@ -31,24 +32,36 @@ namespace basic_light_board
         /// </summary>
         public static List<byte> Level = new List<byte>();
 
+        public static string[] Labels;
         
         private List<SingleSlider> m_sliders;
         
-        [Description("Event fires when the Value property changes")]
+        [Description("Event fires when any Value property changes")]
         [Category("Action")]
         public event EventHandler ValueChanged;
+
+        [Description("Event fires when any Label property changes")]
+        [Category("Action")]
+        public static event EventHandler<LabelChangedArgs> LabelChanged;
+
+
 
         public SliderGroup()
         {
             InitializeComponent();
 
             if (Patchlist.Count==0) setupPatch();
+
             
+            // construct the list of sliders based on what is already in the control
             m_sliders=new List<SingleSlider>();
             foreach (SingleSlider slide in this.tableLayoutPanel1.Controls)
             {
                 slide.Value = 0;
-                m_sliders.Add(slide );
+                m_sliders.Add(slide);
+                if (Labels == null) continue;
+                if (Labels.Length >= slide.Channel)
+                    slide.textBox1.Text = Labels[slide.Channel-1];
             }
         }
 
@@ -113,5 +126,32 @@ namespace basic_light_board
             }
             if (ValueChanged != null) ValueChanged(this, new EventArgs());
         }
+
+        private void singleSlider1_LabelChanged(object sender, EventArgs e)
+        {
+            if (LabelChanged != null)
+            {
+                LabelChanged(this, new LabelChangedArgs(sender as SingleSlider));
+                return;
+            }
+            SingleSlider s = (SingleSlider)sender;
+            if (Labels.Length < (s.Channel  ))
+            {
+                string[] temp = new string[s.Channel];
+                Array.Copy(Labels, temp, Labels.Length);
+                Labels = temp;
+            }
+            Labels[s.Channel - 1] = s.textBox1.Text;
+        }
     }
+    public class LabelChangedArgs : EventArgs
+    {
+        public SingleSlider slider;
+        public LabelChangedArgs(SingleSlider s)
+        {
+            slider = s;
+        }
+
+    }
+    
 }

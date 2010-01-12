@@ -10,6 +10,11 @@ namespace basic_light_board
 {
     public partial class SingleSlider : UserControl
     {
+        [Description("Event fires when the Label property changes")]
+        [Category("Action")]
+        public event EventHandler LabelChanged;
+
+
         [Description("Event fires when the Value property changes")]
         [Category("Action")]
         public event EventHandler ValueChanged;
@@ -73,6 +78,11 @@ namespace basic_light_board
             if (e.Button != MouseButtons.Left) return;
             mainSlider.Value=preBumpVal ;
             if (ValueChanged != null) ValueChanged(this, new EventArgs());
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            if (LabelChanged != null) LabelChanged(this, new EventArgs());
         }
 
         

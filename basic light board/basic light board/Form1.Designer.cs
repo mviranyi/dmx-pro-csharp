@@ -30,7 +30,9 @@
         {
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.sliderGroup1 = new basic_light_board.SliderGroup();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.sliderGroup2 = new basic_light_board.SliderGroup();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -45,8 +47,6 @@
             this.button2 = new System.Windows.Forms.Button();
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.crossFaders1 = new basic_light_board.CrossFaders();
-            this.sliderGroup1 = new basic_light_board.SliderGroup();
-            this.sliderGroup2 = new basic_light_board.SliderGroup();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -82,6 +82,15 @@
             this.tabPage1.Text = "X";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // sliderGroup1
+            // 
+            this.sliderGroup1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.sliderGroup1.Location = new System.Drawing.Point(3, 3);
+            this.sliderGroup1.Name = "sliderGroup1";
+            this.sliderGroup1.Size = new System.Drawing.Size(499, 352);
+            this.sliderGroup1.TabIndex = 0;
+            this.sliderGroup1.ValueChanged += new System.EventHandler(this.trackBar1_ValueChanged);
+            // 
             // tabPage2
             // 
             this.tabPage2.Controls.Add(this.sliderGroup2);
@@ -92,6 +101,15 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Y";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // sliderGroup2
+            // 
+            this.sliderGroup2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.sliderGroup2.Location = new System.Drawing.Point(3, 3);
+            this.sliderGroup2.Name = "sliderGroup2";
+            this.sliderGroup2.Size = new System.Drawing.Size(499, 352);
+            this.sliderGroup2.TabIndex = 0;
+            this.sliderGroup2.ValueChanged += new System.EventHandler(this.trackBar1_ValueChanged);
             // 
             // tabPage3
             // 
@@ -161,8 +179,9 @@
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(78, 29);
             this.button3.TabIndex = 1;
-            this.button3.Text = "button3";
+            this.button3.Text = "Connect";
             this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // comboBox1
             // 
@@ -253,24 +272,6 @@
             this.crossFaders1.TabIndex = 8;
             this.crossFaders1.ValueChanged += new System.EventHandler(this.trackBar1_ValueChanged);
             // 
-            // sliderGroup1
-            // 
-            this.sliderGroup1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.sliderGroup1.Location = new System.Drawing.Point(3, 3);
-            this.sliderGroup1.Name = "sliderGroup1";
-            this.sliderGroup1.Size = new System.Drawing.Size(499, 352);
-            this.sliderGroup1.TabIndex = 0;
-            this.sliderGroup1.ValueChanged += new System.EventHandler(this.trackBar1_ValueChanged);
-            // 
-            // sliderGroup2
-            // 
-            this.sliderGroup2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.sliderGroup2.Location = new System.Drawing.Point(3, 3);
-            this.sliderGroup2.Name = "sliderGroup2";
-            this.sliderGroup2.Size = new System.Drawing.Size(499, 352);
-            this.sliderGroup2.TabIndex = 0;
-            this.sliderGroup2.ValueChanged += new System.EventHandler(this.trackBar1_ValueChanged);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -286,6 +287,7 @@
             this.Controls.Add(this.tabControl1);
             this.Name = "Form1";
             this.Text = "Form1";
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
