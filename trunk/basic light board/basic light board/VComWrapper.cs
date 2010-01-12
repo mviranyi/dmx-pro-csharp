@@ -97,8 +97,41 @@ namespace basic_light_board
             m_port = new System.IO.Ports.SerialPort();
             m_port.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(m_port_DataReceived);
             m_port.ErrorReceived += new System.IO.Ports.SerialErrorReceivedEventHandler(m_port_ErrorReceived);
-            m_port.Encoding = Encoding.UTF8;            
+            m_port.Encoding = Encoding.UTF8;
         }
+
+
+        #region static methods
+        public static string[] comList;
+        public static void getWidgetList()
+        {
+            //setup the dummy Com Port
+            System.IO.Ports.SerialPort temp = new System.IO.Ports.SerialPort();
+            temp.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(temp_DataReceived);
+            temp.Encoding = Encoding.UTF8;
+
+            //try to send a get widget parameters to each port.
+            string [] possiblePorts = System.IO.Ports.SerialPort.GetPortNames();
+            foreach (string p in possiblePorts)
+            {
+                temp.PortName = p;
+                temp.Open();
+                VComWrapper.sendMsg(temp, DMXProMsgLabel.GET_WIDGET_PARAMETERS_REQUEST, new byte[2] { 0, 0 });
+                
+            }
+        }
+
+        static void temp_DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
+        {
+            
+            throw new NotImplementedException();
+        }
+
+
+
+
+
+        #endregion
 
         public bool initPro(string portName)
         {
@@ -146,12 +179,13 @@ namespace basic_light_board
             decodeMessage((DMXProMsgLabel)header[1], message);
         }
 
-        void decodeMessage(DMXProMsgLabel label, byte [] msg)
+        public void decodeMessage(DMXProMsgLabel label, byte [] msg)
         {
             int len;
             switch (label)
             {
                 case DMXProMsgLabel.GET_WIDGET_PARAMETERS_REPLY: //3
+                    if (msg.Length < 5) return;
                     UInt16 Firmware = (UInt16)(msg[0] | (msg[1] << 8));
                     double DMXOutBreakTime = 10.67 * msg[2];
                     double DMXOutMarkTime = 10.67 * msg[3];
@@ -214,7 +248,19 @@ namespace basic_light_board
             temp.Add(msgEnd);
             m_port.Write(temp.ToArray(), 0, temp.Count);
         }
+        public static void sendMsg(System.IO.Ports.SerialPort port, DMXProMsgLabel label, byte[] data)
+        {
+            if (!port.IsOpen) return;
 
+            List<byte> temp = new List<byte>();
+            temp.Add(msgStart);
+            temp.Add((byte)label);
+            temp.Add((byte)(data.Length & 0xff));
+            temp.Add((byte)(data.Length >> 8));
+            temp.AddRange(data);
+            temp.Add(msgEnd);
+            port.Write(temp.ToArray(), 0, temp.Count);
+        }
 
         /// <summary>
         /// tells the Widget that we want to reprogram it's flash
@@ -270,6 +316,12 @@ namespace basic_light_board
             sendMsg(DMXProMsgLabel.SET_WIDGET_PARAMETERS_REQUEST, msg);
         }
 
+        /// <summary>
+        /// this requests that the Widget sends DMX packets out, given the following levels
+        /// universe size is set my the number of bytes in "Levels"
+        /// Levels.Length must be [24, 512]
+        /// </summary>
+        /// <param name="Levels"></param>
         public void sendDMXPacketRequest(byte[] Levels)
         {
             if (Levels.Length < 24 || Levels.Length > 512) throw new Exception("The valid number of dimmer channels must be between 24 and 512.");
@@ -279,14 +331,24 @@ namespace basic_light_board
             sendMsg(DMXProMsgLabel.OUTPUT_ONLY_SEND_DMX_PACKET_REQUEST, msg);
         }
 
+        /// <summary>
+        /// tells the widget to send every dmx packet it receives
+        /// </summary>
         public void setSendDMXalways()
         {
             sendMsg(DMXProMsgLabel.RECEIVE_DMX_ON_CHANGE, new byte[1] { 1 });
         }
+        /// <summary>
+        /// tells the widget to send the "DMX Changed packet" when the dmx signal changes
+        /// </summary>
         public void setSendDMXOnChangeOnly()
         {
             sendMsg(DMXProMsgLabel.RECEIVE_DMX_ON_CHANGE, new byte[1] { 0 });
         }
+        /// <summary>
+        /// requests the serial number of the widget.
+        /// this should match the number on the bottom of the widget.
+        /// </summary>
         public void GetWidgetSerialNumber()
         {
             sendMsg(DMXProMsgLabel.GET_WIDGET_SERIAL_NUMBER_REQUEST, new byte[0]);

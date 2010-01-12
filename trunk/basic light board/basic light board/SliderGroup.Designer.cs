@@ -113,6 +113,7 @@
             this.singleSlider1.Size = new System.Drawing.Size(34, 186);
             this.singleSlider1.TabIndex = 0;
             this.singleSlider1.Value = ((byte)(0));
+            this.singleSlider1.LabelChanged += new System.EventHandler(this.singleSlider1_LabelChanged);
             this.singleSlider1.ValueChanged += new System.EventHandler(this.singleSlider1_ValueChanged);
             this.singleSlider1.Scroll += new System.Windows.Forms.ScrollEventHandler(this.singleSlider1_Scroll);
             // 
@@ -125,6 +126,7 @@
             this.singleSlider2.Size = new System.Drawing.Size(34, 186);
             this.singleSlider2.TabIndex = 1;
             this.singleSlider2.Value = ((byte)(0));
+            this.singleSlider2.LabelChanged += new System.EventHandler(this.singleSlider1_LabelChanged);
             this.singleSlider2.ValueChanged += new System.EventHandler(this.singleSlider1_ValueChanged);
             this.singleSlider2.Scroll += new System.Windows.Forms.ScrollEventHandler(this.singleSlider1_Scroll);
             // 
@@ -137,6 +139,7 @@
             this.singleSlider3.Size = new System.Drawing.Size(34, 186);
             this.singleSlider3.TabIndex = 2;
             this.singleSlider3.Value = ((byte)(0));
+            this.singleSlider3.LabelChanged += new System.EventHandler(this.singleSlider1_LabelChanged);
             this.singleSlider3.ValueChanged += new System.EventHandler(this.singleSlider1_ValueChanged);
             this.singleSlider3.Scroll += new System.Windows.Forms.ScrollEventHandler(this.singleSlider1_Scroll);
             // 
@@ -149,6 +152,7 @@
             this.singleSlider4.Size = new System.Drawing.Size(34, 186);
             this.singleSlider4.TabIndex = 3;
             this.singleSlider4.Value = ((byte)(0));
+            this.singleSlider4.LabelChanged += new System.EventHandler(this.singleSlider1_LabelChanged);
             this.singleSlider4.ValueChanged += new System.EventHandler(this.singleSlider1_ValueChanged);
             this.singleSlider4.Scroll += new System.Windows.Forms.ScrollEventHandler(this.singleSlider1_Scroll);
             // 
@@ -161,6 +165,7 @@
             this.singleSlider5.Size = new System.Drawing.Size(34, 186);
             this.singleSlider5.TabIndex = 4;
             this.singleSlider5.Value = ((byte)(0));
+            this.singleSlider5.LabelChanged += new System.EventHandler(this.singleSlider1_LabelChanged);
             this.singleSlider5.ValueChanged += new System.EventHandler(this.singleSlider1_ValueChanged);
             this.singleSlider5.Scroll += new System.Windows.Forms.ScrollEventHandler(this.singleSlider1_Scroll);
             // 
@@ -173,6 +178,7 @@
             this.singleSlider6.Size = new System.Drawing.Size(34, 186);
             this.singleSlider6.TabIndex = 5;
             this.singleSlider6.Value = ((byte)(0));
+            this.singleSlider6.LabelChanged += new System.EventHandler(this.singleSlider1_LabelChanged);
             this.singleSlider6.ValueChanged += new System.EventHandler(this.singleSlider1_ValueChanged);
             this.singleSlider6.Scroll += new System.Windows.Forms.ScrollEventHandler(this.singleSlider1_Scroll);
             // 
@@ -185,6 +191,7 @@
             this.singleSlider7.Size = new System.Drawing.Size(34, 186);
             this.singleSlider7.TabIndex = 6;
             this.singleSlider7.Value = ((byte)(0));
+            this.singleSlider7.LabelChanged += new System.EventHandler(this.singleSlider1_LabelChanged);
             this.singleSlider7.ValueChanged += new System.EventHandler(this.singleSlider1_ValueChanged);
             this.singleSlider7.Scroll += new System.Windows.Forms.ScrollEventHandler(this.singleSlider1_Scroll);
             // 
@@ -197,6 +204,7 @@
             this.singleSlider8.Size = new System.Drawing.Size(34, 186);
             this.singleSlider8.TabIndex = 7;
             this.singleSlider8.Value = ((byte)(0));
+            this.singleSlider8.LabelChanged += new System.EventHandler(this.singleSlider1_LabelChanged);
             this.singleSlider8.ValueChanged += new System.EventHandler(this.singleSlider1_ValueChanged);
             this.singleSlider8.Scroll += new System.Windows.Forms.ScrollEventHandler(this.singleSlider1_Scroll);
             // 
@@ -209,6 +217,7 @@
             this.singleSlider9.Size = new System.Drawing.Size(34, 186);
             this.singleSlider9.TabIndex = 8;
             this.singleSlider9.Value = ((byte)(0));
+            this.singleSlider9.LabelChanged += new System.EventHandler(this.singleSlider1_LabelChanged);
             this.singleSlider9.ValueChanged += new System.EventHandler(this.singleSlider1_ValueChanged);
             this.singleSlider9.Scroll += new System.Windows.Forms.ScrollEventHandler(this.singleSlider1_Scroll);
             // 
@@ -221,6 +230,7 @@
             this.singleSlider10.Size = new System.Drawing.Size(34, 186);
             this.singleSlider10.TabIndex = 9;
             this.singleSlider10.Value = ((byte)(0));
+            this.singleSlider10.LabelChanged += new System.EventHandler(this.singleSlider1_LabelChanged);
             this.singleSlider10.ValueChanged += new System.EventHandler(this.singleSlider1_ValueChanged);
             this.singleSlider10.Scroll += new System.Windows.Forms.ScrollEventHandler(this.singleSlider1_Scroll);
             // 
@@ -233,6 +243,7 @@
             this.singleSlider11.Size = new System.Drawing.Size(34, 186);
             this.singleSlider11.TabIndex = 10;
             this.singleSlider11.Value = ((byte)(0));
+            this.singleSlider11.LabelChanged += new System.EventHandler(this.singleSlider1_LabelChanged);
             this.singleSlider11.ValueChanged += new System.EventHandler(this.singleSlider1_ValueChanged);
             this.singleSlider11.Scroll += new System.Windows.Forms.ScrollEventHandler(this.singleSlider1_Scroll);
             // 
@@ -245,6 +256,7 @@
             this.singleSlider12.Size = new System.Drawing.Size(35, 186);
             this.singleSlider12.TabIndex = 11;
             this.singleSlider12.Value = ((byte)(0));
+            this.singleSlider12.LabelChanged += new System.EventHandler(this.singleSlider1_LabelChanged);
             this.singleSlider12.ValueChanged += new System.EventHandler(this.singleSlider1_ValueChanged);
             this.singleSlider12.Scroll += new System.Windows.Forms.ScrollEventHandler(this.singleSlider1_Scroll);
             // 
@@ -257,6 +269,7 @@
             this.singleSlider13.Size = new System.Drawing.Size(34, 187);
             this.singleSlider13.TabIndex = 12;
             this.singleSlider13.Value = ((byte)(0));
+            this.singleSlider13.LabelChanged += new System.EventHandler(this.singleSlider1_LabelChanged);
             this.singleSlider13.ValueChanged += new System.EventHandler(this.singleSlider1_ValueChanged);
             this.singleSlider13.Scroll += new System.Windows.Forms.ScrollEventHandler(this.singleSlider1_Scroll);
             // 
@@ -269,6 +282,7 @@
             this.singleSlider14.Size = new System.Drawing.Size(34, 187);
             this.singleSlider14.TabIndex = 13;
             this.singleSlider14.Value = ((byte)(0));
+            this.singleSlider14.LabelChanged += new System.EventHandler(this.singleSlider1_LabelChanged);
             this.singleSlider14.ValueChanged += new System.EventHandler(this.singleSlider1_ValueChanged);
             this.singleSlider14.Scroll += new System.Windows.Forms.ScrollEventHandler(this.singleSlider1_Scroll);
             // 
@@ -281,6 +295,7 @@
             this.singleSlider15.Size = new System.Drawing.Size(34, 187);
             this.singleSlider15.TabIndex = 14;
             this.singleSlider15.Value = ((byte)(0));
+            this.singleSlider15.LabelChanged += new System.EventHandler(this.singleSlider1_LabelChanged);
             this.singleSlider15.ValueChanged += new System.EventHandler(this.singleSlider1_ValueChanged);
             this.singleSlider15.Scroll += new System.Windows.Forms.ScrollEventHandler(this.singleSlider1_Scroll);
             // 
@@ -293,6 +308,7 @@
             this.singleSlider16.Size = new System.Drawing.Size(34, 187);
             this.singleSlider16.TabIndex = 15;
             this.singleSlider16.Value = ((byte)(0));
+            this.singleSlider16.LabelChanged += new System.EventHandler(this.singleSlider1_LabelChanged);
             this.singleSlider16.ValueChanged += new System.EventHandler(this.singleSlider1_ValueChanged);
             this.singleSlider16.Scroll += new System.Windows.Forms.ScrollEventHandler(this.singleSlider1_Scroll);
             // 
@@ -305,6 +321,7 @@
             this.singleSlider17.Size = new System.Drawing.Size(34, 187);
             this.singleSlider17.TabIndex = 16;
             this.singleSlider17.Value = ((byte)(0));
+            this.singleSlider17.LabelChanged += new System.EventHandler(this.singleSlider1_LabelChanged);
             this.singleSlider17.ValueChanged += new System.EventHandler(this.singleSlider1_ValueChanged);
             this.singleSlider17.Scroll += new System.Windows.Forms.ScrollEventHandler(this.singleSlider1_Scroll);
             // 
@@ -317,6 +334,7 @@
             this.singleSlider18.Size = new System.Drawing.Size(34, 187);
             this.singleSlider18.TabIndex = 17;
             this.singleSlider18.Value = ((byte)(0));
+            this.singleSlider18.LabelChanged += new System.EventHandler(this.singleSlider1_LabelChanged);
             this.singleSlider18.ValueChanged += new System.EventHandler(this.singleSlider1_ValueChanged);
             this.singleSlider18.Scroll += new System.Windows.Forms.ScrollEventHandler(this.singleSlider1_Scroll);
             // 
@@ -329,6 +347,7 @@
             this.singleSlider19.Size = new System.Drawing.Size(34, 187);
             this.singleSlider19.TabIndex = 18;
             this.singleSlider19.Value = ((byte)(0));
+            this.singleSlider19.LabelChanged += new System.EventHandler(this.singleSlider1_LabelChanged);
             this.singleSlider19.ValueChanged += new System.EventHandler(this.singleSlider1_ValueChanged);
             this.singleSlider19.Scroll += new System.Windows.Forms.ScrollEventHandler(this.singleSlider1_Scroll);
             // 
@@ -341,6 +360,7 @@
             this.singleSlider20.Size = new System.Drawing.Size(34, 187);
             this.singleSlider20.TabIndex = 19;
             this.singleSlider20.Value = ((byte)(0));
+            this.singleSlider20.LabelChanged += new System.EventHandler(this.singleSlider1_LabelChanged);
             this.singleSlider20.ValueChanged += new System.EventHandler(this.singleSlider1_ValueChanged);
             this.singleSlider20.Scroll += new System.Windows.Forms.ScrollEventHandler(this.singleSlider1_Scroll);
             // 
@@ -353,6 +373,7 @@
             this.singleSlider21.Size = new System.Drawing.Size(34, 187);
             this.singleSlider21.TabIndex = 20;
             this.singleSlider21.Value = ((byte)(0));
+            this.singleSlider21.LabelChanged += new System.EventHandler(this.singleSlider1_LabelChanged);
             this.singleSlider21.ValueChanged += new System.EventHandler(this.singleSlider1_ValueChanged);
             this.singleSlider21.Scroll += new System.Windows.Forms.ScrollEventHandler(this.singleSlider1_Scroll);
             // 
@@ -365,6 +386,7 @@
             this.singleSlider22.Size = new System.Drawing.Size(34, 187);
             this.singleSlider22.TabIndex = 21;
             this.singleSlider22.Value = ((byte)(0));
+            this.singleSlider22.LabelChanged += new System.EventHandler(this.singleSlider1_LabelChanged);
             this.singleSlider22.ValueChanged += new System.EventHandler(this.singleSlider1_ValueChanged);
             this.singleSlider22.Scroll += new System.Windows.Forms.ScrollEventHandler(this.singleSlider1_Scroll);
             // 
@@ -377,6 +399,7 @@
             this.singleSlider23.Size = new System.Drawing.Size(34, 187);
             this.singleSlider23.TabIndex = 22;
             this.singleSlider23.Value = ((byte)(0));
+            this.singleSlider23.LabelChanged += new System.EventHandler(this.singleSlider1_LabelChanged);
             this.singleSlider23.ValueChanged += new System.EventHandler(this.singleSlider1_ValueChanged);
             this.singleSlider23.Scroll += new System.Windows.Forms.ScrollEventHandler(this.singleSlider1_Scroll);
             // 
@@ -389,6 +412,7 @@
             this.singleSlider24.Size = new System.Drawing.Size(35, 187);
             this.singleSlider24.TabIndex = 23;
             this.singleSlider24.Value = ((byte)(0));
+            this.singleSlider24.LabelChanged += new System.EventHandler(this.singleSlider1_LabelChanged);
             this.singleSlider24.ValueChanged += new System.EventHandler(this.singleSlider1_ValueChanged);
             this.singleSlider24.Scroll += new System.Windows.Forms.ScrollEventHandler(this.singleSlider1_Scroll);
             // 
