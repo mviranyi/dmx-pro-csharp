@@ -10,17 +10,17 @@ namespace basic_light_board
 {
     public partial class SingleSlider : UserControl
     {
-        [Description("Event fires when the Label property changes")]
+        [Description("cueChanged fires when the Label property changes")]
         [Category("Action")]
         public event EventHandler LabelChanged;
 
 
-        [Description("Event fires when the Value property changes")]
+        [Description("cueChanged fires when the Value property changes")]
         [Category("Action")]
         public event EventHandler ValueChanged;
 
 
-        [Description("Event fires when the Slider position is changed")]
+        [Description("cueChanged fires when the Slider position is changed")]
         [Category("Behavior")]
         public new event ScrollEventHandler Scroll;
 
@@ -50,7 +50,8 @@ namespace basic_light_board
 
         private void updateLabel()
         {
-            percentLabel.Text = ((int)(Value / 255.0 * 100.0)).ToString();
+            //percentLabel.Text = ((int)(Value / 255.0 * 100.0)).ToString();
+            percentLabel.Text = Value.ToString();
         }
 
         private void mainSlider_Scroll(object sender, ScrollEventArgs e)
@@ -85,7 +86,10 @@ namespace basic_light_board
             if (LabelChanged != null) LabelChanged(this, new EventArgs());
         }
 
-        
+        public override string ToString()
+        {
+            return string.Format("{0,4}-[{1}]: {2}", this.Channel, this.textBox1.Text, this.Value);
+        }
 
     }
 }

@@ -143,9 +143,9 @@ namespace basic_light_board
                     m_port.Open();
                     return true;
                 }
-                catch (Exception ex)
+                catch //(Exception ex)
                 {
-                    //throw new Exception(string.Format("Failed to open USB DMX Pro on comm port: {0} - Check Settings, Device",m_port.PortName),ex);
+                    //throw new Exception(string.Format("Failed to open USB DMX Pro onIsFollowTimeChanged comm port: {0} - Check Settings, Device",m_port.PortName),ex);
                     return false;
                 }
             }
@@ -217,7 +217,7 @@ namespace basic_light_board
                     /*The Widget sends this message to the PC unsolicited, 
                      * whenever the Widget receives a DMX or
                      * RDM packet from the DMX port, 
-                     * and the Receive DMX on Change mode is 'Send always'.*/
+                     * and the Receive DMX onIsFollowTimeChanged Change mode is 'Send always'.*/
                     bool valid = (bool)((msg[0] & 0x01) == 1);
                     len = msg.Length - 1;
                     byte[] levels = new byte[len];
@@ -347,7 +347,7 @@ namespace basic_light_board
         }
         /// <summary>
         /// requests the serial number of the widget.
-        /// this should match the number on the bottom of the widget.
+        /// this should match the number onIsFollowTimeChanged the bottom of the widget.
         /// </summary>
         public void GetWidgetSerialNumber()
         {

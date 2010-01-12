@@ -11,5 +11,8 @@
     <Setting Name="PatchList" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="cueFile" Type="System.String" Scope="User">
+      <Value Profile="(Default)">myCues.csv</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

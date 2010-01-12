@@ -29,12 +29,14 @@
         private void InitializeComponent()
         {
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.Scene1Slider = new MB.Controls.ColorSlider();
-            this.Scene2Slider = new MB.Controls.ColorSlider();
-            this.CrossfaderSlider = new MB.Controls.ColorSlider();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.Scene1Slider = new MB.Controls.ColorSlider();
+            this.Scene2Slider = new MB.Controls.ColorSlider();
+            this.CrossfaderSlider = new MB.Controls.ColorSlider();
+            this.lblLeft = new System.Windows.Forms.Label();
+            this.lblRight = new System.Windows.Forms.Label();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -50,14 +52,54 @@
             this.tableLayoutPanel1.Controls.Add(this.label2, 2, 1);
             this.tableLayoutPanel1.Controls.Add(this.label1, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.checkBox1, 1, 1);
+            this.tableLayoutPanel1.Controls.Add(this.lblLeft, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.lblRight, 2, 2);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 2;
+            this.tableLayoutPanel1.RowCount = 3;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(136, 156);
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(156, 219);
             this.tableLayoutPanel1.TabIndex = 2;
+            // 
+            // label2
+            // 
+            this.label2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label2.Location = new System.Drawing.Point(116, 180);
+            this.label2.Margin = new System.Windows.Forms.Padding(3);
+            this.label2.MinimumSize = new System.Drawing.Size(27, 16);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(37, 16);
+            this.label2.TabIndex = 4;
+            this.label2.Text = "0";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label1
+            // 
+            this.label1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label1.Location = new System.Drawing.Point(3, 180);
+            this.label1.Margin = new System.Windows.Forms.Padding(3);
+            this.label1.MinimumSize = new System.Drawing.Size(27, 16);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(37, 16);
+            this.label1.TabIndex = 3;
+            this.label1.Text = "255";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(46, 180);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(61, 16);
+            this.checkBox1.TabIndex = 5;
+            this.checkBox1.Text = "Disable";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
             // Scene1Slider
             // 
@@ -75,7 +117,7 @@
             this.Scene1Slider.Maximum = 255;
             this.Scene1Slider.Name = "Scene1Slider";
             this.Scene1Slider.Orientation = System.Windows.Forms.Orientation.Vertical;
-            this.Scene1Slider.Size = new System.Drawing.Size(27, 128);
+            this.Scene1Slider.Size = new System.Drawing.Size(37, 171);
             this.Scene1Slider.SmallChange = ((uint)(1u));
             this.Scene1Slider.TabIndex = 0;
             this.Scene1Slider.Text = "colorSlider1";
@@ -96,11 +138,11 @@
             this.Scene2Slider.ElapsedOuterColor = System.Drawing.Color.DarkViolet;
             this.Scene2Slider.invertDirection = false;
             this.Scene2Slider.LargeChange = ((uint)(5u));
-            this.Scene2Slider.Location = new System.Drawing.Point(106, 3);
+            this.Scene2Slider.Location = new System.Drawing.Point(116, 3);
             this.Scene2Slider.Maximum = 255;
             this.Scene2Slider.Name = "Scene2Slider";
             this.Scene2Slider.Orientation = System.Windows.Forms.Orientation.Vertical;
-            this.Scene2Slider.Size = new System.Drawing.Size(27, 128);
+            this.Scene2Slider.Size = new System.Drawing.Size(37, 171);
             this.Scene2Slider.SmallChange = ((uint)(1u));
             this.Scene2Slider.TabIndex = 1;
             this.Scene2Slider.Text = "colorSlider2";
@@ -125,12 +167,12 @@
             this.CrossfaderSlider.ElapsedOuterColor = System.Drawing.Color.Transparent;
             this.CrossfaderSlider.invertDirection = true;
             this.CrossfaderSlider.LargeChange = ((uint)(5u));
-            this.CrossfaderSlider.Location = new System.Drawing.Point(36, 3);
+            this.CrossfaderSlider.Location = new System.Drawing.Point(46, 3);
             this.CrossfaderSlider.Maximum = 255;
             this.CrossfaderSlider.MouseEffects = false;
             this.CrossfaderSlider.Name = "CrossfaderSlider";
             this.CrossfaderSlider.Orientation = System.Windows.Forms.Orientation.Vertical;
-            this.CrossfaderSlider.Size = new System.Drawing.Size(64, 128);
+            this.CrossfaderSlider.Size = new System.Drawing.Size(64, 171);
             this.CrossfaderSlider.SmallChange = ((uint)(1u));
             this.CrossfaderSlider.TabIndex = 2;
             this.CrossfaderSlider.Text = "colorSlider3";
@@ -139,42 +181,25 @@
             this.CrossfaderSlider.ValueChanged += new System.EventHandler(this.colorSlider3_ValueChanged);
             this.CrossfaderSlider.Scroll += new System.Windows.Forms.ScrollEventHandler(this.colorSlider3_Scroll);
             // 
-            // label2
+            // lblLeft
             // 
-            this.label2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label2.Location = new System.Drawing.Point(106, 137);
-            this.label2.Margin = new System.Windows.Forms.Padding(3);
-            this.label2.MinimumSize = new System.Drawing.Size(27, 16);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(27, 16);
-            this.label2.TabIndex = 4;
-            this.label2.Text = "0";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblLeft.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblLeft.Location = new System.Drawing.Point(3, 199);
+            this.lblLeft.Name = "lblLeft";
+            this.lblLeft.Size = new System.Drawing.Size(37, 20);
+            this.lblLeft.TabIndex = 6;
+            this.lblLeft.Text = "Now";
+            this.lblLeft.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // label1
+            // lblRight
             // 
-            this.label1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label1.Location = new System.Drawing.Point(3, 137);
-            this.label1.Margin = new System.Windows.Forms.Padding(3);
-            this.label1.MinimumSize = new System.Drawing.Size(27, 16);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(27, 16);
-            this.label1.TabIndex = 3;
-            this.label1.Text = "255";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // checkBox1
-            // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(36, 137);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(61, 16);
-            this.checkBox1.TabIndex = 5;
-            this.checkBox1.Text = "Disable";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            this.lblRight.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblRight.Location = new System.Drawing.Point(116, 199);
+            this.lblRight.Name = "lblRight";
+            this.lblRight.Size = new System.Drawing.Size(37, 20);
+            this.lblRight.TabIndex = 7;
+            this.lblRight.Text = "Next";
+            this.lblRight.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // CrossFaders
             // 
@@ -182,7 +207,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "CrossFaders";
-            this.Size = new System.Drawing.Size(136, 156);
+            this.Size = new System.Drawing.Size(156, 219);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.ResumeLayout(false);
@@ -198,5 +223,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.Label lblLeft;
+        private System.Windows.Forms.Label lblRight;
     }
 }

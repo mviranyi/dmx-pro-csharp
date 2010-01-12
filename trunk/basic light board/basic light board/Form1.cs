@@ -8,9 +8,11 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using basic_light_board.Properties;
+using System.IO;
 
 namespace basic_light_board
 {
+    public delegate void Action<T1, T2>(T1 arg1, T2 arg2);
     /// <summary>
     /// this form provides a basic 24 channel 1 to 1 patched XY cross fader.
     /// it allows for timed fades using a go button or manual time control using a crossfader.
@@ -26,8 +28,16 @@ namespace basic_light_board
         /// LiveLevels[0] contains the value for dimmer 1
         /// </summary>
         byte[] LiveLevels = new byte[universeSize];
-        byte[] XLevels = new byte[universeSize];
-        byte[] YLevels = new byte[universeSize];
+
+        public CueList CList
+        {
+            get;
+            set;
+        }
+
+
+        CueList mCList;
+        LightCue blindCue;
         output m_outForm;
         Stopwatch m_timer;
         VComWrapper com;
@@ -35,17 +45,173 @@ namespace basic_light_board
         int iterations;
         int change;
 
+        #region Form Events & constructor
         public Form1()
         {
             SliderGroup.Labels = Settings.Default.Labels.Split(',');
             SliderGroup.LabelChanged += new EventHandler<LabelChangedArgs>(SliderGroup_LabelChanged);
             InitializeComponent();
 
+            mCList = new CueList();
+            mCList.nextCueChanged += new EventHandler(mCList_nextCueChanged);
+            //mCList.cueChanged += new EventHandler(mCList_cueChanged);
+            
+
+            
 
             com = new VComWrapper();
             com.SerialNumberReceived += new EventHandler<SerialNumberArgs>(com_SerialNumberReceived);
             com.WidgetParametersReceived += new EventHandler<WidgetParameterArgs>(com_WidgetParametersReceived);
         }
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            com.detatchPro();
+            // save the labels
+            //String.Join(",", intArray.Select(i => i.ToString()).ToArray());
+            mCList.saveToFile(Settings.Default.cueFile);
+            Settings.Default.Save();
+        }
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+            m_outForm = new output(48);
+            m_outForm.Show();
+
+            comboBox1.Items.AddRange(System.IO.Ports.SerialPort.GetPortNames());
+            comboBox1.SelectedIndex = 0;
+            this.Text = "Not Connected";
+
+            if (File.Exists(Settings.Default.cueFile))
+            {
+                mCList.loadFromFile(Settings.Default.cueFile);
+            }
+        }
+        #endregion
+
+        #region Form update Methods
+        private void updateTextBox()
+        {
+            StringBuilder str = new StringBuilder();
+            for (int i = 0; i < universeSize; i++)
+            {
+                str.AppendFormat("Ch{0,2}:{1,4} ", i + 1, LiveLevels[i]);
+                if (i != 0 && ((i + 1) % 6) == 0) str.AppendLine();
+
+
+            }
+            textBox1.Text = str.ToString();
+        }
+        private void updateWidget()
+        {
+            if (com == null) return;
+            if (com.IsOpen == false) return;
+            if (com.m_port.BytesToWrite > 0) return;
+
+            com.sendDMXPacketRequest(LiveLevels);
+        }
+        private void updateOutForm()
+        {
+            if (m_outForm == null) return;
+            for (int i = 0; i < m_outForm.m_Bars.Count; i++)
+            {
+                m_outForm.m_Bars[i].Value = LiveLevels[i];
+            }
+        }
+        void updateFader(byte c,byte n)
+        {
+            crossfaders1.CurrentSceneValue = c;
+            crossfaders1.NextSceneValue = n;
+        }
+
+        #endregion
+
+        #region handle CueList Events
+        void mCList_cueChanged(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+        void mCList_nextCueChanged(object sender, EventArgs e)
+        {
+            sliderGroupNext.ChannelValues = mCList.NextCue.channelLevels;
+        }
+        #endregion
+
+        #region handle Go button
+        private void GoButton_Click(object sender, EventArgs e)
+        {
+            Timer goTime = new Timer();
+            if ((int)(((int)numericUpDown1.Value) / 255.0) == 0)
+            {
+                crossfaders1.CrossFaderValue = (byte)(crossfaders1.CrossFaderValue == 0 ? 255 : 0);
+                return;
+            }
+            goTime.Interval = 50;// 1/40 Sec  (max output rate of DMX)
+            goTime.Tick += new EventHandler(goTime_Tick);
+            if (crossfaders1.CrossFaderValue == 0) change = 1;//up
+            else change = -1;//down
+            button1.Enabled = false;
+            m_timer = new Stopwatch();
+            m_timer.Start();
+            goTime.Start();
+        }
+        void goTime_Tick(object sender, EventArgs e)
+        {
+            Timer t = (sender as Timer);
+            if (t.Enabled == false) { Console.WriteLine("**tick when Disabled**"); return; }
+            long elapsed = m_timer.ElapsedMilliseconds;
+            byte currentSceneVal = (byte)(255-Math.Min(255 * ((double)elapsed / mCList.NextCue.downFadeTime), 255));
+            byte nextSceneVal = (byte)Math.Min(255 * ((double)elapsed / mCList.NextCue.upFadeTime), 255);
+
+            Console.WriteLine(string.Format("Time_Tick:{0},{1}", currentSceneVal, nextSceneVal));
+            if (currentSceneVal==0 && nextSceneVal==255)
+            {
+                t.Stop();
+                t.Enabled = false;
+                button1.Enabled = true;
+                Console.WriteLine("timer stopped");
+            }
+            
+            if (crossfaders1.InvokeRequired)
+                crossfaders1.Invoke(new Action<byte,byte>(updateFader),currentSceneVal, nextSceneVal);
+            else
+            {
+                if (crossfaders1.NextSceneValue!=255 && crossfaders1.CurrentSceneValue ==0)
+                    crossfaders1.NextSceneValue = nextSceneVal;
+                else if (crossfaders1.CurrentSceneValue != 0 && crossfaders1.NextSceneValue == 255)
+                    crossfaders1.CurrentSceneValue = currentSceneVal;
+                else
+                {
+                    crossfaders1.CurrentSceneValue = currentSceneVal;
+                    crossfaders1.NextSceneValue = nextSceneVal; 
+                }
+
+                
+            }
+
+            
+        }
+
+        #endregion
+
+        #region handle Widget Events
+        private void button3_Click(object sender, EventArgs e)
+        {
+            if (com.initPro((string)comboBox1.SelectedItem))
+                com.sendGetWidgetParametersRequest((ushort)0);
+        }
+
+        void com_WidgetParametersReceived(object sender, WidgetParameterArgs e)
+        {
+            if (this.InvokeRequired)
+                this.Invoke(new System.Action<string>(delegate(string s) { this.Text =s; }),"Connected");
+            else
+                this.Text = "Connected";
+        }
+        void com_SerialNumberReceived(object sender, SerialNumberArgs e)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
 
         void SliderGroup_LabelChanged(object sender, LabelChangedArgs e)
         {
@@ -58,200 +224,70 @@ namespace basic_light_board
             }
             temp[e.slider.Channel - 1] = e.slider.textBox1.Text;
             Settings.Default.Labels = String.Join(",", temp);
-            SliderGroup.Labels = temp ;
+            SliderGroup.Labels = temp;
             Settings.Default.Save();
         }
-
-        void com_WidgetParametersReceived(object sender, WidgetParameterArgs e)
+        private void trackBar1_ValueChanged(object sender, EventArgs e)
         {
-            if (this.InvokeRequired)
-                this.Invoke(new System.Action<string>(delegate(string s) { this.Text =s; }),"Connected");
-            else
-                this.Text = "Connected";
+            //FullScale(LiveLevels, sliderGroupLive.Values, sliderGroupNext.Values, crossFaders1.Scene1Value, crossFaders1.Scene2Value);
+            outputLightMix(LiveLevels,SliderGroup.Patchlist,SliderGroup.Level,
+                sliderGroupLive.ChannelValues, 
+                mCList.CurrentCue.channelLevels, mCList.NextCue.channelLevels,
+                crossfaders1.CurrentSceneValue, crossfaders1.NextSceneValue);
         }
-
-        void com_SerialNumberReceived(object sender, SerialNumberArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
-        /*
-        void com_dataReceived(object sender, DMXMessage e)
-        {
-            int len;
-            switch (e.type)
-            {
-                case DMXProMsgLabel.GET_WIDGET_PARAMETERS_REPLY: //3
-                    UInt16 Firmware = (UInt16)(e.message[0] | (e.message[1] << 8));
-                    double DMXOutBreakTime = 10.67 * e.message[2];
-                    double DMXOutMarkTime = 10.67 * e.message[3];
-                    int DMXOutRate = e.message[4];
-
-                    len = e.message.Length - 5;
-                    byte[] UserConfigData = new byte[len];
-                    Array.Copy(e.message,5,UserConfigData,0,len);
-                    break;
-                case DMXProMsgLabel.GET_WIDGET_SERIAL_NUMBER_REPLY: //10
-                    UInt32 SerialNumber;
-                    SerialNumber = (UInt32)(e.message[0] | (e.message[1] << 8) | (e.message[2] << 16) | (e.message[3] << 24));
-                    break;
-                case DMXProMsgLabel.PROGRAM_FLASH_PAGE_REPLY:
-                    bool success;
-                    string label=Encoding.UTF8.GetString(e.message, 0, 4);
-                    if (label == "TRUE") success = true;
-                    else if (label == "FALSE") success = false;
-                    else throw new Exception("Program Flash Page Responded with neither TRUE nor FALSE");
-                    break;
-                case DMXProMsgLabel.RECEIVED_DMX_CHANGE_OF_STATE_PACKET:
-                    throw new NotImplementedException("Received DMX Change of State Packet is more effort than i want to put in at 12:26");
-                    break;
-                case DMXProMsgLabel.RECEIVED_DMX_PACKET:
-                    //*The Widget sends this message to the PC unsolicited, 
-                    // * whenever the Widget receives a DMX or
-                    // * RDM packet from the DMX port, 
-                    // * and the Receive DMX on Change mode is 'Send always'./
-                    bool valid = (bool)((e.message[0] & 0x01)==1);
-                    len = e.message.Length - 1;
-                    byte[] levels = new byte[len];
-                    Array.Copy(e.message, 1, levels, 0, len);
-                    break;
-
-
-            }                
-        }
-        */
-
-        private void updateTextBox()
-        {
-            StringBuilder str = new StringBuilder();
-            for (int i = 0; i < universeSize; i++)
-            {
-                str.AppendFormat("Ch{0,2}:{1,4} ", i + 1, LiveLevels[i]);
-                if (i != 0 && ((i+1) % 6) == 0) str.AppendLine();
-
-
-            }
-            textBox1.Text = str.ToString();
-        }
-
-        private void updateWidget()
-        {
-            if (com == null) return;
-            if (com.IsOpen == false) return;
-            if (com.m_port.BytesToWrite > 0) return;
-
-            com.sendDMXPacketRequest(LiveLevels);
-        }
-
-        private void updateOutForm()
-        {
-            if (m_outForm == null) return;
-            for (int i = 0; i < m_outForm.m_Bars.Count; i++)
-            {
-                m_outForm.m_Bars[i].Value = LiveLevels[i];
-            }
-        }
-
-
         
-        private void FullScale(byte[] Live, byte[] X, byte[] Y, byte xLev, byte yLev)
+        
+        /// <summary>
+        /// this will fill the dimmer list (Output) based on the value of the crossfaders/(next& currents Scenes)
+        /// as wel as the Live console.
+        /// </summary>
+        /// <param name="Output">a list of dimmers Output[0] should be dimmer#1's value</param>
+        /// <param name="patchList">this is how dimmers are patched into channels patchlist[0] contains the channel that dimmer#1 corrisponds to</param>
+        /// <param name="Live">the CHANNEL list of the live values</param>
+        /// <param name="currentScene">the CHANNEL list of the current scene</param>
+        /// <param name="nextScene">the CHANNEL list of the next scene</param>
+        /// <param name="currentSceneVal">the scale factor(0-255) of the current scene</param>
+        /// <param name="NextSceneVal">the scale factor(0-255) of the next scene</param>
+        private void outputLightMix(byte[] Output, List<int> patchList, List<byte> maxLevel, byte[] Live, byte[] currentScene, byte[] nextScene, byte currentSceneVal, byte NextSceneVal)
         {
+            int i;
             int max = universeSize;
-            for (int i = 0; i < max; i++)
+            int tChannel;
+            byte tLevel;
+            for (i = 0; i < max; i++)
             {
-                Live[i] = scale(X[i], Y[i], xLev,yLev);
+                tChannel = patchList[i]-1;
+                tLevel = maxLevel[i];
+                Output[i] = scale(Live[tChannel], currentScene[tChannel],
+                          nextScene[tChannel],
+                          currentSceneVal, NextSceneVal, tLevel);
             }
             updateTextBox();
             updateOutForm();
             updateWidget();
         }
-               
-
-        private byte scale(byte Xval, byte Yval, byte XLevel,byte Ylevel)
+        private byte scale(byte live,byte Xval, byte Yval, byte XLevel,byte Ylevel,byte maxDimmerVal)
         {
-            int xTemp = (int)(Xval * (XLevel / 255.0));
-            int yTemp = (int)(Yval * (Ylevel / 255.0));
-            int temp =(int)Math.Round(((Xval * (XLevel / 255.0) + Yval * (Ylevel / 255.0))));
+            int xTemp = (int)(Xval * (XLevel / 255.0) * (maxDimmerVal / 255.0));
+            int yTemp = (int)(Yval * (Ylevel / 255.0) * (maxDimmerVal / 255.0));
+            int liveTemp = (int)(live * (maxDimmerVal / 255));
+            int temp =xTemp + yTemp;
 
-            return (byte)(xTemp < yTemp ? yTemp : xTemp);
+            return (byte)Math.Min(255,Math.Max(liveTemp, temp));
+            //return (byte)(xTemp < yTemp ? yTemp : xTemp);
             //return (byte)(temp > 255 ? 255 : temp);
         }
 
-        private void trackBar1_ValueChanged(object sender, EventArgs e)
+
+        private void button2_Click(object sender, EventArgs e)//record Cue
         {
-            FullScale(LiveLevels, sliderGroup1.Values, sliderGroup2.Values, crossFaders1.Scene1Value, crossFaders1.Scene2Value);
-            if (sender is CrossFaders )
-            {
-                if ((sender as CrossFaders).CrossFaderValue == 0) tabControl1.SelectTab(1);
-                if ((sender as CrossFaders).CrossFaderValue == 255) tabControl1.SelectTab(0);
-            }
+            CueNumberForm c = new CueNumberForm();
+            c.ShowDialog();
+            if (c.DialogResult==DialogResult.Cancel)return;
+            mCList.AddCue(new LightCue(c.CueNum, c.CueName, sliderGroupLive.ChannelValues));
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            Timer goTime = new Timer();
-            if ((int)(((int)numericUpDown1.Value)/255.0) == 0)
-            {
-                crossFaders1.CrossFaderValue = (byte)(crossFaders1.CrossFaderValue == 0 ? 255 : 0);
-                return;
-            }
-            goTime.Interval = (int)((double)numericUpDown1.Value / 255.0);
-            goTime.Tick += new EventHandler(goTime_Tick);
-            if (crossFaders1.CrossFaderValue == 0) change=  1;//up
-            else change = -1;//down
-            button1.Enabled = false;
-            m_timer = new Stopwatch();
-            m_timer.Start();
-            
-            goTime.Start();
-            
-
-        }
-
-        void goTime_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
-        {
-            Timer t = (sender as Timer);
-            crossFaders1.CrossFaderValue = (byte)(crossFaders1.CrossFaderValue + change );
-
-            if (crossFaders1.CrossFaderValue == 0 || crossFaders1.CrossFaderValue == 255)
-            {
-                button1.Enabled = true;
-                
-                t.Stop();
-                m_timer.Stop();
-                MessageBox.Show(string.Format("time={0}ms", m_timer.Elapsed));
-            }
-        }
-
-        void updateFader(byte val)
-        {
-            crossFaders1.CrossFaderValue = val;
-        }
-
-        void goTime_Tick(object sender, EventArgs e)
-        {
-
-            Timer t = (sender as Timer);
-            if (crossFaders1.InvokeRequired)
-                crossFaders1.Invoke( new Action<byte>(updateFader),(byte)(crossFaders1.CrossFaderValue + change));
-            else
-                updateFader((byte)(crossFaders1.CrossFaderValue + change));
-
-            if (crossFaders1.CrossFaderValue == 0 || crossFaders1.CrossFaderValue == 255)
-            {
-                button1.Enabled = true;
-                t.Stop();
-            }
-            
-            
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            com.GetWidgetSerialNumber();
-        }
-
-
+        #region Patch Cmd
         private void textBox2_TextChanged(object sender, EventArgs e)
         {
             Regex rx = new Regex(@"(?<dimmer>\d+)(@(?<channel>\d+)(@(?<level>\d+))?)?", RegexOptions.Compiled);
@@ -264,7 +300,6 @@ namespace basic_light_board
             label2.Text = "channel: " + m.Groups["channel"].Value;
             label3.Text = "Value: " + m.Groups["level"].Value;
         }
-
         private void textBox2_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == (char)Keys.Return)
@@ -300,18 +335,19 @@ namespace basic_light_board
                 }
             }
         }
+        #endregion
 
+        #region Channel Cmd
         private void textBox3_TextChanged(object sender, EventArgs e)
         {
             
         }
-
         private void textBox3_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == (char)Keys.Return)
             {
                 Regex rx = new Regex(@"(?<channel>\d+)@(?<level>\d+\%?)", RegexOptions.Compiled);
-                Match m = rx.Match(textBox3.Text);
+                Match m = rx.Match(txtLiveCmd.Text);
                 if (!m.Success) { MessageBox.Show("bad string"); return; }
 
                 try
@@ -328,7 +364,7 @@ namespace basic_light_board
                     if (c < 1) throw new ArgumentOutOfRangeException("channel");
                     if (l < 0 || l > 255) throw new ArgumentOutOfRangeException("level");
 
-                    sliderGroup1.setLevel(c, (byte) l);
+                    sliderGroupLive.setLevel(c, (byte) l);
                     MessageBox.Show(string.Format("channel {0} @ {1}", c, l));
                 }
                 catch (Exception ex)
@@ -337,33 +373,134 @@ namespace basic_light_board
                 }
             }
         }
-
-        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        #endregion
+        
+        private void sliderGroupLive_ValueChanged(object sender, EventArgs e)
         {
-            com.detatchPro();
-            // save the labels
-            //String.Join(",", intArray.Select(i => i.ToString()).ToArray());
-            Settings.Default.Save();
+            outputLightMix(LiveLevels,SliderGroup.Patchlist,SliderGroup.Level, sliderGroupLive.dimmerValues, 
+                mCList.CurrentCue.channelLevels, mCList.NextCue.channelLevels, 
+                crossfaders1.CurrentSceneValue, crossfaders1.NextSceneValue);
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        
+
+        private void crossFaders1_SceneChanged(object sender, EventArgs e)
         {
+            mCList.gotoNextCue();
+            updateCueLabels();
+            sliderGroupNext.ChannelValues  = mCList.NextCue.channelLevels;
 
-            m_outForm = new output(48);
-            m_outForm.Show();
-
-            comboBox1.Items.AddRange(System.IO.Ports.SerialPort.GetPortNames());
-            comboBox1.SelectedIndex = 0;
-            this.Text = "Not Connected";
-
-            // get the labels and 
+        }
+        private void updateCueLabels()
+        {
+            lblCueCurrent.Text = string.Format("Current Cue:{0}", mCList.CurrentCueNumber);
+            lblCueNext.Text = string.Format("Next Cue:{0}", mCList.NextCueNumber);
+            lblCuePrev.Text = string.Format("Previous Cue:{0}", mCList.PrevCueNumber);
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void txtBlindCmd_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (com.initPro((string)comboBox1.SelectedItem))
-                com.sendGetWidgetParametersRequest((ushort)0);
+            if (e.KeyChar == (char)Keys.Enter)
+            {
+                int cue;
+                if (int.TryParse(txtBlindCmd.Text, out cue))
+                {
+                    if (mCList[cue] != null)
+                        loadCueIntoBlind(cue);
+                    else
+                    {
+                        txtBlindCmd.Text = "no such cue";
+                        txtBlindCmd.Invalidate();
+                        System.Threading.Thread.Sleep(1000);
+                        txtBlindCmd.Text = "";
+                    }
+                }
+            }
+            if (e.KeyChar == (char)Keys.Escape)
+            {
+                txtBlindCmd.Text = "";
+            }
         }
 
+        public void loadCueIntoBlind(int num)
+        {
+            blindCue = mCList[num];
+            
+            if (blindCue==null) return;
+            sliderGroupBlind.ChannelValues = blindCue.channelLevels;
+            txtCueName.Text = blindCue.cueName;
+            nudDownFade.Value = blindCue.downFadeTime;
+            nudUpFade.Value = blindCue.upFadeTime;
+            nudFollowTime.Value = blindCue.followTime;
+            chkFollow.Checked = blindCue.isFollowCue;
+        }
+
+        private void sliderGroupBlind_ValueChanged(object sender, EventArgs e)
+        {
+            blindCue.channelLevels = sliderGroupBlind.ChannelValues;
+        }
+        private void txtCueName_TextChanged(object sender, EventArgs e)
+        {
+            blindCue.cueName = txtCueName.Text;
+        }
+
+        private void nudUpFade_ValueChanged(object sender, EventArgs e)
+        {
+            blindCue.upFadeTime = (int)nudUpFade.Value;
+        }
+
+        private void nudDownFade_ValueChanged(object sender, EventArgs e)
+        {
+            blindCue.downFadeTime = (int)nudDownFade.Value ;
+        }
+
+        private void nudFollowTime_ValueChanged(object sender, EventArgs e)
+        {
+            blindCue.followTime = (int)nudFollowTime.Value ;
+        }
+
+        private void Form1_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar==(char)Keys.F1)
+            {
+                tabControl1.SelectedTab = tabPageLive;
+            }
+        }
+
+        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        {
+            /*
+            if (e.KeyCode == Keys.F1)
+                tabControl1.SelectedTab = tabPageLive;
+            else if (e.KeyCode == Keys.F2)
+                tabControl1.SelectedTab = tabPageNext;
+            else if (e.KeyCode == Keys.F3)
+                tabControl1.SelectedTab = tabPageBlind;
+            else if (e.KeyCode == Keys.F4)
+                tabControl1.SelectedTab = tabPagePatch;
+            else if (e.KeyCode == Keys.F5)
+                tabControl1.SelectedTab = tabPageConnection;
+            else
+            {
+                if (e.KeyCode == Keys.Up && tabControl1.SelectedTab == tabPageBlind)
+                { }
+            }
+            e.Handled = false;
+             */
+        }
+
+        private void txtBlindCmd_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void cmdDeleteCue_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("are you sure?", "Confirm?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly, false);
+            mCList.RemoveCue(blindCue.cueNumber);
+            blindCue = null;
+        }
+
+        
     }
 }
