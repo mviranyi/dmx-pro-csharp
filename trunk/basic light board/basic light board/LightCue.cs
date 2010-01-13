@@ -163,7 +163,7 @@ namespace basic_light_board
         public byte[] channelLevels
         {
             get { return mChannelLevels; }
-            set { mChannelLevels = value; onChannelLevelsChanged(); }
+            set { mChannelLevels = (byte[])value.Clone(); onChannelLevelsChanged(); }
         }
 
         #region onChanged methods

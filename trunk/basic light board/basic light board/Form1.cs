@@ -40,6 +40,7 @@ namespace basic_light_board
         LightCue blindCue;
         output m_outForm;
         Stopwatch m_timer;
+
         VComWrapper com;
 
         int iterations;
@@ -163,13 +164,7 @@ namespace basic_light_board
             byte nextSceneVal = (byte)Math.Min(255 * ((double)elapsed / mCList.NextCue.upFadeTime), 255);
 
             Console.WriteLine(string.Format("Time_Tick:{0},{1}", currentSceneVal, nextSceneVal));
-            if (currentSceneVal==0 && nextSceneVal==255)
-            {
-                t.Stop();
-                t.Enabled = false;
-                button1.Enabled = true;
-                Console.WriteLine("timer stopped");
-            }
+            
             
             if (crossfaders1.InvokeRequired)
                 crossfaders1.Invoke(new Action<byte,byte>(updateFader),currentSceneVal, nextSceneVal);
@@ -187,8 +182,32 @@ namespace basic_light_board
 
                 
             }
+            if (currentSceneVal == 0 && nextSceneVal == 255)
+            {
+                t.Stop();
+                t.Enabled = false;
+                Console.WriteLine("timer stopped");
+                if (mCList.NextCue.isFollowCue)
+                {
+                    Timer follow = new Timer();
+                    follow.Interval = mCList.NextCue.followTime;
+                    follow.Tick += new EventHandler(follow_Tick);
+                    follow.Start();
+                }
+                else
+                {
+                    button1.Enabled = true;
+                }
+            }
 
             
+        }
+
+        void follow_Tick(object sender, EventArgs e)
+        {
+            if (!(sender is Timer)) return;
+            (sender as Timer).Stop();
+            GoButton_Click(sender, e);
         }
 
         #endregion
@@ -427,7 +446,12 @@ namespace basic_light_board
             blindCue = mCList[num];
             
             if (blindCue==null) return;
-            sliderGroupBlind.ChannelValues = blindCue.channelLevels;
+            Console.WriteLine("before blindslider.channels=blindcue.channel:");
+            Console.WriteLine(blindCue.serialize());
+            sliderGroupBlind.ChannelValues = blindCue.channelLevels; 
+            Console.WriteLine("after blindslider.channels=blindcue.channel:");
+            Console.WriteLine(blindCue.serialize());
+            
             txtCueName.Text = blindCue.cueName;
             nudDownFade.Value = blindCue.downFadeTime;
             nudUpFade.Value = blindCue.upFadeTime;
@@ -496,9 +520,16 @@ namespace basic_light_board
 
         private void cmdDeleteCue_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("are you sure?", "Confirm?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly, false);
+            if (blindCue == null) return;
+            MessageBox.Show("are you sure?", "Confirm?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1 );
+            
             mCList.RemoveCue(blindCue.cueNumber);
             blindCue = null;
+        }
+
+        private void chkFollow_CheckedChanged(object sender, EventArgs e)
+        {
+            blindCue.isFollowCue = chkFollow.Checked;
         }
 
         
