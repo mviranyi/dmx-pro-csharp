@@ -111,6 +111,13 @@ namespace basic_light_board
             int index = mCues.FindIndex(delegate(LightCue l){return l.cueNumber==cueNumber;});
             if (index ==-1) return false;
             mCues.RemoveAt(index);
+            if (index < mPrevCueIndex) mPrevCueIndex--;
+            if (index < mCurrentCueIndex) mCurrentCueIndex--;
+            if (index < mNextCueIndex) mNextCueIndex--;
+            if (index == mPrevCueIndex) mPrevCueIndex = index-1;
+            if (index == mCurrentCueIndex) mCurrentCueIndex = 0;
+            //if (index == mNextCueIndex) mCurrentCueIndex = index;
+
             return true;
         }
 
