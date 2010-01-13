@@ -22,6 +22,7 @@ namespace basic_light_board
     public partial class Form1 : Form
     {
         public const int universeSize=512;
+        public const int ShowSaveVersion = 200;
 
         /// <summary>
         /// LiveLevels contains one entry for every dimmer
@@ -141,15 +142,8 @@ namespace basic_light_board
         private void GoButton_Click(object sender, EventArgs e)
         {
             Timer goTime = new Timer();
-            if ((int)(((int)numericUpDown1.Value) / 255.0) == 0)
-            {
-                crossfaders1.CrossFaderValue = (byte)(crossfaders1.CrossFaderValue == 0 ? 255 : 0);
-                return;
-            }
-            goTime.Interval = 50;// 1/40 Sec  (max output rate of DMX)
+            goTime.Interval = 25;// 1/40 Sec  (max output rate of DMX)
             goTime.Tick += new EventHandler(goTime_Tick);
-            if (crossfaders1.CrossFaderValue == 0) change = 1;//up
-            else change = -1;//down
             button1.Enabled = false;
             m_timer = new Stopwatch();
             m_timer.Start();
@@ -185,6 +179,8 @@ namespace basic_light_board
             if (currentSceneVal == 0 && nextSceneVal == 255)
             {
                 t.Stop();
+                m_timer.Stop();
+                m_timer = null;//release timer
                 t.Enabled = false;
                 Console.WriteLine("timer stopped");
                 if (mCList.NextCue.isFollowCue)
@@ -285,7 +281,21 @@ namespace basic_light_board
             updateOutForm();
             updateWidget();
         }
-        private byte scale(byte live,byte Xval, byte Yval, byte XLevel,byte Ylevel,byte maxDimmerVal)
+        private byte[] mixChannelVals()
+        {
+            // for each channel mix the Live Sliders, the current Scene and Next Scene
+            byte[] Output = new byte[512]; // this is a channel List fyi (not a dimmer List)
+            int currentTemp,nextTemp,live;
+            for (int i = 1; i <= 512; i++)
+            {
+                currentTemp = mCList.CurrentCue[i] * crossfaders1.CurrentSceneValue / 255;
+                nextTemp = mCList.NextCue[i] * crossfaders1.NextSceneValue / 255;
+                live = sliderGroupLive.ChannelValues[i-1];
+                Output[i-1] = (byte)Math.Min(255, Math.Max(live, currentTemp + nextTemp));
+            }
+            return Output;
+        }
+        private byte scale(byte live, byte Xval, byte Yval, byte XLevel, byte Ylevel, byte maxDimmerVal)
         {
             int xTemp = (int)(Xval * (XLevel / 255.0) * (maxDimmerVal / 255.0));
             int yTemp = (int)(Yval * (Ylevel / 255.0) * (maxDimmerVal / 255.0));
@@ -303,7 +313,7 @@ namespace basic_light_board
             CueNumberForm c = new CueNumberForm();
             c.ShowDialog();
             if (c.DialogResult==DialogResult.Cancel)return;
-            mCList.AddCue(new LightCue(c.CueNum, c.CueName, sliderGroupLive.ChannelValues));
+            mCList.AddCue(new LightCue(c.CueNum, c.CueName, mixChannelVals() ));
         }
 
         #region Patch Cmd
@@ -422,16 +432,24 @@ namespace basic_light_board
             if (e.KeyChar == (char)Keys.Enter)
             {
                 int cue;
-                if (int.TryParse(txtBlindCmd.Text, out cue))
+                int channel;
+                if (txtBlindCmd.Text[0] == 'C' || txtBlindCmd.Text[0] == 'c')
+                {
+                    if (int.TryParse(txtBlindCmd.Text.Substring(1), out channel))
+                        sliderGroupBlind.SelectSlider(channel);
+                    else
+                        MessageBox.Show("not a valid channel number");
+                }
+                else if (int.TryParse(txtBlindCmd.Text, out cue))
                 {
                     if (mCList[cue] != null)
                         loadCueIntoBlind(cue);
                     else
                     {
-                        txtBlindCmd.Text = "no such cue";
-                        txtBlindCmd.Invalidate();
-                        System.Threading.Thread.Sleep(1000);
-                        txtBlindCmd.Text = "";
+                        LightCue newBlankCue = LightCue.BlankCue;
+                        newBlankCue.cueNumber=cue;
+                        mCList.AddCue(newBlankCue);
+                        loadCueIntoBlind(cue);
                     }
                 }
             }
@@ -532,6 +550,69 @@ namespace basic_light_board
             blindCue.isFollowCue = chkFollow.Checked;
         }
 
-        
+        private void toolStripButtonSaveShow_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog dlg = new SaveFileDialog();
+            dlg.AddExtension = true;
+            dlg.CreatePrompt = true;
+            dlg.DefaultExt = "txt";
+            dlg.OverwritePrompt = true;
+            dlg.Title = "Where to save the show?";
+            dlg.FileOk += new CancelEventHandler(dlg_FileOk);
+            dlg.ShowDialog();
+            
+
+
+        }
+
+        void dlg_FileOk(object sender, CancelEventArgs e)
+        {
+            if (!(sender is SaveFileDialog)) return; // sanity check
+            //save the show (patchList and cue List(all cues,current,prev,next) and current Live Levels and crossfader levels)
+            try
+            {
+                SaveFileDialog dlg = (sender as SaveFileDialog);
+                System.IO.StreamWriter s=new StreamWriter(dlg.FileName);
+                //write version of save file
+                s.WriteLine(Form1.ShowSaveVersion);
+                StringBuilder Plist = new StringBuilder();
+                #region construct the patchlist
+                foreach (int dimmer in SliderGroup.Patchlist)
+                {
+                    Plist.AppendFormat("{0},", dimmer);
+                }
+                Plist.Remove(Plist.Length - 1, 1); // remove the extra ","
+                #endregion
+                s.WriteLine(Plist.ToString());
+            }
+            catch
+            {
+            }
+
+
+        }
+
+        private void cmdSetNextCue_Click(object sender, EventArgs e)
+        {
+            CueNumberForm cnf = new CueNumberForm();
+            cnf.ShowDialog();
+            if (cnf.DialogResult == DialogResult.OK)
+            {
+                if (cnf.CueName!="") 
+                {
+                    if (mCList.setNextCue(cnf.CueName))
+                        MessageBox.Show("cue set");
+                    else
+                        MessageBox.Show("no such Cue Name");
+                }
+                else 
+                {
+                    if (mCList.setNextCue(cnf.CueNum))
+                        MessageBox.Show("cue set");
+                    else
+                        MessageBox.Show("no such Cue Number");
+                }
+            }
+        }
     }
 }

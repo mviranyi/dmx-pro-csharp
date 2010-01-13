@@ -25,6 +25,21 @@ namespace basic_light_board
             mNextCueIndex = 0;
             mPrevCueIndex = 0;
         }
+
+        public bool setNextCue(string cueName)
+        {
+            if (this[cueName] == null) return false;
+            NextCueNumber = this[cueName].cueNumber;
+            return true;
+        }
+
+        public bool setNextCue(int cueNumber)
+        {
+            if (this[cueNumber] == null) return false;
+            NextCueNumber = cueNumber;
+            return true;
+        }
+
     
         public LightCue this[int cueNum]
         {
@@ -153,6 +168,7 @@ namespace basic_light_board
         {
             System.IO.StreamWriter f = new System.IO.StreamWriter(fileName,false,Encoding.UTF8);
             f.WriteLine("{0}", LightCue.version);
+            f.WriteLine("{0}", this.mCues.Count);
             foreach (LightCue l in mCues)
             {
                 f.WriteLine(l.serialize());
@@ -164,13 +180,32 @@ namespace basic_light_board
         {
             StreamReader f = new System.IO.StreamReader(fileName, Encoding.UTF8);
             mCues.Clear();
-            if (int.Parse(f.ReadLine()) != LightCue.version) throw new InvalidDataException("version of cue file not compatable");
-            string line = f.ReadLine();
-            while (line != null)
+            try
             {
-                AddCue(new LightCue(line));
-                line = f.ReadLine();
+                if (int.Parse(f.ReadLine()) != LightCue.version) throw new InvalidDataException("version of cue file not compatable");
+                int num = int.Parse(f.ReadLine());
+                for (int i = 0; i < num; i++)
+                    AddCue(new LightCue(f.ReadLine()));
             }
+            catch
+            {
+                if (mCues.Count == 0)
+                    AddCue(LightCue.BlankCue);
+            }
+        }
+        public string Serialize()
+        {
+            StringBuilder s = new StringBuilder();
+            s.Append(LightCue.version);
+            s.AppendLine(string.Format("{0}",this.mCues.Count));
+            foreach (LightCue l in mCues)
+            {
+                s.AppendLine(l.serialize());
+            }
+
+
+
+            return s.ToString();
         }
     }
 }

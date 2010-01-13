@@ -77,6 +77,12 @@ namespace basic_light_board
         public static event EventHandler<LabelChangedArgs> LabelChanged;
 
 
+        public bool SelectSlider(int channelNumber)
+        {
+            if (channelNumber >= m_sliders.Count) return false;
+            m_sliders[channelNumber - 1].Select();
+            return true;
+        }
 
         public SliderGroup()
         {
