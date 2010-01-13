@@ -91,5 +91,10 @@ namespace basic_light_board
             return string.Format("{0,4}-[{1}]: {2}", this.Channel, this.textBox1.Text, this.Value);
         }
 
+        private void SingleSlider_Enter(object sender, EventArgs e)
+        {
+            this.mainSlider.Select();
+        }
+
     }
 }
