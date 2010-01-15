@@ -13,8 +13,8 @@ namespace basic_light_board
     {
         private bool suspendValuesChanged = false;
         /// <summary>
-        /// Values contains one entry for ever dimmer
-        /// Values[0] is the value of dimmer 1 (0-255)
+        /// Values contains one entry for ever channel
+        /// Values[0] is the value of channel 1 (0-255)
         /// </summary>
         private byte[] mValues = new byte[512];
 
@@ -52,15 +52,15 @@ namespace basic_light_board
         }
 
         /// <summary>
-        ///Patchlist contains one entry for every dimmer
-        ///Patchlist[0] contains the channel that dimmer 1 is patched into. (1-> anything)
+        ///Patchlist contains one entry for every channel
+        ///Patchlist[0] contains the channel that channel 1 is patched into. (1-> anything)
         /// </summary>
         public static List<int> Patchlist=new List<int>();
 
         
         /// <summary>
-        ///Level contains one entry for every dimmer
-        ///Level[0] contains the maxLevel that dimmer 1 can achieve (0->255)
+        ///Level contains one entry for every channel
+        ///Level[0] contains the maxLevel that channel 1 can achieve (0->255)
         /// </summary>
         public static List<byte> Level = new List<byte>();
 
@@ -76,6 +76,9 @@ namespace basic_light_board
         [Category("Action")]
         public static event EventHandler<LabelChangedArgs> LabelChanged;
 
+         int numChannels = 96;
+         int itemsPerRow = 24;
+         int itemsPerHGrp = 12;
 
         public bool SelectSlider(int channelNumber)
         {
@@ -90,17 +93,50 @@ namespace basic_light_board
 
             if (Patchlist.Count==0) setupPatch();
 
+
+           
             
-            // construct the list of sliders based onIsFollowTimeChanged what is already in the control
+            
+            // construct the list of sliders based  what is already in the control
             m_sliders=new List<SingleSlider>();
-            foreach (SingleSlider slide in this.tableLayoutPanel1.Controls)
+            SingleSlider temp;
+            //tableLayoutPanel1.RowCount=(numChannels/itemsPerRow)*2-1 ; // 1 row is a spacer. 5 rows = 4 spaces = 9 Total;
+            //tableLayoutPanel1.ColumnCount=itemsPerRow + itemsPerRow/itemsPerHGrp-1; // items/(itemspergrp)=groups. 3 groups=2 spaces
+
+
+            int col,row;
+            for (int i = 0; i < numChannels; i++)
+            {
+                temp = new SingleSlider(i + 1);
+                temp.ValueChanged += singleSlider1_ValueChanged;
+                temp.Scroll += singleSlider1_Scroll;
+                temp.LabelChanged += singleSlider1_LabelChanged;
+                m_sliders.Add(temp);
+                col = i % itemsPerRow + (i % itemsPerRow) / itemsPerHGrp;
+                row = (i / itemsPerRow);
+                temp.Left = (temp.Width) * col + ((col + 1) * temp.Margin.Left);
+                temp.Top = (temp.Height) * row + ((row + 1) * 10);
+                this.Controls.Add(temp);
+
+
+                if (Labels == null) continue;
+                if (Labels.Length >=temp.Channel)
+                    temp.textBox1.Text = Labels[temp.Channel - 1];
+                
+            }
+
+
+
+            /*foreach (SingleSlider slide in this.tableLayoutPanel1.Controls)
             {
                 slide.Value = 0;
                 m_sliders.Add(slide);
                 if (Labels == null) continue;
                 if (Labels.Length >= slide.Channel)
                     slide.textBox1.Text = Labels[slide.Channel-1];
-            }
+            }*/
+
+            m_sliders.Sort(delegate(SingleSlider a, SingleSlider b) { return a.Channel.CompareTo(b.Channel); });
         }
 
         public void setLevel(int channel, byte value)
@@ -122,7 +158,7 @@ namespace basic_light_board
         public static void patch(int dimmer, int channel, byte maxLevel)
         {
             if (dimmer < 1 || dimmer > 512) throw new ArgumentOutOfRangeException("Dimmer)");
-            if (channel < 1) throw new ArgumentOutOfRangeException("Channel");
+            if (channel < 1) throw new ArgumentOutOfRangeException("dimmer");
             if (maxLevel < 0 || maxLevel > 255) throw new ArgumentOutOfRangeException("maxLevel");
             Patchlist[dimmer-1]=channel;
             Level[dimmer-1]=maxLevel;
@@ -139,13 +175,28 @@ namespace basic_light_board
             }
         }
 
+        private void singleSlider1_LabelChanged(object sender, EventArgs e)
+        {
+            if (LabelChanged != null)
+            {
+                LabelChanged(this, new LabelChangedArgs(sender as SingleSlider));
+                return;
+            }
+            SingleSlider s = (SingleSlider)sender;
+            if (Labels.Length < (s.Channel))
+            {
+                string[] temp = new string[s.Channel];
+                Array.Copy(Labels, temp, Labels.Length);
+                Labels = temp;
+            }
+            Labels[s.Channel - 1] = s.textBox1.Text;
+        }
         private void singleSlider1_ValueChanged(object sender, EventArgs e)
         {
             int channel = (sender as SingleSlider).Channel;
             byte value = (sender as SingleSlider).Value;
             setLevel(channel, value);
         }
-
         private void singleSlider1_Scroll(object sender, ScrollEventArgs e)
         {
             int channel = (sender as SingleSlider).Channel;
@@ -167,21 +218,16 @@ namespace basic_light_board
             onValuesChanged();
         }
 
-        private void singleSlider1_LabelChanged(object sender, EventArgs e)
+        private void SliderGroup_Resize(object sender, EventArgs e)
         {
-            if (LabelChanged != null)
+            int rows = numChannels/itemsPerRow;
+            int cols = itemsPerRow+ itemsPerRow/itemsPerHGrp-1;
+            
+            foreach(SingleSlider s in m_sliders)
             {
-                LabelChanged(this, new LabelChangedArgs(sender as SingleSlider));
-                return;
+                s.Width = this.Width / cols - s.Margin.Left - s.Margin.Right;
+                s.Left = ((s.Channel - 1)%itemsPerRow+ ((s.Channel-1)%itemsPerRow/itemsPerHGrp)) * (s.Width + s.Margin.Left+s.Margin.Right) + s.Margin.Left;
             }
-            SingleSlider s = (SingleSlider)sender;
-            if (Labels.Length < (s.Channel  ))
-            {
-                string[] temp = new string[s.Channel];
-                Array.Copy(Labels, temp, Labels.Length);
-                Labels = temp;
-            }
-            Labels[s.Channel - 1] = s.textBox1.Text;
         }
     }
     public class LabelChangedArgs : EventArgs

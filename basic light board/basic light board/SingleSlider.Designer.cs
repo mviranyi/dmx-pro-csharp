@@ -43,6 +43,7 @@
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(25, 24);
             this.button1.TabIndex = 1;
+            this.button1.TabStop = false;
             this.button1.UseVisualStyleBackColor = true;
             this.button1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.button1_MouseDown);
             this.button1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.button1_MouseUp);
@@ -55,7 +56,7 @@
             this.channelLabel.Location = new System.Drawing.Point(3, 23);
             this.channelLabel.Name = "channelLabel";
             this.channelLabel.Size = new System.Drawing.Size(25, 23);
-            this.channelLabel.TabIndex = 2;
+            this.channelLabel.TabIndex = 0;
             this.channelLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // percentLabel
@@ -78,6 +79,7 @@
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(31, 20);
             this.textBox1.TabIndex = 4;
+            this.textBox1.TabStop = false;
             this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
             // mainSlider

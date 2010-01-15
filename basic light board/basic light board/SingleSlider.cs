@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace basic_light_board
 {
-    public partial class SingleSlider : UserControl
+    public partial class SingleSlider : UserControl, basic_light_board.ISingleSlider
     {
         [Description("cueChanged fires when the Label property changes")]
         [Category("Action")]

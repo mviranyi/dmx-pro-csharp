@@ -35,7 +35,8 @@
             this.tabPageNext = new System.Windows.Forms.TabPage();
             this.tabPageBlind = new System.Windows.Forms.TabPage();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.cmdSaveCue = new System.Windows.Forms.Button();
+            this.cmdNextBlindCue = new System.Windows.Forms.Button();
+            this.cmdPrevBlindCue = new System.Windows.Forms.Button();
             this.cmdDeleteCue = new System.Windows.Forms.Button();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
             this.chkFollow = new System.Windows.Forms.CheckBox();
@@ -56,6 +57,7 @@
             this.tabPageConnection = new System.Windows.Forms.TabPage();
             this.button3 = new System.Windows.Forms.Button();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.tabPageSub = new System.Windows.Forms.TabPage();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
@@ -100,6 +102,7 @@
             this.tabControl1.Controls.Add(this.tabPageBlind);
             this.tabControl1.Controls.Add(this.tabPagePatch);
             this.tabControl1.Controls.Add(this.tabPageConnection);
+            this.tabControl1.Controls.Add(this.tabPageSub);
             this.tabControl1.Location = new System.Drawing.Point(17, 28);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
@@ -126,12 +129,11 @@
             this.txtLiveCmd.Name = "txtLiveCmd";
             this.txtLiveCmd.Size = new System.Drawing.Size(755, 20);
             this.txtLiveCmd.TabIndex = 10;
-            this.txtLiveCmd.TextChanged += new System.EventHandler(this.textBox3_TextChanged);
-            this.txtLiveCmd.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox3_KeyPress);
+            this.txtLiveCmd.TextChanged += new System.EventHandler(this.txtLiveCmd_TextChanged);
+            this.txtLiveCmd.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtLiveCmd_KeyPress);
             // 
             // tabPageNext
             // 
-            this.tabPageNext.AutoScroll = true;
             this.tabPageNext.Controls.Add(this.sliderGroupNext);
             this.tabPageNext.Location = new System.Drawing.Point(4, 22);
             this.tabPageNext.Name = "tabPageNext";
@@ -156,39 +158,47 @@
             // 
             // groupBox3
             // 
-            this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox3.Controls.Add(this.cmdSaveCue);
+            this.groupBox3.Controls.Add(this.cmdNextBlindCue);
+            this.groupBox3.Controls.Add(this.cmdPrevBlindCue);
             this.groupBox3.Controls.Add(this.cmdDeleteCue);
             this.groupBox3.Controls.Add(this.groupBox7);
             this.groupBox3.Controls.Add(this.groupBox6);
             this.groupBox3.Controls.Add(this.groupBox5);
             this.groupBox3.Controls.Add(this.groupBox4);
-            this.groupBox3.Location = new System.Drawing.Point(625, 6);
+            this.groupBox3.Location = new System.Drawing.Point(6, 236);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(133, 330);
+            this.groupBox3.Size = new System.Drawing.Size(752, 100);
             this.groupBox3.TabIndex = 3;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Cue Attributes";
             // 
-            // cmdSaveCue
+            // cmdNextBlindCue
             // 
-            this.cmdSaveCue.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmdSaveCue.Location = new System.Drawing.Point(6, 270);
-            this.cmdSaveCue.Name = "cmdSaveCue";
-            this.cmdSaveCue.Size = new System.Drawing.Size(120, 23);
-            this.cmdSaveCue.TabIndex = 7;
-            this.cmdSaveCue.Text = "Save Cue";
-            this.cmdSaveCue.UseVisualStyleBackColor = true;
+            this.cmdNextBlindCue.Location = new System.Drawing.Point(689, 16);
+            this.cmdNextBlindCue.Name = "cmdNextBlindCue";
+            this.cmdNextBlindCue.Size = new System.Drawing.Size(57, 46);
+            this.cmdNextBlindCue.TabIndex = 8;
+            this.cmdNextBlindCue.Text = ">";
+            this.cmdNextBlindCue.UseVisualStyleBackColor = true;
+            this.cmdNextBlindCue.Click += new System.EventHandler(this.cmdNextBlindCue_Click);
+            // 
+            // cmdPrevBlindCue
+            // 
+            this.cmdPrevBlindCue.Location = new System.Drawing.Point(626, 16);
+            this.cmdPrevBlindCue.Name = "cmdPrevBlindCue";
+            this.cmdPrevBlindCue.Size = new System.Drawing.Size(57, 46);
+            this.cmdPrevBlindCue.TabIndex = 7;
+            this.cmdPrevBlindCue.Text = "<";
+            this.cmdPrevBlindCue.UseVisualStyleBackColor = true;
+            this.cmdPrevBlindCue.Click += new System.EventHandler(this.cmdPrevBlindCue_Click);
             // 
             // cmdDeleteCue
             // 
-            this.cmdDeleteCue.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmdDeleteCue.Location = new System.Drawing.Point(7, 241);
+            this.cmdDeleteCue.Location = new System.Drawing.Point(7, 68);
             this.cmdDeleteCue.Name = "cmdDeleteCue";
-            this.cmdDeleteCue.Size = new System.Drawing.Size(120, 23);
+            this.cmdDeleteCue.Size = new System.Drawing.Size(113, 23);
             this.cmdDeleteCue.TabIndex = 6;
             this.cmdDeleteCue.Text = "Delete Cue";
             this.cmdDeleteCue.UseVisualStyleBackColor = true;
@@ -196,22 +206,20 @@
             // 
             // groupBox7
             // 
-            this.groupBox7.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox7.Controls.Add(this.chkFollow);
             this.groupBox7.Controls.Add(this.nudFollowTime);
-            this.groupBox7.Location = new System.Drawing.Point(6, 166);
+            this.groupBox7.Location = new System.Drawing.Point(339, 19);
             this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Size = new System.Drawing.Size(121, 68);
+            this.groupBox7.Size = new System.Drawing.Size(182, 46);
             this.groupBox7.TabIndex = 5;
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "Follow Time";
             // 
             // chkFollow
             // 
-            this.chkFollow.Location = new System.Drawing.Point(6, 43);
+            this.chkFollow.Location = new System.Drawing.Point(94, 17);
             this.chkFollow.Name = "chkFollow";
-            this.chkFollow.Size = new System.Drawing.Size(109, 19);
+            this.chkFollow.Size = new System.Drawing.Size(91, 19);
             this.chkFollow.TabIndex = 2;
             this.chkFollow.Text = "is Follow Cue";
             this.chkFollow.UseVisualStyleBackColor = true;
@@ -224,25 +232,23 @@
             0,
             0,
             0});
-            this.nudFollowTime.Location = new System.Drawing.Point(6, 17);
+            this.nudFollowTime.Location = new System.Drawing.Point(5, 17);
             this.nudFollowTime.Maximum = new decimal(new int[] {
             100000,
             0,
             0,
             0});
             this.nudFollowTime.Name = "nudFollowTime";
-            this.nudFollowTime.Size = new System.Drawing.Size(109, 20);
+            this.nudFollowTime.Size = new System.Drawing.Size(83, 20);
             this.nudFollowTime.TabIndex = 1;
             this.nudFollowTime.ValueChanged += new System.EventHandler(this.nudFollowTime_ValueChanged);
             // 
             // groupBox6
             // 
-            this.groupBox6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox6.Controls.Add(this.nudDownFade);
-            this.groupBox6.Location = new System.Drawing.Point(6, 117);
+            this.groupBox6.Location = new System.Drawing.Point(236, 19);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(121, 43);
+            this.groupBox6.Size = new System.Drawing.Size(97, 43);
             this.groupBox6.TabIndex = 4;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Downfade Time";
@@ -261,18 +267,16 @@
             0,
             0});
             this.nudDownFade.Name = "nudDownFade";
-            this.nudDownFade.Size = new System.Drawing.Size(109, 20);
+            this.nudDownFade.Size = new System.Drawing.Size(85, 20);
             this.nudDownFade.TabIndex = 1;
             this.nudDownFade.ValueChanged += new System.EventHandler(this.nudDownFade_ValueChanged);
             // 
             // groupBox5
             // 
-            this.groupBox5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox5.Controls.Add(this.nudUpFade);
-            this.groupBox5.Location = new System.Drawing.Point(6, 68);
+            this.groupBox5.Location = new System.Drawing.Point(133, 19);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(121, 43);
+            this.groupBox5.Size = new System.Drawing.Size(97, 43);
             this.groupBox5.TabIndex = 3;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Upfade Time";
@@ -291,14 +295,12 @@
             0,
             0});
             this.nudUpFade.Name = "nudUpFade";
-            this.nudUpFade.Size = new System.Drawing.Size(109, 20);
+            this.nudUpFade.Size = new System.Drawing.Size(70, 20);
             this.nudUpFade.TabIndex = 1;
             this.nudUpFade.ValueChanged += new System.EventHandler(this.nudUpFade_ValueChanged);
             // 
             // groupBox4
             // 
-            this.groupBox4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox4.Controls.Add(this.txtCueName);
             this.groupBox4.Location = new System.Drawing.Point(6, 19);
             this.groupBox4.Name = "groupBox4";
@@ -334,7 +336,7 @@
             this.groupBox2.Controls.Add(this.sliderGroupBlind);
             this.groupBox2.Location = new System.Drawing.Point(7, 6);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(611, 330);
+            this.groupBox2.Size = new System.Drawing.Size(751, 224);
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "groupBox2";
@@ -418,6 +420,16 @@
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(121, 21);
             this.comboBox1.TabIndex = 0;
+            // 
+            // tabPageSub
+            // 
+            this.tabPageSub.Location = new System.Drawing.Point(4, 22);
+            this.tabPageSub.Name = "tabPageSub";
+            this.tabPageSub.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageSub.Size = new System.Drawing.Size(764, 368);
+            this.tabPageSub.TabIndex = 5;
+            this.tabPageSub.Text = "SubMasters?";
+            this.tabPageSub.UseVisualStyleBackColor = true;
             // 
             // textBox1
             // 
@@ -519,6 +531,7 @@
             this.toolStripButtonLoadShow.Name = "toolStripButtonLoadShow";
             this.toolStripButtonLoadShow.Size = new System.Drawing.Size(79, 22);
             this.toolStripButtonLoadShow.Text = "Load Show";
+            this.toolStripButtonLoadShow.Click += new System.EventHandler(this.toolStripButtonLoadShow_Click);
             // 
             // cmdSetNextCue
             // 
@@ -549,7 +562,10 @@
             // 
             // sliderGroupLive
             // 
-            this.sliderGroupLive.AutoSize = true;
+            this.sliderGroupLive.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.sliderGroupLive.AutoScroll = true;
             this.sliderGroupLive.ChannelValues = new byte[] {
         ((byte)(0)),
         ((byte)(0)),
@@ -1576,17 +1592,15 @@
         ((byte)(0)),
         ((byte)(0)),
         ((byte)(0))};
-            this.sliderGroupLive.Dock = System.Windows.Forms.DockStyle.Fill;
             this.sliderGroupLive.Location = new System.Drawing.Point(3, 3);
             this.sliderGroupLive.Name = "sliderGroupLive";
-            this.sliderGroupLive.Size = new System.Drawing.Size(758, 362);
+            this.sliderGroupLive.Size = new System.Drawing.Size(755, 336);
             this.sliderGroupLive.TabIndex = 0;
             this.sliderGroupLive.ValueChanged += new System.EventHandler(this.sliderGroupLive_ValueChanged);
             // 
             // sliderGroupNext
             // 
-            this.sliderGroupNext.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.sliderGroupNext.AutoScroll = true;
             this.sliderGroupNext.ChannelValues = new byte[] {
         ((byte)(0)),
         ((byte)(0)),
@@ -2613,14 +2627,16 @@
         ((byte)(0)),
         ((byte)(0)),
         ((byte)(0))};
+            this.sliderGroupNext.Dock = System.Windows.Forms.DockStyle.Fill;
             this.sliderGroupNext.Enabled = false;
             this.sliderGroupNext.Location = new System.Drawing.Point(3, 3);
             this.sliderGroupNext.Name = "sliderGroupNext";
-            this.sliderGroupNext.Size = new System.Drawing.Size(741, 495);
+            this.sliderGroupNext.Size = new System.Drawing.Size(758, 362);
             this.sliderGroupNext.TabIndex = 0;
             // 
             // sliderGroupBlind
             // 
+            this.sliderGroupBlind.AutoScroll = true;
             this.sliderGroupBlind.ChannelValues = new byte[] {
         ((byte)(0)),
         ((byte)(0)),
@@ -3650,7 +3666,7 @@
             this.sliderGroupBlind.Dock = System.Windows.Forms.DockStyle.Fill;
             this.sliderGroupBlind.Location = new System.Drawing.Point(3, 16);
             this.sliderGroupBlind.Name = "sliderGroupBlind";
-            this.sliderGroupBlind.Size = new System.Drawing.Size(605, 311);
+            this.sliderGroupBlind.Size = new System.Drawing.Size(745, 205);
             this.sliderGroupBlind.TabIndex = 0;
             this.sliderGroupBlind.ValueChanged += new System.EventHandler(this.sliderGroupBlind_ValueChanged);
             // 
@@ -3740,13 +3756,15 @@
         private System.Windows.Forms.GroupBox groupBox7;
         private System.Windows.Forms.CheckBox chkFollow;
         private System.Windows.Forms.NumericUpDown nudFollowTime;
-        private System.Windows.Forms.Button cmdSaveCue;
         private System.Windows.Forms.Button cmdDeleteCue;
         private System.Windows.Forms.TextBox txtCueName;
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripButton toolStripButtonSaveShow;
         private System.Windows.Forms.ToolStripButton toolStripButtonLoadShow;
         private System.Windows.Forms.Button cmdSetNextCue;
+        private System.Windows.Forms.Button cmdNextBlindCue;
+        private System.Windows.Forms.Button cmdPrevBlindCue;
+        private System.Windows.Forms.TabPage tabPageSub;
     }
 }
 

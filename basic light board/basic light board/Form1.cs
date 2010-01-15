@@ -25,8 +25,8 @@ namespace basic_light_board
         public const int ShowSaveVersion = 200;
 
         /// <summary>
-        /// LiveLevels contains one entry for every dimmer
-        /// LiveLevels[0] contains the value for dimmer 1
+        /// LiveLevels contains one entry for every channel
+        /// LiveLevels[0] contains the value for channel 1
         /// </summary>
         byte[] LiveLevels = new byte[universeSize];
 
@@ -76,7 +76,7 @@ namespace basic_light_board
         private void Form1_Load(object sender, EventArgs e)
         {
 
-            m_outForm = new output(48);
+            m_outForm = new output(96);
             m_outForm.Show();
 
             comboBox1.Items.AddRange(System.IO.Ports.SerialPort.GetPortNames());
@@ -242,6 +242,8 @@ namespace basic_light_board
             SliderGroup.Labels = temp;
             Settings.Default.Save();
         }
+        
+        
         private void trackBar1_ValueChanged(object sender, EventArgs e)
         {
             //FullScale(LiveLevels, sliderGroupLive.Values, sliderGroupNext.Values, crossFaders1.Scene1Value, crossFaders1.Scene2Value);
@@ -253,11 +255,11 @@ namespace basic_light_board
         
         
         /// <summary>
-        /// this will fill the dimmer list (Output) based on the value of the crossfaders/(next& currents Scenes)
+        /// this will fill the channel list (Output) based on the value of the crossfaders/(next& currents Scenes)
         /// as wel as the Live console.
         /// </summary>
-        /// <param name="Output">a list of dimmers Output[0] should be dimmer#1's value</param>
-        /// <param name="patchList">this is how dimmers are patched into channels patchlist[0] contains the channel that dimmer#1 corrisponds to</param>
+        /// <param name="Output">a list of dimmers Output[0] should be channel#1's value</param>
+        /// <param name="patchList">this is how dimmers are patched into channels patchlist[0] contains the channel that channel#1 corrisponds to</param>
         /// <param name="Live">the CHANNEL list of the live values</param>
         /// <param name="currentScene">the CHANNEL list of the current scene</param>
         /// <param name="nextScene">the CHANNEL list of the next scene</param>
@@ -283,8 +285,8 @@ namespace basic_light_board
         }
         private byte[] mixChannelVals()
         {
-            // for each channel mix the Live Sliders, the current Scene and Next Scene
-            byte[] Output = new byte[512]; // this is a channel List fyi (not a dimmer List)
+            // for each channel CalculateLiveLevels the Live Sliders, the current Scene and Next Scene
+            byte[] Output = new byte[512]; // this is a channel List fyi (not a channel List)
             int currentTemp,nextTemp,live;
             for (int i = 1; i <= 512; i++)
             {
@@ -313,19 +315,22 @@ namespace basic_light_board
             CueNumberForm c = new CueNumberForm();
             c.ShowDialog();
             if (c.DialogResult==DialogResult.Cancel)return;
-            mCList.AddCue(new LightCue(c.CueNum, c.CueName, mixChannelVals() ));
+            if (mCList[c.CueNum] == null)
+                mCList.AddCue(new LightCue(c.CueNum, c.CueName, mixChannelVals()));
+            else
+                mCList[c.CueNum].channelLevels = mixChannelVals();
         }
 
         #region Patch Cmd
         private void textBox2_TextChanged(object sender, EventArgs e)
         {
-            Regex rx = new Regex(@"(?<dimmer>\d+)(@(?<channel>\d+)(@(?<level>\d+))?)?", RegexOptions.Compiled);
+            Regex rx = new Regex(@"(?<channel>\d+)(@(?<channel>\d+)(@(?<level>\d+))?)?", RegexOptions.Compiled);
             Regex rx2 = new Regex(@"\d+@\d+@\d+", RegexOptions.Compiled);
 
 
             Match m = rx.Match(textBox2.Text);
             //m = rx2.Match(textBox2.Text);
-            label1.Text = "dimmer: " + m.Groups["dimmer"].Value;
+            label1.Text = "channel: " + m.Groups["channel"].Value;
             label2.Text = "channel: " + m.Groups["channel"].Value;
             label3.Text = "Value: " + m.Groups["level"].Value;
         }
@@ -333,13 +338,13 @@ namespace basic_light_board
         {
             if (e.KeyChar == (char)Keys.Return)
             {
-                Regex rx = new Regex(@"(?<dimmer>\d+)(@(?<channel>\d+)(@(?<level>\d+\%?))?)?", RegexOptions.Compiled);
+                Regex rx = new Regex(@"(?<channel>\d+)(@(?<channel>\d+)(@(?<level>\d+\%?))?)?", RegexOptions.Compiled);
                 Match m = rx.Match(textBox2.Text);
                 if (!m.Success) { MessageBox.Show("bad string"); return; }
 
                 try
                 {
-                    int d = int.Parse(m.Groups["dimmer"].Value);
+                    int d = int.Parse(m.Groups["channel"].Value);
                     int c = int.Parse(m.Groups["channel"].Value);
                     byte l;
                     if (m.Groups["level"].Value == "")
@@ -356,7 +361,7 @@ namespace basic_light_board
                     }
 
                     SliderGroup.patch(d, c, l);
-                    MessageBox.Show(string.Format("Patched dimmer {0} to channel {1} @ {2}", d, c, l));
+                    MessageBox.Show(string.Format("Patched channel {0} to channel {1} @ {2}", d, c, l));
                 }
                 catch (Exception ex)
                 {
@@ -366,16 +371,127 @@ namespace basic_light_board
         }
         #endregion
 
-        #region Channel Cmd
-        private void textBox3_TextChanged(object sender, EventArgs e)
+        #region dimmer Cmd
+        private void txtLiveCmd_TextChanged(object sender, EventArgs e)
         {
             
         }
-        private void textBox3_KeyPress(object sender, KeyPressEventArgs e)
+        private void txtLiveCmd_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == (char)Keys.Return)
             {
-                Regex rx = new Regex(@"(?<channel>\d+)@(?<level>\d+\%?)", RegexOptions.Compiled);
+                //clear can be achived with 1>96@0;
+                //if (txtLiveCmd.Text == "clear") { for (int i = 1; i < 512; i++) sliderGroupLive.setLevel(i, 0); return; }
+
+                string[] cmds = txtLiveCmd.Text.Split(',');
+
+                Regex rx = new Regex(@"(?<channel>\d{1,3})(@(?<level>\d+\%?))?", RegexOptions.Compiled);
+                Regex rx2 = new Regex(@"(?<channelList>\d+((\+|\>)\d+)+)(@(?<level>\d+\%?))?", RegexOptions.Compiled);
+                Regex ThruExpession = new Regex(@"(?<start>\d+)>(?<finish>\d+)", RegexOptions.Compiled);
+                Regex AndExpession = new Regex(@"(?<start>\d+)\+(?<finish>\d+)", RegexOptions.Compiled);
+
+
+                StringBuilder  err= new StringBuilder();
+
+                List<int> SelectedChannels = new List<int>();
+                int level;
+
+                foreach (string s in cmds)
+                {
+                    Match mch = rx2.Match(s);
+
+                    if (!mch.Success) { err.AppendLine("{0} is not a valid cmd"); continue; }
+                    #region build the List of Selected Channels
+                    if (mch.Groups["channelList"].Success != true) { err.AppendLine("{0} is not a valid cmd"); continue; }
+                    string channelList = mch.Groups["channelList"].Value;
+                    #region deal with ranges
+                    MatchCollection ranges =  ThruExpession.Matches(channelList);
+                    foreach (Match m in ranges)
+                    {
+                        int chanStartVal = int.Parse(m.Groups["start"].Value);
+                        int chanEndVal = int.Parse(m.Groups["finish"].Value);
+                        // make sure that we dont get caught in an infinite loop
+                        if (chanStartVal > chanEndVal) { int swapTemp = chanEndVal; chanEndVal = chanStartVal; chanStartVal = swapTemp; } 
+                        for (int channel = chanStartVal ; channel <= chanEndVal; channel++)
+                        {
+                            if (!SelectedChannels.Contains(channel)) SelectedChannels.Add(channel);
+                        }
+                    }
+                    #endregion
+                    #region deal with single + (ands)
+                    //this will give us sum duplicate channels which is why we check to make sure that !SelectedChannels.Contains()
+                    //example : 1>5+10>15 will try to add 5 and 10 to the list twice (this is not a big deal
+
+                    ranges = AndExpession.Matches(channelList);
+                    foreach (Match m in ranges)
+                    {
+                        int chan1 = int.Parse(m.Groups["start"].Value);
+                        int chan2 = int.Parse(m.Groups["finish"].Value);
+                        if (!SelectedChannels.Contains(chan1)) SelectedChannels.Add(chan1);
+                        if (!SelectedChannels.Contains(chan2)) SelectedChannels.Add(chan2);
+                    }
+
+                    #endregion
+                    #region remove Invalid Channels ( <0  || >512)
+
+                    SelectedChannels.RemoveAll(delegate(int i) { return i < 0 || i > 512; });
+
+                    #endregion
+
+                    #endregion
+
+                    #region get Channel Value
+                    
+                    if (mch.Groups["level"].Value.EndsWith("%"))
+                        level = (int.Parse(mch.Groups["level"].Value.TrimEnd('%')) * 255 / 100);
+                    else
+                        level = int.Parse(mch.Groups["level"].Value);
+                    #endregion
+
+                    foreach (int chan in SelectedChannels)
+                    {
+                        sliderGroupLive.setLevel(chan, (byte)level);
+                    }
+
+                }
+                    
+
+                /*Match m = rx.Match(txtLiveCmd.Text);
+                if (!m.Success) { MessageBox.Show("bad string"); return; }
+
+                try
+                {
+                    int c = int.Parse(m.Groups["channel"].Value);
+                    //byte l = byte.Parse(m.Groups["level"].Value);
+                    sliderGroupLive.SelectSlider(c);
+
+                    if (m.Groups["level"].Success == false) return;
+
+                    int l;
+                    if (m.Groups["level"].Value.EndsWith("%"))
+                        l = (int.Parse(m.Groups["level"].Value.TrimEnd('%')) * 255 / 100);
+                    else
+                        l = int.Parse(m.Groups["level"].Value);
+
+                    if (c < 1) throw new ArgumentOutOfRangeException("channel");
+                    if (l < 0 || l > 255) throw new ArgumentOutOfRangeException("level");
+
+                    sliderGroupLive.setLevel(c, (byte)l);
+                    MessageBox.Show(string.Format("channel {0} @ {1}", c, l));
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.ToString());
+                }
+                 */
+            }
+        }
+        /*private void txtLiveCmd_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Return)
+            {
+                if (txtLiveCmd.Text == "clear") { for (int i = 1; i < 512; i++) sliderGroupLive.setLevel(i, 0); return; }
+                Regex rx = new Regex(@"(?<channel>\d+)(@(?<level>\d+\%?))?", RegexOptions.Compiled);
                 Match m = rx.Match(txtLiveCmd.Text);
                 if (!m.Success) { MessageBox.Show("bad string"); return; }
 
@@ -383,6 +499,9 @@ namespace basic_light_board
                 {
                     int c = int.Parse(m.Groups["channel"].Value);
                     //byte l = byte.Parse(m.Groups["level"].Value);
+                    sliderGroupLive.SelectSlider(c);
+
+                    if (m.Groups["level"].Success  == false) return;
 
                     int l;
                     if (m.Groups["level"].Value.EndsWith("%"))
@@ -401,7 +520,7 @@ namespace basic_light_board
                         MessageBox.Show(ex.ToString());
                 }
             }
-        }
+        }*/
         #endregion
         
         private void sliderGroupLive_ValueChanged(object sender, EventArgs e)
@@ -464,6 +583,8 @@ namespace basic_light_board
             blindCue = mCList[num];
             
             if (blindCue==null) return;
+
+            groupBox2.Text = string.Format("Cue Number: {0} - {1}", blindCue.cueNumber, blindCue.cueName);
             Console.WriteLine("before blindslider.channels=blindcue.channel:");
             Console.WriteLine(blindCue.serialize());
             sliderGroupBlind.ChannelValues = blindCue.channelLevels; 
@@ -485,22 +606,19 @@ namespace basic_light_board
         {
             blindCue.cueName = txtCueName.Text;
         }
-
         private void nudUpFade_ValueChanged(object sender, EventArgs e)
         {
             blindCue.upFadeTime = (int)nudUpFade.Value;
         }
-
         private void nudDownFade_ValueChanged(object sender, EventArgs e)
         {
             blindCue.downFadeTime = (int)nudDownFade.Value ;
         }
-
         private void nudFollowTime_ValueChanged(object sender, EventArgs e)
         {
             blindCue.followTime = (int)nudFollowTime.Value ;
         }
-
+        
         private void Form1_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar==(char)Keys.F1)
@@ -508,7 +626,6 @@ namespace basic_light_board
                 tabControl1.SelectedTab = tabPageLive;
             }
         }
-
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
             /*
@@ -540,9 +657,10 @@ namespace basic_light_board
         {
             if (blindCue == null) return;
             MessageBox.Show("are you sure?", "Confirm?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1 );
-            
-            mCList.RemoveCue(blindCue.cueNumber);
-            blindCue = null;
+            int blindNumber = blindCue.cueNumber;
+            loadCueIntoBlind(mCList.getFollowingCue(blindNumber).cueNumber);
+            mCList.RemoveCue(blindNumber);
+            MessageBox.Show(string.Format("cue {0} deleted", blindNumber));
         }
 
         private void chkFollow_CheckedChanged(object sender, EventArgs e)
@@ -584,13 +702,101 @@ namespace basic_light_board
                 Plist.Remove(Plist.Length - 1, 1); // remove the extra ","
                 #endregion
                 s.WriteLine(Plist.ToString());
+                #region construct the Live channel LevelList
+                Plist = new StringBuilder();
+                foreach( byte level in sliderGroupLive.ChannelValues)
+                {
+                    Plist.AppendFormat("{0},", level);
+                }
+                Plist.Remove(Plist.Length - 1, 1); // remove the extra ","
+                #endregion
+                s.WriteLine(Plist.ToString());
+                #region construct the Current cue/NextCue/crossfaders values string
+                Plist = new StringBuilder();
+                Plist.AppendFormat("{0},{1},{2},{3}", mCList.CurrentCueNumber, mCList.NextCueNumber, crossfaders1.Scene1Value, crossfaders1.Scene2Value);
+                #endregion
+                s.WriteLine(Plist.ToString());
+
+                #region save all Cues
+                Plist=new StringBuilder();
+                Plist.AppendLine(string.Format("{0}",mCList.mCues.Count));
+                foreach(LightCue c in mCList.mCues)
+                    Plist.AppendLine(c.serialize());
+                #endregion
+                s.Write(Plist.ToString());
+                s.Close();
             }
             catch
-            {
-            }
+            {}
+        }
 
+        void dlg_OpenFileOk(object sender, CancelEventArgs e)
+        {
+            OpenFileDialog dlg = (sender as OpenFileDialog);
+            System.IO.StreamReader s = new StreamReader(dlg.FileName);
+            int version, i, count;
+            string line;
+            string[] strList;
+            
+            if (!int.TryParse(s.ReadLine(),out version)) return;
+            if (version != Form1.ShowSaveVersion) return;
+            #region get the patchList
+            line = s.ReadLine();
+            strList = line.Split(',');
+            i=0;
+            foreach (string tmpStr in strList)
+            {
+                SliderGroup.Patchlist[i] = int.Parse(tmpStr);
+                i++;
+            }
+            #endregion
+            #region get the Live Chanel Levels
+            line = s.ReadLine();
+            strList = line.Split(',');
+            i=1;
+            foreach (string tmpStr in strList)
+            {
+                sliderGroupLive.setLevel(i, byte.Parse(tmpStr));
+                i++;
+            }
+            #endregion
+            #region get current CurrentCue/NextCue/Crossfader Values
+            line = s.ReadLine();
+            strList = line.Split(',');
+            mCList.CurrentCueNumber = int.Parse(strList[0]);
+            mCList.NextCueNumber = int.Parse(strList[1]);
+            crossfaders1.Scene1Value = byte.Parse(strList[2]);
+            crossfaders1.Scene2Value = byte.Parse(strList[3]);
+
+            #endregion
+            #region get All the cues
+            mCList.mCues.Clear();
+
+            count = int.Parse(s.ReadLine());
+            for (i = 0; i < count; i++)
+            {
+                line = s.ReadLine();
+                mCList.AddCue(new LightCue(line));
+            }
+            if (mCList[0] == null) mCList.AddCue(LightCue.BlankCue);
+            #endregion
+
+            s.Close();
 
         }
+
+        private void toolStripButtonLoadShow_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog dlg = new OpenFileDialog();
+            dlg.AddExtension = true;
+            dlg.CheckFileExists = true;
+            dlg.DefaultExt = "txt";
+            
+            dlg.Title = "what show to open";
+            dlg.FileOk +=new CancelEventHandler(dlg_OpenFileOk);
+            dlg.ShowDialog();
+        }
+
 
         private void cmdSetNextCue_Click(object sender, EventArgs e)
         {
@@ -614,5 +820,14 @@ namespace basic_light_board
                 }
             }
         }
+        private void cmdPrevBlindCue_Click(object sender, EventArgs e)
+        {
+            loadCueIntoBlind(mCList.getPrecedingCue(blindCue).cueNumber);
+        }
+        private void cmdNextBlindCue_Click(object sender, EventArgs e)
+        {
+            loadCueIntoBlind(mCList.getFollowingCue(blindCue).cueNumber);
+        }
+
     }
 }
