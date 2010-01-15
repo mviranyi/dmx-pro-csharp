@@ -103,7 +103,8 @@ namespace basic_light_board
             }
             set
             {
-                mFollowTime = value;
+                if (value == 0) mFollowTime = 1;
+                else mFollowTime = value;
                 onFollowTimeChanged();
             }
         }

@@ -64,6 +64,7 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="ISingleSlider.cs" />
     <Compile Include="LightCue.cs" />
     <Compile Include="output.cs">
       <SubType>Form</SubType>

@@ -42,6 +42,11 @@ namespace basic_light_board
         {
             this.DialogResult = DialogResult.Cancel;
         }
+
+        private void CueNumberForm_Load(object sender, EventArgs e)
+        {
+            numericUpDown1.Select();
+        }
         
     }
 }

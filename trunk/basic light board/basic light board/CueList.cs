@@ -10,6 +10,7 @@ namespace basic_light_board
         
         public event EventHandler cueChanged;
         public event EventHandler nextCueChanged;
+        public event EventHandler currentCueChanged;
 
         public List<LightCue> mCues;
 
@@ -32,12 +33,57 @@ namespace basic_light_board
             NextCueNumber = this[cueName].cueNumber;
             return true;
         }
-
         public bool setNextCue(int cueNumber)
         {
             if (this[cueNumber] == null) return false;
             NextCueNumber = cueNumber;
             return true;
+        }
+
+        public LightCue getPrecedingCue(int cueNumber)
+        {
+            int index = mCues.FindIndex(delegate(LightCue l) { return l.cueNumber == cueNumber; });
+            if (index == -1) return mCues[0];
+            if (index == 0) return mCues[mCues.Count - 1];
+            return mCues[index - 1];
+        }
+        public LightCue getPrecedingCue(string cueName)
+        {
+            int index = mCues.FindIndex(delegate(LightCue l) { return l.cueName == cueName; });
+            if (index == -1) return mCues[0];
+            if (index == 0) return mCues[mCues.Count - 1];
+            return mCues[index - 1];
+        }
+        public LightCue getPrecedingCue(LightCue cue)
+        {
+            if (cue == null) return mCues[0];
+            int index = mCues.FindIndex(delegate(LightCue l) { return l.cueNumber == cue.cueNumber; });
+            if (index == -1) return mCues[0];
+            if (index == 0) return mCues[mCues.Count - 1];
+            return mCues[index - 1];
+        }
+
+        public LightCue getFollowingCue(int cueNumber)
+        {
+            int index = mCues.FindIndex(delegate(LightCue l) { return l.cueNumber == cueNumber; });
+            if (index == -1) return mCues[0];
+            if (index == (mCues.Count - 1)) return mCues[0];
+            return mCues[index + 1];
+        }
+        public LightCue getFollowingCue(string cueName)
+        {
+            int index = mCues.FindIndex(delegate(LightCue l) { return l.cueName == cueName; });
+            if (index == -1) return mCues[0];
+            if (index == (mCues.Count - 1)) return mCues[0];
+            return mCues[index + 1];
+        }
+        public LightCue getFollowingCue(LightCue cue)
+        {
+            if (cue == null) return mCues[0];
+            int index = mCues.FindIndex(delegate(LightCue l) { return l.cueNumber == cue.cueNumber; });
+            if (index == -1) return mCues[0];
+            if (index == (mCues.Count - 1)) return mCues[0];
+            return mCues[index + 1];
         }
 
     
@@ -85,6 +131,15 @@ namespace basic_light_board
             {
                 return mCues[mCurrentCueIndex].cueNumber;
             }
+            set
+            {
+                int index = mCues.FindIndex(delegate(LightCue l) { return l.cueNumber == value; });
+                if (index != -1)
+                {
+                    mCurrentCueIndex = index;
+                    onCurrentCueChanged();
+                }
+            }
         }
         public int NextCueNumber
         {
@@ -120,7 +175,6 @@ namespace basic_light_board
             // since LightCue implements IComparable<LightCue> 
             //we dont need to specify a delegate. it will sort by cue number
         }
-
         public bool RemoveCue(int cueNumber)
         {
             int index = mCues.FindIndex(delegate(LightCue l){return l.cueNumber==cueNumber;});
@@ -135,7 +189,6 @@ namespace basic_light_board
 
             return true;
         }
-
         public bool RemoveCue(string cueName)
         {
             int index = mCues.FindIndex(delegate(LightCue l) { return l.cueName==cueName; });
@@ -162,6 +215,10 @@ namespace basic_light_board
         {
             Console.WriteLine("nextCueChanged");
             if (nextCueChanged != null) nextCueChanged(this, new EventArgs());
+        }
+        public void onCurrentCueChanged()
+        {
+            if (currentCueChanged != null) currentCueChanged(this, new EventArgs());
         }
 
         public void saveToFile(string fileName)

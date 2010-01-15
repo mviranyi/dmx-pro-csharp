@@ -324,7 +324,7 @@ namespace basic_light_board
         /// <param name="Levels"></param>
         public void sendDMXPacketRequest(byte[] Levels)
         {
-            if (Levels.Length < 24 || Levels.Length > 512) throw new Exception("The valid number of dimmer channels must be between 24 and 512.");
+            if (Levels.Length < 24 || Levels.Length > 512) throw new Exception("The valid number of channel channels must be between 24 and 512.");
             byte[] msg = new byte[1 + Levels.Length];
             Array.Copy(Levels, 0, msg, 1, Levels.Length);
             msg[0] = (byte)0;
