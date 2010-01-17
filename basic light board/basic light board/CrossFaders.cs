@@ -13,6 +13,8 @@ namespace basic_light_board
         public event EventHandler ValueChanged;
         public event EventHandler SceneChanged;
 
+        public bool suspendUpdates = false;
+
         public byte Scene1Value {
             set
             {
@@ -133,7 +135,7 @@ namespace basic_light_board
 
         private void OnValueChanged()
         {
-            if (ValueChanged != null) ValueChanged(this, new EventArgs());
+            if (ValueChanged != null && !suspendUpdates ) ValueChanged(this, new EventArgs());
             checkScene();
 
         }

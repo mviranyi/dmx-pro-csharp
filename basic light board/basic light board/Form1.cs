@@ -93,11 +93,13 @@ namespace basic_light_board
         #region Form update Methods
         private void updateTextBox()
         {
+            int numCharsWide = (int)(textBox1.Width / textBox1.Font.Size );
+            int numItemsPerLine = numCharsWide / 11;
             StringBuilder str = new StringBuilder();
             for (int i = 0; i < universeSize; i++)
             {
-                str.AppendFormat("Ch{0,2}:{1,4} ", i + 1, LiveLevels[i]);
-                if (i != 0 && ((i + 1) % 6) == 0) str.AppendLine();
+                str.AppendFormat("Ch{0,3}:{1,4} ", i + 1, LiveLevels[i]);
+                if (i != 0 && ((i+1) % numItemsPerLine) == 0) str.AppendLine();
 
 
             }
@@ -139,6 +141,7 @@ namespace basic_light_board
         #endregion
 
         #region handle Go button
+        public bool inCrossfade = false;
         private void GoButton_Click(object sender, EventArgs e)
         {
             Timer goTime = new Timer();
@@ -146,6 +149,8 @@ namespace basic_light_board
             goTime.Tick += new EventHandler(goTime_Tick);
             button1.Enabled = false;
             m_timer = new Stopwatch();
+            if (mCList.NextCue.upFadeTime==mCList.NextCue.downFadeTime)
+                inCrossfade = true;
             m_timer.Start();
             goTime.Start();
         }
@@ -154,10 +159,10 @@ namespace basic_light_board
             Timer t = (sender as Timer);
             if (t.Enabled == false) { Console.WriteLine("**tick when Disabled**"); return; }
             long elapsed = m_timer.ElapsedMilliseconds;
-            byte currentSceneVal = (byte)(255-Math.Min(255 * ((double)elapsed / mCList.NextCue.downFadeTime), 255));
-            byte nextSceneVal = (byte)Math.Min(255 * ((double)elapsed / mCList.NextCue.upFadeTime), 255);
+            byte currentSceneVal = (byte)(255-Math.Min(Math.Floor( 255 * ((double)elapsed / mCList.NextCue.downFadeTime)), 255));
+            byte nextSceneVal = (byte)Math.Min(Math.Floor( 255 * ((double)elapsed / mCList.NextCue.upFadeTime)), 255);
 
-            Console.WriteLine(string.Format("Time_Tick:{0},{1}", currentSceneVal, nextSceneVal));
+            Console.WriteLine(string.Format("Time_Tick:{0},{1} = {2}", currentSceneVal, nextSceneVal,currentSceneVal+nextSceneVal));
             
             
             if (crossfaders1.InvokeRequired)
@@ -170,7 +175,9 @@ namespace basic_light_board
                     crossfaders1.CurrentSceneValue = currentSceneVal;
                 else
                 {
+                    crossfaders1.suspendUpdates = true;
                     crossfaders1.CurrentSceneValue = currentSceneVal;
+                    crossfaders1.suspendUpdates = false;
                     crossfaders1.NextSceneValue = nextSceneVal; 
                 }
 
@@ -180,6 +187,7 @@ namespace basic_light_board
             {
                 t.Stop();
                 m_timer.Stop();
+                inCrossfade = false;
                 m_timer = null;//release timer
                 t.Enabled = false;
                 Console.WriteLine("timer stopped");
@@ -244,7 +252,7 @@ namespace basic_light_board
         }
         
         
-        private void trackBar1_ValueChanged(object sender, EventArgs e)
+        private void trackBar1_ValueChanged(object sender, EventArgs e)// when the cross fader
         {
             //FullScale(LiveLevels, sliderGroupLive.Values, sliderGroupNext.Values, crossFaders1.Scene1Value, crossFaders1.Scene2Value);
             outputLightMix(LiveLevels,SliderGroup.Patchlist,SliderGroup.Level,
@@ -275,7 +283,12 @@ namespace basic_light_board
             {
                 tChannel = patchList[i]-1;
                 tLevel = maxLevel[i];
-                Output[i] = scale(Live[tChannel], currentScene[tChannel],
+                if (inCrossfade) 
+                    Output[i] = crossfadeScale(Live[tChannel], currentScene[tChannel],
+                          nextScene[tChannel],
+                          currentSceneVal, NextSceneVal, tLevel);
+                else
+                    Output[i] = scale(Live[tChannel], currentScene[tChannel],
                           nextScene[tChannel],
                           currentSceneVal, NextSceneVal, tLevel);
             }
@@ -299,14 +312,24 @@ namespace basic_light_board
         }
         private byte scale(byte live, byte Xval, byte Yval, byte XLevel, byte Ylevel, byte maxDimmerVal)
         {
-            int xTemp = (int)(Xval * (XLevel / 255.0) * (maxDimmerVal / 255.0));
-            int yTemp = (int)(Yval * (Ylevel / 255.0) * (maxDimmerVal / 255.0));
-            int liveTemp = (int)(live * (maxDimmerVal / 255));
-            int temp =xTemp + yTemp;
+            double xTemp = Math.Ceiling((Xval * (XLevel / 255.0) * (maxDimmerVal / 255.0)));
+            double yTemp = (int)Math.Floor((Yval * (Ylevel / 255.0) * (maxDimmerVal / 255.0)));
+            double liveTemp = (int)Math.Ceiling((live * (maxDimmerVal / 255.0)));
+            double temp =xTemp + yTemp;
+            //double temp = (xTemp > yTemp ? xTemp : yTemp);
+            if (Xval == Yval) temp = Xval;
 
-            return (byte)Math.Min(255,Math.Max(liveTemp, temp));
+            
+
+            return (byte)Math.Min(255,Math.Max(liveTemp, Math.Ceiling(temp)));
             //return (byte)(xTemp < yTemp ? yTemp : xTemp);
             //return (byte)(temp > 255 ? 255 : temp);
+        }
+
+        private byte crossfadeScale(byte live, byte Xval, byte Yval, byte XLevel, byte YLevel, byte maxDimmerVal)
+        {
+            byte temp =(byte) (Xval + Math.Floor((Yval - Xval) * YLevel/255.0));
+            return (byte)(Math.Max(temp, live) * maxDimmerVal / 255.0);
         }
 
 
@@ -386,9 +409,10 @@ namespace basic_light_board
                 string[] cmds = txtLiveCmd.Text.Split(',');
 
                 Regex rx = new Regex(@"(?<channel>\d{1,3})(@(?<level>\d+\%?))?", RegexOptions.Compiled);
-                Regex rx2 = new Regex(@"(?<channelList>\d+((\+|\>)\d+)+)(@(?<level>\d+\%?))?", RegexOptions.Compiled);
+                Regex rx2 = new Regex(@"(?<channelList>\d+((\+|\>)\d+)*)(@(?<level>\d+\%?))?", RegexOptions.Compiled);
                 Regex ThruExpession = new Regex(@"(?<start>\d+)>(?<finish>\d+)", RegexOptions.Compiled);
                 Regex AndExpession = new Regex(@"(?<start>\d+)\+(?<finish>\d+)", RegexOptions.Compiled);
+                Regex ChannelExpression = new Regex(@"(?<start>\d+)", RegexOptions.Compiled);
 
 
                 StringBuilder  err= new StringBuilder();
@@ -399,6 +423,7 @@ namespace basic_light_board
                 foreach (string s in cmds)
                 {
                     Match mch = rx2.Match(s);
+                    SelectedChannels.Clear();
 
                     if (!mch.Success) { err.AppendLine("{0} is not a valid cmd"); continue; }
                     #region build the List of Selected Channels
@@ -430,8 +455,17 @@ namespace basic_light_board
                         if (!SelectedChannels.Contains(chan1)) SelectedChannels.Add(chan1);
                         if (!SelectedChannels.Contains(chan2)) SelectedChannels.Add(chan2);
                     }
-
                     #endregion
+
+                    #region for good measure (also becasue the above doesnt recognize 1@255 as a valid Channel list)
+                    ranges = ChannelExpression.Matches(channelList);
+                    foreach (Match m in ranges)
+                    {
+                        int chan = int.Parse(m.Groups["start"].Value);
+                        if (!SelectedChannels.Contains(chan)) SelectedChannels.Add(chan);
+                    }
+                    #endregion
+
                     #region remove Invalid Channels ( <0  || >512)
 
                     SelectedChannels.RemoveAll(delegate(int i) { return i < 0 || i > 512; });
@@ -440,18 +474,23 @@ namespace basic_light_board
 
                     #endregion
 
-                    #region get Channel Value
-                    
-                    if (mch.Groups["level"].Value.EndsWith("%"))
-                        level = (int.Parse(mch.Groups["level"].Value.TrimEnd('%')) * 255 / 100);
-                    else
-                        level = int.Parse(mch.Groups["level"].Value);
-                    #endregion
-
-                    foreach (int chan in SelectedChannels)
+                    if (mch.Groups["level"].Success == true)
                     {
-                        sliderGroupLive.setLevel(chan, (byte)level);
+
+                        #region get Channel Value
+
+                        if (mch.Groups["level"].Value.EndsWith("%"))
+                            level = (int.Parse(mch.Groups["level"].Value.TrimEnd('%')) * 255 / 100);
+                        else
+                            level = int.Parse(mch.Groups["level"].Value);
+                        #endregion
+
+                        foreach (int chan in SelectedChannels)
+                        {
+                            sliderGroupLive.setLevel(chan, (byte)level);
+                        }
                     }
+                    if (SelectedChannels.Count == 1) sliderGroupLive.SelectSlider(SelectedChannels[0]);
 
                 }
                     
@@ -523,7 +562,7 @@ namespace basic_light_board
         }*/
         #endregion
         
-        private void sliderGroupLive_ValueChanged(object sender, EventArgs e)
+        private void sliderGroupLive_ValueChanged(object sender, EventArgs e)// when the live leves change
         {
             outputLightMix(LiveLevels,SliderGroup.Patchlist,SliderGroup.Level, sliderGroupLive.dimmerValues, 
                 mCList.CurrentCue.channelLevels, mCList.NextCue.channelLevels, 
@@ -827,6 +866,11 @@ namespace basic_light_board
         private void cmdNextBlindCue_Click(object sender, EventArgs e)
         {
             loadCueIntoBlind(mCList.getFollowingCue(blindCue).cueNumber);
+        }
+
+        private void cmdCopyToLive_Click(object sender, EventArgs e)
+        {
+            sliderGroupLive.ChannelValues = (byte[])mCList.CurrentCue.channelLevels.Clone();
         }
 
     }

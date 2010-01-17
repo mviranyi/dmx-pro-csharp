@@ -69,6 +69,7 @@
             this.toolStripButtonSaveShow = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonLoadShow = new System.Windows.Forms.ToolStripButton();
             this.cmdSetNextCue = new System.Windows.Forms.Button();
+            this.cmdCopyToLive = new System.Windows.Forms.Button();
             this.crossfaders1 = new basic_light_board.CrossFaders();
             this.sliderGroupLive = new basic_light_board.SliderGroup();
             this.sliderGroupNext = new basic_light_board.SliderGroup();
@@ -439,6 +440,8 @@
             this.textBox1.Location = new System.Drawing.Point(17, 428);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
+            this.textBox1.ReadOnly = true;
+            this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.textBox1.Size = new System.Drawing.Size(772, 62);
             this.textBox1.TabIndex = 3;
             // 
@@ -543,6 +546,17 @@
             this.cmdSetNextCue.Text = "NextCue";
             this.cmdSetNextCue.UseVisualStyleBackColor = true;
             this.cmdSetNextCue.Click += new System.EventHandler(this.cmdSetNextCue_Click);
+            // 
+            // cmdCopyToLive
+            // 
+            this.cmdCopyToLive.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cmdCopyToLive.Location = new System.Drawing.Point(797, 458);
+            this.cmdCopyToLive.Name = "cmdCopyToLive";
+            this.cmdCopyToLive.Size = new System.Drawing.Size(68, 23);
+            this.cmdCopyToLive.TabIndex = 11;
+            this.cmdCopyToLive.Text = "Cpy 2 Live";
+            this.cmdCopyToLive.UseVisualStyleBackColor = true;
+            this.cmdCopyToLive.Click += new System.EventHandler(this.cmdCopyToLive_Click);
             // 
             // crossfaders1
             // 
@@ -3676,6 +3690,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(943, 494);
+            this.Controls.Add(this.cmdCopyToLive);
             this.Controls.Add(this.cmdSetNextCue);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.groupBox1);
@@ -3765,6 +3780,7 @@
         private System.Windows.Forms.Button cmdNextBlindCue;
         private System.Windows.Forms.Button cmdPrevBlindCue;
         private System.Windows.Forms.TabPage tabPageSub;
+        private System.Windows.Forms.Button cmdCopyToLive;
     }
 }
 
