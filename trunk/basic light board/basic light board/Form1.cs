@@ -56,14 +56,35 @@ namespace basic_light_board
 
             mCList = new CueList();
             mCList.nextCueChanged += new EventHandler(mCList_nextCueChanged);
+            mCList.currentCueChanged += new EventHandler(mCList_currentCueChanged);
+            mCList.NextCueNumber = 0;
             //mCList.cueChanged += new EventHandler(mCList_cueChanged);
-            
+
+
+            loadCueIntoBlind(0);
+            blindCue.channelLevelsChanged += new EventHandler(blindCue_channelLevelsChanged);
 
             
 
             com = new VComWrapper();
             com.SerialNumberReceived += new EventHandler<SerialNumberArgs>(com_SerialNumberReceived);
             com.WidgetParametersReceived += new EventHandler<WidgetParameterArgs>(com_WidgetParametersReceived);
+        }
+
+        void blindCue_channelLevelsChanged(object sender, EventArgs e)
+        {
+            if (blindCue.cueNumber == mCList.CurrentCueNumber)
+            {
+                outputLightMix(LiveLevels, SliderGroup.Patchlist, SliderGroup.Level,
+              sliderGroupLive.ChannelValues,
+              mCList.CurrentCue.channelLevels, mCList.NextCue.channelLevels,
+              crossfaders1.CurrentSceneValue, crossfaders1.NextSceneValue);                                                                                                               
+            }
+        }
+
+        void mCList_currentCueChanged(object sender, EventArgs e)
+        {
+            updateCueLabels();
         }
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -137,6 +158,7 @@ namespace basic_light_board
         void mCList_nextCueChanged(object sender, EventArgs e)
         {
             sliderGroupNext.ChannelValues = mCList.NextCue.channelLevels;
+            updateCueLabels();
         }
         #endregion
 
@@ -569,8 +591,6 @@ namespace basic_light_board
                 crossfaders1.CurrentSceneValue, crossfaders1.NextSceneValue);
         }
 
-        
-
         private void crossFaders1_SceneChanged(object sender, EventArgs e)
         {
             mCList.gotoNextCue();
@@ -619,7 +639,9 @@ namespace basic_light_board
 
         public void loadCueIntoBlind(int num)
         {
+            //if (blindCue!=null) blindCue.channelLevelsChanged -= 
             blindCue = mCList[num];
+            blindCue.channelLevelsChanged+=new EventHandler(blindCue_channelLevelsChanged);
             
             if (blindCue==null) return;
 

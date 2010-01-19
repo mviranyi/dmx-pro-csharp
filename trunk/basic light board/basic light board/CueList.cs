@@ -25,6 +25,7 @@ namespace basic_light_board
             mCurrentCueIndex = 0;
             mNextCueIndex = 0;
             mPrevCueIndex = 0;
+            onNextCueChanged();
         }
 
         public bool setNextCue(string cueName)
