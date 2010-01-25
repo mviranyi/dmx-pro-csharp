@@ -11,11 +11,11 @@ this is a place holder for many small projects related to my quest for a personl
 ==Basic Light Board==
 This has expanded from its original intent (a 24 channel XY crossfader) to a fully fledged memory board.
 features include:
-  *Cues
-  *go button
-  *record cue
-  *blind cue editing
-  *and more that i cant think of atm...
+  * Cues
+  * go button
+  * record cue
+  * blind cue editing
+  * and more that i cant think of atm...
 
 = Currently Under Development = 
 since death of a salesman has gone up successfully i have stopped working on this for the time being to devote time to my (unrelated) masters thesis project.
@@ -23,7 +23,7 @@ since death of a salesman has gone up successfully i have stopped working on thi
 =future work=
 add sub masters.
 add better intelegent light control.Specificly:
-  *moving fixtures
-  *gobo options
-  *gel options
+  * moving fixtures
+  * gobo options
+  * gel options
   * full RGB color control
