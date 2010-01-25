@@ -15,6 +15,7 @@ features include:
   * go button
   * record cue
   * blind cue editing
+  * command interface for cueing up scenes (1>10@50%,15@75% or 1>10@128,15@192)
   * and more that i cant think of atm...
 
 = Currently Under Development = 
