@@ -9,19 +9,21 @@ this is a place holder for many small projects related to my quest for a personl
 = Projects =
 
 ==Basic Light Board==
-this project is the first attempt at a full solution to control DMX lighting.
-It is a 1 to 1 patched 24 channel board with X and Y scenes a cross fader and a go button with timer.
-
-===Notes===
-  * This currently does not interface with the Enttec widget because i haven't receive it yet. that should be forthcoming in the next week (by Jan 07 2010)
-  * this employs two custom built controls
-    # a basic slider with channel label, slider, percentage display, and bump button
-    # a group of sliders to allow for easy GUI integration and ease of detecting changes
+This has expanded from its original intent (a 24 channel XY crossfader) to a fully fledged memory board.
+features include:
+  *Cues
+  *go button
+  *record cue
+  *blind cue editing
+  *and more that i cant think of atm...
 
 = Currently Under Development = 
-add a cue list to the *Basic Light Board*
+since death of a salesman has gone up successfully i have stopped working on this for the time being to devote time to my (unrelated) masters thesis project.
 
 =future work=
-  *make a Slider group control that can be adjusted to contain as many sliders as needed
-  *adjust the sliders so they can have multiple dimmers
-  *allow the sliders to change their position when given new values.
+add sub masters.
+add better intelegent light control.Specificly:
+  *moving fixtures
+  *gobo options
+  *gel options
+  * full RGB color control
