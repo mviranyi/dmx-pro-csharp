@@ -316,10 +316,10 @@ namespace MB.Controls
 
         private bool mouseEffects = true;
         /// <summary>
-        /// Gets or sets whether mouse entry and exit actions have impact onIsFollowTimeChanged how control look.
+        /// Gets or sets whether mouse entry and exit actions have impact on how control look.
         /// </summary>
-        /// <value><c>true</c> if mouse entry and exit actions have impact onIsFollowTimeChanged how control look; otherwise, <c>false</c>.</value>
-        [Description("Set whether mouse entry and exit actions have impact onIsFollowTimeChanged how control look")]
+        /// <value><c>true</c> if mouse entry and exit actions have impact on how control look; otherwise, <c>false</c>.</value>
+        [Description("Set whether mouse entry and exit actions have impact on how control look")]
         [Category("ColorSlider")]
         [DefaultValue(true)]
         public bool MouseEffects
@@ -1024,7 +1024,7 @@ namespace MB.Controls
         /// <summary>
         /// Creates the round rect path.
         /// </summary>
-        /// <param name="rect">The rectangle onIsFollowTimeChanged which graphics path will be spanned.</param>
+        /// <param name="rect">The rectangle on which graphics path will be spanned.</param>
         /// <param name="size">The size of rounded rectangle edges.</param>
         /// <returns></returns>
         public static GraphicsPath CreateRoundRectPath(Rectangle rect, Size size)

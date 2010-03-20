@@ -29,12 +29,10 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabControlMain = new System.Windows.Forms.TabControl();
             this.tabPageLive = new System.Windows.Forms.TabPage();
             this.sliderGroupLive = new basic_light_board.SliderGroup();
             this.txtLiveCmd = new System.Windows.Forms.TextBox();
-            this.tabPageNext = new System.Windows.Forms.TabPage();
-            this.sliderGroupNext = new basic_light_board.SliderGroup();
             this.tabPageBlind = new System.Windows.Forms.TabPage();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.cmdNextBlindCue = new System.Windows.Forms.Button();
@@ -61,6 +59,17 @@
             this.button3 = new System.Windows.Forms.Button();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.tabPageSub = new System.Windows.Forms.TabPage();
+            this.submasterSliderGroup1 = new basic_light_board.SubmasterSliderGroup();
+            this.txtCmdSub = new System.Windows.Forms.TextBox();
+            this.tabPageSubBlinds = new System.Windows.Forms.TabPage();
+            this.groupBoxSubEditCmd = new System.Windows.Forms.GroupBox();
+            this.textBoxSubBlindCmd = new System.Windows.Forms.TextBox();
+            this.groupBoxSubAttributes = new System.Windows.Forms.GroupBox();
+            this.txtBlindSubName = new System.Windows.Forms.TextBox();
+            this.cmdNextBlindSub = new System.Windows.Forms.Button();
+            this.cmdPrevBlindSub = new System.Windows.Forms.Button();
+            this.groupBoxBlindSub = new System.Windows.Forms.GroupBox();
+            this.sliderGroupBlindSub = new basic_light_board.SliderGroup();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
@@ -71,12 +80,16 @@
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButtonSaveShow = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonLoadShow = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripButtonLoadSubs = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonSaveSubs = new System.Windows.Forms.ToolStripButton();
             this.cmdSetNextCue = new System.Windows.Forms.Button();
             this.cmdCopyToLive = new System.Windows.Forms.Button();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.outputLevels1 = new basic_light_board.OutputLevels();
             this.crossfaders1 = new basic_light_board.CrossFaders();
-            this.tabControl1.SuspendLayout();
+            this.tabControlMain.SuspendLayout();
             this.tabPageLive.SuspendLayout();
-            this.tabPageNext.SuspendLayout();
             this.tabPageBlind.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox7.SuspendLayout();
@@ -89,26 +102,34 @@
             this.groupBox2.SuspendLayout();
             this.tabPagePatch.SuspendLayout();
             this.tabPageConnection.SuspendLayout();
+            this.tabPageSub.SuspendLayout();
+            this.tabPageSubBlinds.SuspendLayout();
+            this.groupBoxSubEditCmd.SuspendLayout();
+            this.groupBoxSubAttributes.SuspendLayout();
+            this.groupBoxBlindSub.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
+            this.splitContainer1.Panel1.SuspendLayout();
+            this.splitContainer1.Panel2.SuspendLayout();
+            this.splitContainer1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // tabControl1
+            // tabControlMain
             // 
-            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this.tabControlMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.tabControl1.Controls.Add(this.tabPageLive);
-            this.tabControl1.Controls.Add(this.tabPageNext);
-            this.tabControl1.Controls.Add(this.tabPageBlind);
-            this.tabControl1.Controls.Add(this.tabPagePatch);
-            this.tabControl1.Controls.Add(this.tabPageConnection);
-            this.tabControl1.Controls.Add(this.tabPageSub);
-            this.tabControl1.Location = new System.Drawing.Point(17, 28);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(772, 394);
-            this.tabControl1.TabIndex = 1;
+            this.tabControlMain.Controls.Add(this.tabPageLive);
+            this.tabControlMain.Controls.Add(this.tabPageBlind);
+            this.tabControlMain.Controls.Add(this.tabPagePatch);
+            this.tabControlMain.Controls.Add(this.tabPageConnection);
+            this.tabControlMain.Controls.Add(this.tabPageSub);
+            this.tabControlMain.Controls.Add(this.tabPageSubBlinds);
+            this.tabControlMain.Location = new System.Drawing.Point(17, 28);
+            this.tabControlMain.Name = "tabControlMain";
+            this.tabControlMain.SelectedIndex = 0;
+            this.tabControlMain.Size = new System.Drawing.Size(772, 346);
+            this.tabControlMain.TabIndex = 1;
             // 
             // tabPageLive
             // 
@@ -117,7 +138,7 @@
             this.tabPageLive.Location = new System.Drawing.Point(4, 22);
             this.tabPageLive.Name = "tabPageLive";
             this.tabPageLive.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageLive.Size = new System.Drawing.Size(764, 368);
+            this.tabPageLive.Size = new System.Drawing.Size(764, 320);
             this.tabPageLive.TabIndex = 0;
             this.tabPageLive.Text = "Live";
             this.tabPageLive.UseVisualStyleBackColor = true;
@@ -1156,7 +1177,7 @@
         ((byte)(0))};
             this.sliderGroupLive.Location = new System.Drawing.Point(3, 3);
             this.sliderGroupLive.Name = "sliderGroupLive";
-            this.sliderGroupLive.Size = new System.Drawing.Size(755, 336);
+            this.sliderGroupLive.Size = new System.Drawing.Size(755, 288);
             this.sliderGroupLive.TabIndex = 0;
             this.sliderGroupLive.ValueChanged += new System.EventHandler(this.sliderGroupLive_ValueChanged);
             // 
@@ -1164,1059 +1185,12 @@
             // 
             this.txtLiveCmd.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtLiveCmd.Location = new System.Drawing.Point(3, 345);
+            this.txtLiveCmd.Location = new System.Drawing.Point(3, 297);
             this.txtLiveCmd.Name = "txtLiveCmd";
             this.txtLiveCmd.Size = new System.Drawing.Size(755, 20);
             this.txtLiveCmd.TabIndex = 10;
             this.txtLiveCmd.TextChanged += new System.EventHandler(this.txtLiveCmd_TextChanged);
             this.txtLiveCmd.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtLiveCmd_KeyPress);
-            // 
-            // tabPageNext
-            // 
-            this.tabPageNext.Controls.Add(this.sliderGroupNext);
-            this.tabPageNext.Location = new System.Drawing.Point(4, 22);
-            this.tabPageNext.Name = "tabPageNext";
-            this.tabPageNext.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageNext.Size = new System.Drawing.Size(764, 368);
-            this.tabPageNext.TabIndex = 1;
-            this.tabPageNext.Text = "Next(Read Only)";
-            this.tabPageNext.UseVisualStyleBackColor = true;
-            // 
-            // sliderGroupNext
-            // 
-            this.sliderGroupNext.AutoScroll = true;
-            this.sliderGroupNext.ChannelValues = new byte[] {
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0))};
-            this.sliderGroupNext.dimmerValues = new byte[] {
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0)),
-        ((byte)(0))};
-            this.sliderGroupNext.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.sliderGroupNext.Enabled = false;
-            this.sliderGroupNext.Location = new System.Drawing.Point(3, 3);
-            this.sliderGroupNext.Name = "sliderGroupNext";
-            this.sliderGroupNext.Size = new System.Drawing.Size(758, 362);
-            this.sliderGroupNext.TabIndex = 0;
             // 
             // tabPageBlind
             // 
@@ -2226,7 +1200,7 @@
             this.tabPageBlind.Location = new System.Drawing.Point(4, 22);
             this.tabPageBlind.Name = "tabPageBlind";
             this.tabPageBlind.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageBlind.Size = new System.Drawing.Size(764, 368);
+            this.tabPageBlind.Size = new System.Drawing.Size(764, 320);
             this.tabPageBlind.TabIndex = 4;
             this.tabPageBlind.Text = "Blind";
             this.tabPageBlind.UseVisualStyleBackColor = true;
@@ -2242,7 +1216,7 @@
             this.groupBox3.Controls.Add(this.groupBox6);
             this.groupBox3.Controls.Add(this.groupBox5);
             this.groupBox3.Controls.Add(this.groupBox4);
-            this.groupBox3.Location = new System.Drawing.Point(6, 267);
+            this.groupBox3.Location = new System.Drawing.Point(6, 219);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(752, 69);
             this.groupBox3.TabIndex = 3;
@@ -2396,7 +1370,7 @@
             // 
             this.txtBlindCmd.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtBlindCmd.Location = new System.Drawing.Point(7, 342);
+            this.txtBlindCmd.Location = new System.Drawing.Point(7, 294);
             this.txtBlindCmd.Name = "txtBlindCmd";
             this.txtBlindCmd.Size = new System.Drawing.Size(751, 20);
             this.txtBlindCmd.TabIndex = 2;
@@ -2411,7 +1385,7 @@
             this.groupBox2.Controls.Add(this.sliderGroupBlind);
             this.groupBox2.Location = new System.Drawing.Point(7, 6);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(751, 255);
+            this.groupBox2.Size = new System.Drawing.Size(751, 207);
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "groupBox2";
@@ -3448,7 +2422,7 @@
             this.sliderGroupBlind.Dock = System.Windows.Forms.DockStyle.Fill;
             this.sliderGroupBlind.Location = new System.Drawing.Point(3, 16);
             this.sliderGroupBlind.Name = "sliderGroupBlind";
-            this.sliderGroupBlind.Size = new System.Drawing.Size(745, 236);
+            this.sliderGroupBlind.Size = new System.Drawing.Size(745, 188);
             this.sliderGroupBlind.TabIndex = 0;
             this.sliderGroupBlind.ValueChanged += new System.EventHandler(this.sliderGroupBlind_ValueChanged);
             // 
@@ -3461,7 +2435,7 @@
             this.tabPagePatch.Location = new System.Drawing.Point(4, 22);
             this.tabPagePatch.Name = "tabPagePatch";
             this.tabPagePatch.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPagePatch.Size = new System.Drawing.Size(764, 368);
+            this.tabPagePatch.Size = new System.Drawing.Size(764, 320);
             this.tabPagePatch.TabIndex = 2;
             this.tabPagePatch.Text = "Patch";
             this.tabPagePatch.UseVisualStyleBackColor = true;
@@ -3499,8 +2473,8 @@
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(262, 20);
             this.textBox2.TabIndex = 0;
-            this.textBox2.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
-            this.textBox2.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox2_KeyPress);
+            this.textBox2.TextChanged += new System.EventHandler(this.txtCmdPatch_TextChanged);
+            this.textBox2.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtCmdPatch_KeyPress);
             // 
             // tabPageConnection
             // 
@@ -3509,7 +2483,7 @@
             this.tabPageConnection.Location = new System.Drawing.Point(4, 22);
             this.tabPageConnection.Name = "tabPageConnection";
             this.tabPageConnection.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageConnection.Size = new System.Drawing.Size(764, 368);
+            this.tabPageConnection.Size = new System.Drawing.Size(764, 320);
             this.tabPageConnection.TabIndex = 3;
             this.tabPageConnection.Text = "Conntection";
             this.tabPageConnection.UseVisualStyleBackColor = true;
@@ -3522,7 +2496,7 @@
             this.button3.TabIndex = 1;
             this.button3.Text = "Connect";
             this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            this.button3.Click += new System.EventHandler(this.WidgetConnect_Click);
             // 
             // comboBox1
             // 
@@ -3534,25 +2508,1171 @@
             // 
             // tabPageSub
             // 
+            this.tabPageSub.Controls.Add(this.submasterSliderGroup1);
+            this.tabPageSub.Controls.Add(this.txtCmdSub);
             this.tabPageSub.Location = new System.Drawing.Point(4, 22);
             this.tabPageSub.Name = "tabPageSub";
             this.tabPageSub.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageSub.Size = new System.Drawing.Size(764, 368);
+            this.tabPageSub.Size = new System.Drawing.Size(764, 320);
             this.tabPageSub.TabIndex = 5;
             this.tabPageSub.Text = "SubMasters?";
             this.tabPageSub.UseVisualStyleBackColor = true;
             // 
+            // submasterSliderGroup1
+            // 
+            this.submasterSliderGroup1.AutoScroll = true;
+            this.submasterSliderGroup1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.submasterSliderGroup1.Location = new System.Drawing.Point(3, 3);
+            this.submasterSliderGroup1.Name = "submasterSliderGroup1";
+            this.submasterSliderGroup1.Size = new System.Drawing.Size(758, 314);
+            this.submasterSliderGroup1.TabIndex = 2;
+            this.submasterSliderGroup1.ValueChanged += new System.EventHandler(this.submasterSliderGroup1_ValueChanged);
+            // 
+            // txtCmdSub
+            // 
+            this.txtCmdSub.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtCmdSub.Location = new System.Drawing.Point(7, 294);
+            this.txtCmdSub.Name = "txtCmdSub";
+            this.txtCmdSub.Size = new System.Drawing.Size(751, 20);
+            this.txtCmdSub.TabIndex = 1;
+            this.txtCmdSub.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtCmdSub_KeyPress);
+            // 
+            // tabPageSubBlinds
+            // 
+            this.tabPageSubBlinds.Controls.Add(this.groupBoxSubEditCmd);
+            this.tabPageSubBlinds.Controls.Add(this.groupBoxSubAttributes);
+            this.tabPageSubBlinds.Controls.Add(this.groupBoxBlindSub);
+            this.tabPageSubBlinds.Location = new System.Drawing.Point(4, 22);
+            this.tabPageSubBlinds.Name = "tabPageSubBlinds";
+            this.tabPageSubBlinds.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageSubBlinds.Size = new System.Drawing.Size(764, 320);
+            this.tabPageSubBlinds.TabIndex = 6;
+            this.tabPageSubBlinds.Text = "EditSub";
+            this.tabPageSubBlinds.UseVisualStyleBackColor = true;
+            this.tabPageSubBlinds.Click += new System.EventHandler(this.tabPageSubBlinds_Click);
+            // 
+            // groupBoxSubEditCmd
+            // 
+            this.groupBoxSubEditCmd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.groupBoxSubEditCmd.Controls.Add(this.textBoxSubBlindCmd);
+            this.groupBoxSubEditCmd.Location = new System.Drawing.Point(197, 273);
+            this.groupBoxSubEditCmd.Name = "groupBoxSubEditCmd";
+            this.groupBoxSubEditCmd.Size = new System.Drawing.Size(558, 41);
+            this.groupBoxSubEditCmd.TabIndex = 6;
+            this.groupBoxSubEditCmd.TabStop = false;
+            this.groupBoxSubEditCmd.Text = "Edit Command";
+            // 
+            // textBoxSubBlindCmd
+            // 
+            this.textBoxSubBlindCmd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxSubBlindCmd.Location = new System.Drawing.Point(6, 16);
+            this.textBoxSubBlindCmd.Name = "textBoxSubBlindCmd";
+            this.textBoxSubBlindCmd.Size = new System.Drawing.Size(545, 20);
+            this.textBoxSubBlindCmd.TabIndex = 0;
+            this.textBoxSubBlindCmd.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxSubBlindCmd_KeyPress);
+            // 
+            // groupBoxSubAttributes
+            // 
+            this.groupBoxSubAttributes.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.groupBoxSubAttributes.Controls.Add(this.txtBlindSubName);
+            this.groupBoxSubAttributes.Controls.Add(this.cmdNextBlindSub);
+            this.groupBoxSubAttributes.Controls.Add(this.cmdPrevBlindSub);
+            this.groupBoxSubAttributes.Location = new System.Drawing.Point(6, 273);
+            this.groupBoxSubAttributes.Name = "groupBoxSubAttributes";
+            this.groupBoxSubAttributes.Size = new System.Drawing.Size(185, 41);
+            this.groupBoxSubAttributes.TabIndex = 5;
+            this.groupBoxSubAttributes.TabStop = false;
+            this.groupBoxSubAttributes.Text = "Sub Attributes";
+            // 
+            // txtBlindSubName
+            // 
+            this.txtBlindSubName.Location = new System.Drawing.Point(6, 16);
+            this.txtBlindSubName.Name = "txtBlindSubName";
+            this.txtBlindSubName.Size = new System.Drawing.Size(108, 20);
+            this.txtBlindSubName.TabIndex = 0;
+            this.txtBlindSubName.TextChanged += new System.EventHandler(this.txtBlindSubName_TextChanged);
+            // 
+            // cmdNextBlindSub
+            // 
+            this.cmdNextBlindSub.Location = new System.Drawing.Point(152, 16);
+            this.cmdNextBlindSub.Name = "cmdNextBlindSub";
+            this.cmdNextBlindSub.Size = new System.Drawing.Size(26, 20);
+            this.cmdNextBlindSub.TabIndex = 8;
+            this.cmdNextBlindSub.Text = ">";
+            this.cmdNextBlindSub.UseVisualStyleBackColor = true;
+            this.cmdNextBlindSub.Click += new System.EventHandler(this.cmdNextBlindSub_Click);
+            // 
+            // cmdPrevBlindSub
+            // 
+            this.cmdPrevBlindSub.Location = new System.Drawing.Point(120, 16);
+            this.cmdPrevBlindSub.Name = "cmdPrevBlindSub";
+            this.cmdPrevBlindSub.Size = new System.Drawing.Size(26, 20);
+            this.cmdPrevBlindSub.TabIndex = 7;
+            this.cmdPrevBlindSub.Text = "<";
+            this.cmdPrevBlindSub.UseVisualStyleBackColor = true;
+            this.cmdPrevBlindSub.Click += new System.EventHandler(this.cmdPrevBlindSub_Click);
+            // 
+            // groupBoxBlindSub
+            // 
+            this.groupBoxBlindSub.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBoxBlindSub.Controls.Add(this.sliderGroupBlindSub);
+            this.groupBoxBlindSub.Location = new System.Drawing.Point(3, 0);
+            this.groupBoxBlindSub.Name = "groupBoxBlindSub";
+            this.groupBoxBlindSub.Size = new System.Drawing.Size(755, 267);
+            this.groupBoxBlindSub.TabIndex = 4;
+            this.groupBoxBlindSub.TabStop = false;
+            this.groupBoxBlindSub.Text = "Sub Channel Levels";
+            // 
+            // sliderGroupBlindSub
+            // 
+            this.sliderGroupBlindSub.AutoScroll = true;
+            this.sliderGroupBlindSub.ChannelValues = new byte[] {
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0))};
+            this.sliderGroupBlindSub.dimmerValues = new byte[] {
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0)),
+        ((byte)(0))};
+            this.sliderGroupBlindSub.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.sliderGroupBlindSub.Location = new System.Drawing.Point(3, 16);
+            this.sliderGroupBlindSub.Name = "sliderGroupBlindSub";
+            this.sliderGroupBlindSub.Size = new System.Drawing.Size(749, 248);
+            this.sliderGroupBlindSub.TabIndex = 0;
+            this.sliderGroupBlindSub.ValueChanged += new System.EventHandler(this.sliderGroupBlindSub_ValueChanged);
+            this.sliderGroupBlindSub.Scroll += new System.Windows.Forms.ScrollEventHandler(this.sliderGroupBlindSub_Scroll);
+            // 
             // textBox1
             // 
-            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.textBox1.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox1.Location = new System.Drawing.Point(17, 428);
+            this.textBox1.Location = new System.Drawing.Point(0, 0);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
             this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBox1.Size = new System.Drawing.Size(772, 62);
+            this.textBox1.Size = new System.Drawing.Size(0, 109);
             this.textBox1.TabIndex = 3;
             // 
             // button1
@@ -3575,7 +3695,7 @@
             this.button2.TabIndex = 9;
             this.button2.Text = "RecCue";
             this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.button2.Click += new System.EventHandler(this.RecCue_Click);
             // 
             // groupBox1
             // 
@@ -3621,7 +3741,10 @@
             // 
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButtonSaveShow,
-            this.toolStripButtonLoadShow});
+            this.toolStripButtonLoadShow,
+            this.toolStripSeparator1,
+            this.toolStripButtonLoadSubs,
+            this.toolStripButtonSaveSubs});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(943, 25);
@@ -3646,6 +3769,29 @@
             this.toolStripButtonLoadShow.Text = "Load Show";
             this.toolStripButtonLoadShow.Click += new System.EventHandler(this.toolStripButtonLoadShow_Click);
             // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            // 
+            // toolStripButtonLoadSubs
+            // 
+            this.toolStripButtonLoadSubs.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonLoadSubs.Image")));
+            this.toolStripButtonLoadSubs.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonLoadSubs.Name = "toolStripButtonLoadSubs";
+            this.toolStripButtonLoadSubs.Size = new System.Drawing.Size(73, 22);
+            this.toolStripButtonLoadSubs.Text = "LoadSubs";
+            this.toolStripButtonLoadSubs.Click += new System.EventHandler(this.toolStripButtonLoadSubs_Click);
+            // 
+            // toolStripButtonSaveSubs
+            // 
+            this.toolStripButtonSaveSubs.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonSaveSubs.Image")));
+            this.toolStripButtonSaveSubs.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonSaveSubs.Name = "toolStripButtonSaveSubs";
+            this.toolStripButtonSaveSubs.Size = new System.Drawing.Size(74, 22);
+            this.toolStripButtonSaveSubs.Text = "SaveSubs";
+            this.toolStripButtonSaveSubs.Click += new System.EventHandler(this.toolStripButtonSaveSubs_Click);
+            // 
             // cmdSetNextCue
             // 
             this.cmdSetNextCue.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -3667,6 +3813,37 @@
             this.cmdCopyToLive.Text = "Cpy 2 Live";
             this.cmdCopyToLive.UseVisualStyleBackColor = true;
             this.cmdCopyToLive.Click += new System.EventHandler(this.cmdCopyToLive_Click);
+            // 
+            // splitContainer1
+            // 
+            this.splitContainer1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.splitContainer1.Location = new System.Drawing.Point(12, 380);
+            this.splitContainer1.Name = "splitContainer1";
+            // 
+            // splitContainer1.Panel1
+            // 
+            this.splitContainer1.Panel1.Controls.Add(this.textBox1);
+            this.splitContainer1.Panel1MinSize = 0;
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.AutoScroll = true;
+            this.splitContainer1.Panel2.Controls.Add(this.outputLevels1);
+            this.splitContainer1.Panel2MinSize = 0;
+            this.splitContainer1.Size = new System.Drawing.Size(777, 109);
+            this.splitContainer1.SplitterDistance = 0;
+            this.splitContainer1.TabIndex = 14;
+            // 
+            // outputLevels1
+            // 
+            this.outputLevels1.AutoSize = true;
+            this.outputLevels1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.outputLevels1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.outputLevels1.Location = new System.Drawing.Point(0, 0);
+            this.outputLevels1.Name = "outputLevels1";
+            this.outputLevels1.Size = new System.Drawing.Size(773, 109);
+            this.outputLevels1.TabIndex = 0;
             // 
             // crossfaders1
             // 
@@ -3690,6 +3867,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(943, 494);
+            this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.cmdCopyToLive);
             this.Controls.Add(this.cmdSetNextCue);
             this.Controls.Add(this.toolStrip1);
@@ -3697,19 +3875,19 @@
             this.Controls.Add(this.button2);
             this.Controls.Add(this.crossfaders1);
             this.Controls.Add(this.button1);
-            this.Controls.Add(this.textBox1);
-            this.Controls.Add(this.tabControl1);
+            this.Controls.Add(this.tabControlMain);
             this.KeyPreview = true;
             this.Name = "Form1";
             this.Text = "Light Board";
             this.Load += new System.EventHandler(this.Form1_Load);
+            this.Shown += new System.EventHandler(this.Form1_Shown);
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Form1_KeyPress);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
+            this.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.Form1_PreviewKeyDown);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
-            this.tabControl1.ResumeLayout(false);
+            this.tabControlMain.ResumeLayout(false);
             this.tabPageLive.ResumeLayout(false);
             this.tabPageLive.PerformLayout();
-            this.tabPageNext.ResumeLayout(false);
             this.tabPageBlind.ResumeLayout(false);
             this.tabPageBlind.PerformLayout();
             this.groupBox3.ResumeLayout(false);
@@ -3725,10 +3903,23 @@
             this.tabPagePatch.ResumeLayout(false);
             this.tabPagePatch.PerformLayout();
             this.tabPageConnection.ResumeLayout(false);
+            this.tabPageSub.ResumeLayout(false);
+            this.tabPageSub.PerformLayout();
+            this.tabPageSubBlinds.ResumeLayout(false);
+            this.groupBoxSubEditCmd.ResumeLayout(false);
+            this.groupBoxSubEditCmd.PerformLayout();
+            this.groupBoxSubAttributes.ResumeLayout(false);
+            this.groupBoxSubAttributes.PerformLayout();
+            this.groupBoxBlindSub.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
+            this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel1.PerformLayout();
+            this.splitContainer1.Panel2.ResumeLayout(false);
+            this.splitContainer1.Panel2.PerformLayout();
+            this.splitContainer1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -3736,12 +3927,10 @@
 
         #endregion
 
-        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabControl tabControlMain;
         private System.Windows.Forms.TabPage tabPageLive;
-        private System.Windows.Forms.TabPage tabPageNext;
         private System.Windows.Forms.TextBox textBox1;
         private SliderGroup sliderGroupLive;
-        private SliderGroup sliderGroupNext;
         private System.Windows.Forms.Button button1;
         private CrossFaders crossfaders1;
         private System.Windows.Forms.Button button2;
@@ -3781,6 +3970,22 @@
         private System.Windows.Forms.Button cmdPrevBlindCue;
         private System.Windows.Forms.TabPage tabPageSub;
         private System.Windows.Forms.Button cmdCopyToLive;
+        private System.Windows.Forms.TextBox txtCmdSub;
+        private SubmasterSliderGroup submasterSliderGroup1;
+        private System.Windows.Forms.SplitContainer splitContainer1;
+        private OutputLevels outputLevels1;
+        private System.Windows.Forms.TabPage tabPageSubBlinds;
+        private System.Windows.Forms.GroupBox groupBoxSubAttributes;
+        private System.Windows.Forms.Button cmdNextBlindSub;
+        private System.Windows.Forms.Button cmdPrevBlindSub;
+        private System.Windows.Forms.TextBox txtBlindSubName;
+        private System.Windows.Forms.GroupBox groupBoxBlindSub;
+        private SliderGroup sliderGroupBlindSub;
+        private System.Windows.Forms.GroupBox groupBoxSubEditCmd;
+        private System.Windows.Forms.TextBox textBoxSubBlindCmd;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripButton toolStripButtonLoadSubs;
+        private System.Windows.Forms.ToolStripButton toolStripButtonSaveSubs;
     }
 }
 

@@ -28,7 +28,8 @@ namespace basic_light_board
         private int _channel;
         public byte Value { 
             get { return (byte)mainSlider.Value; } 
-            set { 
+            set {
+                if (mainSlider.Value == value) return; // added brv 3-15-2010
                 mainSlider.Value = (int)value; 
                 if (ValueChanged!=null) 
                     ValueChanged(this, EventArgs.Empty); 
@@ -50,7 +51,6 @@ namespace basic_light_board
 
         private void updateLabel()
         {
-            //percentLabel.Text = ((int)(Value / 255.0 * 100.0)).ToString();
             percentLabel.Text = Value.ToString();
         }
 

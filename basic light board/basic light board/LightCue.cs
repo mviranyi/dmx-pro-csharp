@@ -41,13 +41,16 @@ namespace basic_light_board
         {}
         public LightCue(int num, string name, int upTime, int downTime, bool isFollow, int followTime,byte[] levels)
         {
+            if (levels.Length != LightingConstants.maxChannels)
+                throw new ArgumentException(string.Format("levels.Length = {0}. actual Length= {1}", levels.Length, LightingConstants.maxChannels));
             mCueNumber = num;
             mCueName = name;
             mUpFadeTime = upTime;
             mDownFadeTime = downTime;
             mIsFollowCue = isFollow;
             mFollowTime = followTime;
-            mChannelLevels = (byte[])levels.Clone();
+            mChannelLevels = new byte[LightingConstants.maxChannels];
+            Array.Copy(levels, mChannelLevels, LightingConstants.maxChannels);
         }
 
         public LightCue(string csvCueString)
@@ -61,10 +64,11 @@ namespace basic_light_board
             mIsFollowCue  = bool.Parse(temp[4]);
             mFollowTime = int.Parse(temp[5]);
 
-            int numChannels = temp.Length - 6;
-            mChannelLevels = new byte[numChannels];
-            for (int i = 6; i < temp.Length; i++)
-                mChannelLevels[i-6] = byte.Parse(temp[i]);
+            int numChannels = temp.Length - 6; // num channels may be different from LightingConstants.maxChannels but thats ok
+            mChannelLevels = new byte[LightingConstants.maxChannels];
+            if (numChannels > LightingConstants.maxChannels) numChannels = LightingConstants.maxChannels;
+            for (int i = 0; i < numChannels; i++)
+                mChannelLevels[i] = byte.Parse(temp[6+i]);
         }
         #endregion
 
@@ -81,7 +85,6 @@ namespace basic_light_board
                 onUpTimeChanged();
             }
         }
-
         public int downFadeTime
         {
             get
@@ -94,7 +97,6 @@ namespace basic_light_board
                 onDownTimeChanged();
             }
         }
-
         public int followTime
         {
             get
@@ -108,7 +110,6 @@ namespace basic_light_board
                 onFollowTimeChanged();
             }
         }
-
         public bool isFollowCue
         {
             get
@@ -121,7 +122,6 @@ namespace basic_light_board
                 onIsFollowTimeChanged();
             }
         }
-
         public int cueNumber
         {
             get
@@ -134,7 +134,6 @@ namespace basic_light_board
                 onCueNumberChanged();
             }
         }
-
         public string cueName
         {
             get

@@ -38,6 +38,7 @@
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.Name = "OutputLevels";
             this.Size = new System.Drawing.Size(0, 0);
+            this.Resize += new System.EventHandler(this.OutputLevels_Resize);
             this.ResumeLayout(false);
 
         }

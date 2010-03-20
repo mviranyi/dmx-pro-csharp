@@ -70,5 +70,17 @@ namespace basic_light_board.Properties {
                 this["cueFile"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("mySubs.csv")]
+        public string subFile {
+            get {
+                return ((string)(this["subFile"]));
+            }
+            set {
+                this["subFile"] = value;
+            }
+        }
     }
 }

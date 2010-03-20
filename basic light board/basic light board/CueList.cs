@@ -205,7 +205,7 @@ namespace basic_light_board
             mNextCueIndex++;
             mNextCueIndex %= mCues.Count;
             onCueChanged();
-            Console.WriteLine("cue incremented");
+            /* Console.WriteLine("cue incremented"); */
         }
 
         public void onCueChanged()
@@ -214,7 +214,7 @@ namespace basic_light_board
         }
         public void onNextCueChanged()
         {
-            Console.WriteLine("nextCueChanged");
+            /* Console.WriteLine("nextCueChanged"); */
             if (nextCueChanged != null) nextCueChanged(this, new EventArgs());
         }
         public void onCurrentCueChanged()
@@ -236,10 +236,11 @@ namespace basic_light_board
 
         public void loadFromFile(string fileName)
         {
-            StreamReader f = new System.IO.StreamReader(fileName, Encoding.UTF8);
-            mCues.Clear();
+            StreamReader f = null;
             try
             {
+                f = new System.IO.StreamReader(fileName, Encoding.UTF8);
+                mCues.Clear();
                 if (int.Parse(f.ReadLine()) != LightCue.version) throw new InvalidDataException("version of cue file not compatable");
                 int num = int.Parse(f.ReadLine());
                 for (int i = 0; i < num; i++)
@@ -249,6 +250,10 @@ namespace basic_light_board
             {
                 if (mCues.Count == 0)
                     AddCue(LightCue.BlankCue);
+            }
+            finally
+            {
+                if (f!=null) f.Close();
             }
         }
         public string Serialize()
