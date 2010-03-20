@@ -14,5 +14,8 @@
     <Setting Name="cueFile" Type="System.String" Scope="User">
       <Value Profile="(Default)">myCues.csv</Value>
     </Setting>
+    <Setting Name="subFile" Type="System.String" Scope="User">
+      <Value Profile="(Default)">mySubs.csv</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

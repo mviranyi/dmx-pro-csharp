@@ -1,6 +1,6 @@
 ﻿namespace basic_light_board
 {
-    partial class SliderGroup
+    partial class SubmasterSliderGroup
     {
         /// <summary> 
         /// Required designer variable.
@@ -30,21 +30,17 @@
         {
             this.SuspendLayout();
             // 
-            // SliderGroup
+            // SubmasterSliderGroup
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.AutoScroll = true;
-            this.Name = "SliderGroup";
-            this.Size = new System.Drawing.Size(315, 218);
-            this.Load += new System.EventHandler(this.SliderGroup_Load);
+            this.Name = "SubmasterSliderGroup";
+            this.Load += new System.EventHandler(this.SubmasterSliderGroup_Load);
             this.Resize += new System.EventHandler(this.SliderGroup_Resize);
             this.ResumeLayout(false);
 
         }
 
         #endregion
-
-
     }
 }

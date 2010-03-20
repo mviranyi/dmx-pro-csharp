@@ -117,9 +117,22 @@ namespace VPB
 					m_Value = m_Maximum;
 				if(m_Value < m_Minimum)
 					m_Value = m_Minimum;
-				Invalidate();
+				if (!mSuspended) Invalidate();
 			}
 		}
+        bool mSuspended;
+        public bool PaintingSuspended
+        {
+            get
+            {
+                return mSuspended;
+            }
+            set
+            {
+                mSuspended = value;
+                if (!mSuspended) Invalidate();
+            }
+        }
 		[Description( "VerticalProgressBar Color")]
 		[Category( "VerticalProgressBar" )]
 		[RefreshProperties(RefreshProperties.All)]
